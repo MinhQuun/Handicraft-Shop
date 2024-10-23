@@ -27,6 +27,10 @@ namespace Handicraft_Shop.Controllers
         {
             return View();
         }
+        public ActionResult Lu1()
+        {
+            return View();
+        }
 
         public ActionResult duyupdate()
         {
