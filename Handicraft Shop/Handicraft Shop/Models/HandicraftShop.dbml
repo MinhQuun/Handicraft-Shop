@@ -80,8 +80,8 @@
       <Column Name="NGAYBATDAU" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="NGAYKETTHUC" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="GIAMGIA" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
-      <Association Name="KHUYENMAI_SANPHAM" Member="SANPHAMs" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="SANPHAM" />
       <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="SANPHAM_KHUYENMAI" />
+      <Association Name="KHUYENMAI_SANPHAM" Member="SANPHAMs" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="SANPHAM" />
     </Type>
   </Table>
   <Table Name="dbo.LOAI" Member="LOAIs">
@@ -113,19 +113,20 @@
       <Association Name="NHACUNGCAP_SANPHAM" Member="SANPHAMs" ThisKey="MANHACUNGCAP" OtherKey="MANHACUNGCAP" Type="SANPHAM" />
     </Type>
   </Table>
-  <Table Name="dbo.QUYEN" Member="QUYENs">
-    <Type Name="QUYEN">
-      <Column Name="MAQUYEN" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="TENQUYEN" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="QUYEN_QUYEN_NGUOIDUNG" Member="QUYEN_NGUOIDUNGs" ThisKey="MAQUYEN" OtherKey="MAQUYEN" Type="QUYEN_NGUOIDUNG" />
-    </Type>
-  </Table>
   <Table Name="dbo.QUYEN_NGUOIDUNG" Member="QUYEN_NGUOIDUNGs">
     <Type Name="QUYEN_NGUOIDUNG">
       <Column Name="MANGUOIDUNG" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="MAQUYEN" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="NGUOIDUNG_QUYEN_NGUOIDUNG" Member="NGUOIDUNG" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="NGUOIDUNG" IsForeignKey="true" />
       <Association Name="QUYEN_QUYEN_NGUOIDUNG" Member="QUYEN" ThisKey="MAQUYEN" OtherKey="MAQUYEN" Type="QUYEN" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs">
+    <Type Name="SANPHAM_KHUYENMAI">
+      <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
+      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.SANPHAM" Member="SANPHAMs">
@@ -147,12 +148,11 @@
       <Association Name="NHACUNGCAP_SANPHAM" Member="NHACUNGCAP" ThisKey="MANHACUNGCAP" OtherKey="MANHACUNGCAP" Type="NHACUNGCAP" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs">
-    <Type Name="SANPHAM_KHUYENMAI">
-      <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
-      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
+  <Table Name="dbo.QUYEN" Member="QUYENs">
+    <Type Name="QUYEN">
+      <Column Name="MAQUYEN" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TENQUYEN" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="QUYEN_QUYEN_NGUOIDUNG" Member="QUYEN_NGUOIDUNGs" ThisKey="MAQUYEN" OtherKey="MAQUYEN" Type="QUYEN_NGUOIDUNG" />
     </Type>
   </Table>
 </Database>
