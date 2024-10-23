@@ -1,0 +1,200 @@
+﻿@using Handicraft_Shop.Models;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <link href="~/bootstrap/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/bootstrap/bootstrap/js/jquery-3.3.1.min.js"></script>
+    <title>@ViewBag.Title</title>
+
+
+    <style>
+        .header__nav {
+            position: relative;
+            display: inline-block;
+        }
+
+        .header__nav-link {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+            .header__nav-link svg {
+                margin-left: 5px;
+            }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .submenu a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .submenu a:hover {
+                    background-color: #f1f1f1;
+                }
+
+        .header__nav:hover .submenu {
+            display: block;
+        }
+    </style>
+    @*<style>
+            .navbar {
+                background-color: #343a40;
+            }
+
+            .nav-item {
+                margin-right: 10px;
+            }
+
+            .nav-link {
+                color: #ffffff !important;
+                font-size: 16px;
+                padding: 10px 15px;
+                transition: background-color 0.3s;
+            }
+
+                .nav-link:hover, .nav-link:focus {
+                    background-color: #495057;
+                    border-radius: 5px;
+                }
+
+            .dropdown-menu {
+                background-color: #ffffff;
+                border: none;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+                border-radius: 5px;
+                margin-top: 0;
+                padding: 0;
+            }
+
+            .dropdown-item {
+                color: #212529;
+                padding: 10px 20px;
+                transition: background-color 0.3s;
+            }
+
+                .dropdown-item:hover, .dropdown-item:focus {
+                    background-color: #f8f9fa;
+                }
+        </style>*@
+</head>
+
+<body>
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="~/Hinh/everonvn-vn.jpg" class="bi me-2" width="80" height="32" />
+
+                </a>
+
+                <ul class="nav col-11 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li>
+
+                        <div class="header__nav">
+                            <a href="javascript:;" class="nav-link px-2 text-white">
+                                Danh Mục Sản phẩm
+                            </a>
+                            <div class="submenu">
+                                @*@Html.Action("Menuc1", "Home")*@
+                            </div>
+                        </div>
+                    </li>
+
+                    <li><a href="/Home/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
+                    <li><a href="/Home/LichSuDonHang" class="nav-link px-2 text-white">Lịch Sử Đơn Hàng</a></li>
+                    <li>
+                        <div class="header__nav">
+                            <a href="javascript:;" class="nav-link px-2 text-white">
+                                Tùy Chọn
+                            </a>
+                            <div class="submenu">
+
+                                <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
+                                @*<a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>*@
+                            </div>
+                        </div>
+
+
+
+                    </li>
+
+                </ul>
+
+
+
+                <div class="text-end">
+
+
+                    @*@if (Session["kh"] == null)
+                        {*@
+                    <a href="/Home/Login" class="btn btn-outline-light me-2">Đăng Nhập</a>
+                    <a href="/Home/SignUp" class="btn btn-outline-success me-2">Đăng Ký</a>
+                    @*}*@
+                    @*else
+                        {
+                            <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
+
+                            if (Session["kh"] != null)
+                            {
+                                var kh = Session["kh"] as KhachHang;
+                                <label>Chào bạn, @kh.TenKhachHang</label>
+                            }
+                            else
+                            {
+                                <label></label>
+                            }
+
+                        }*@
+                    <a href="/Home/TimKiem">
+
+
+
+                        <img src="~/Hinh/search-icon-2044x2048-psdrpqwp.jpg" style="width:25px;height:25px" />
+                    </a>
+                    <a href="/Home/Xemgiohang">
+
+
+                        <img src="~/Hinh/icon_muahang.jpg" style="width:25px;height:25px" />
+                        @*@{
+                            if (Session["GioHang"] != null)
+                            {
+                                var gio = Session["GioHang"] as GioHang;*@
+                        @*<label class="rounded-circle bg-light pl-2 pr-2">@gio.SoMatHang()</label>*@
+                        @*}
+                            else
+                            {*@
+                        <label class="rounded-circle bg-light pl-2 pr-2">0</label>
+
+                        @*}*@
+                        }
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

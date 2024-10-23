@@ -1,13 +1,14 @@
 ﻿
 @{
     ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
 }
 
 
 
 <h2>Đăng nhập</h2>
 
-<form method="post" action="@Url.Action("Login", "Home")">
+<form  action="Login" method="post" name="dang-ky">
     <div class="form-group">
         <label for="username">Tên đăng nhập</label>
         <input type="text" class="form-control" id="username" name="username" required />
@@ -19,7 +20,3 @@
     <button type="submit" class="btn btn-primary">Đăng nhập</button>
 </form>
 
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-danger">@ViewBag.Message</div>
-}
