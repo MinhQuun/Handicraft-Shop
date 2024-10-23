@@ -28,10 +28,11 @@ namespace Handicraft_Shop.Controllers
             return View();
         }
 
-        public ActionResult Duy()
+        public ActionResult duyupdate()
         {
             return View();
         }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
