@@ -37,6 +37,12 @@ namespace Handicraft_Shop.Controllers
             return View();
         }
 
+        public ActionResult luuupdate()
+
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
