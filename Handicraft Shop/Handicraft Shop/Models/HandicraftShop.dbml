@@ -93,6 +93,17 @@
       <Association Name="DANHMUCSANPHAM_LOAI" Member="DANHMUCSANPHAM" ThisKey="MADANHMUC" OtherKey="MADANHMUC" Type="DANHMUCSANPHAM" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.NGUOIDUNG" Member="NGUOIDUNGs">
+    <Type Name="NGUOIDUNG">
+      <Column Name="MANGUOIDUNG" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TENNGUOIDUNG" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TAIKHOAN" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="MATKHAU" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="EMAIL" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="SODIENTHOAI" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="NGUOIDUNG_QUYEN_NGUOIDUNG" Member="QUYEN_NGUOIDUNGs" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="QUYEN_NGUOIDUNG" />
+    </Type>
+  </Table>
   <Table Name="dbo.NHACUNGCAP" Member="NHACUNGCAPs">
     <Type Name="NHACUNGCAP">
       <Column Name="MANHACUNGCAP" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -102,10 +113,25 @@
       <Association Name="NHACUNGCAP_SANPHAM" Member="SANPHAMs" ThisKey="MANHACUNGCAP" OtherKey="MANHACUNGCAP" Type="SANPHAM" />
     </Type>
   </Table>
+  <Table Name="dbo.QUYEN" Member="QUYENs">
+    <Type Name="QUYEN">
+      <Column Name="MAQUYEN" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TENQUYEN" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="QUYEN_QUYEN_NGUOIDUNG" Member="QUYEN_NGUOIDUNGs" ThisKey="MAQUYEN" OtherKey="MAQUYEN" Type="QUYEN_NGUOIDUNG" />
+    </Type>
+  </Table>
+  <Table Name="dbo.QUYEN_NGUOIDUNG" Member="QUYEN_NGUOIDUNGs">
+    <Type Name="QUYEN_NGUOIDUNG">
+      <Column Name="MANGUOIDUNG" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MAQUYEN" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="NGUOIDUNG_QUYEN_NGUOIDUNG" Member="NGUOIDUNG" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="NGUOIDUNG" IsForeignKey="true" />
+      <Association Name="QUYEN_QUYEN_NGUOIDUNG" Member="QUYEN" ThisKey="MAQUYEN" OtherKey="MAQUYEN" Type="QUYEN" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.SANPHAM" Member="SANPHAMs">
     <Type Name="SANPHAM">
       <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="TENSANPHAM" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TENSANPHAM" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="HINHANH" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="GIABAN" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
       <Column Name="SOLUONGTON" Type="System.Int32" DbType="Int" CanBeNull="true" />
