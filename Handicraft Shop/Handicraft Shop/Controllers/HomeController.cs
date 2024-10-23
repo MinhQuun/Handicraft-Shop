@@ -15,6 +15,10 @@ namespace Handicraft_Shop.Controllers
             List < SANPHAM > sp= data.SANPHAMs.ToList();
             return View(sp);
         }
+        public ActionResult()
+        {
+            return View();
+        }
 
         public ActionResult About()
         {
