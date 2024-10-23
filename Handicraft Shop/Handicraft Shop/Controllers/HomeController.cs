@@ -19,6 +19,10 @@ namespace Handicraft_Shop.Controllers
         {
             return View();
         }
+        public ActionResult helo()
+        {
+            return View();
+        }
 
         public ActionResult About()
         {
