@@ -1,6 +1,35 @@
-﻿
+﻿@using Handicraft_Shop.Models;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/Mainlayout.cshtml";
 }
 
+@helper Truncate(string input, int length)
+{
+    if (input.Length < length)
+    {
+        @input
+    }
+    else
+    {
+        @input.Substring(0, length) <text>...</text>
+    }
+}
+<div class="product-group">
+    <div class="row">
+        @foreach (SANPHAM sp in Model)
+        {
+            <div class="col-lg-3 card mr-2 mt-2 text-center">
+                <div class="card-prodcut">
+                    <img style="width:200px;height:200px;" class="card-img-top mt-2" src="/HinhAnhSP/@sp.HINHANH" />
+                    <div class="card-body">
+                        <h5 style="font-size:20px;" class="card-title">@Truncate(sp.TENSANPHAM, 18)</h5>
+                        @Html.ActionLink("Chi tiết", "Details", "Home", new { id = @sp.MASANPHAM }, new { @class = "btn btn-warning" })
+                        <p class="text-danger"> @String.Format("{0:#,###}", sp.GIABAN) VNĐ </p>
+                        <a href="/Home/ThemMatHang/@sp.MASANPHAM" class="btn btn-outline-success">Chọn mua</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

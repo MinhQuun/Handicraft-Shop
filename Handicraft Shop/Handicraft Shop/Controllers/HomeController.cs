@@ -12,7 +12,8 @@ namespace Handicraft_Shop.Controllers
         HandicraftShopDataContext data = new HandicraftShopDataContext();
         public ActionResult Index()
         {
-            return View();
+            List<SANPHAM> sp = data.SANPHAMs.ToList();
+            return View(sp);
         }
 
         [HttpGet]

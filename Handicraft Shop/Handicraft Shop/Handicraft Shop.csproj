@@ -229,11 +229,6 @@
     <Content Include="HinhAnhSP\TUI XACH\tuitrondeocheothoitrang.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Models\HandicraftShop.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>HandicraftShop.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="bootstrap\bootstrap\css\bootstrap-grid.css.map" />
     <Content Include="bootstrap\bootstrap\css\bootstrap-grid.min.css.map" />
     <Content Include="bootstrap\bootstrap\css\bootstrap-reboot.css.map" />
@@ -244,6 +239,11 @@
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.min.js.map" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.js.map" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="Models\HandicraftShop.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>HandicraftShop.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Models\HandicraftShop.dbml.layout">
       <DependentUpon>HandicraftShop.dbml</DependentUpon>
     </None>
