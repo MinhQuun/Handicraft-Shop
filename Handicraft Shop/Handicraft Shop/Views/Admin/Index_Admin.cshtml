@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Trang quản trị Admin";
+}
+
+<h2>Chào mừng Admin đến với hệ thống quản trị</h2>
+
+<p>Bạn có thể sử dụng các chức năng sau để quản lý hệ thống:</p>
+
+<ul>
+    <li><a href="@Url.Action("QuanLyNguoiDung", "Admin")">Quản lý người dùng</a></li>
+    <li><a href="@Url.Action("QuanLySanPham", "Admin")">Quản lý sản phẩm</a></li>
+    <li><a href="@Url.Action("QuanLyDonHang", "Admin")">Quản lý đơn hàng</a></li>
+</ul>
