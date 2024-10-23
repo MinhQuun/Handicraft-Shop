@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Handicraft_Shop.Models;
 
 namespace Handicraft_Shop.Controllers
 {
     public class HomeController : Controller
     {
+        HandicraftShopDataContext data = new HandicraftShopDataContext();
         public ActionResult Index()
         {
-            return View();
+            List < SANPHAM > sp= data.SANPHAMs.ToList();
+            return View(sp);
         }
 
         public ActionResult About()
