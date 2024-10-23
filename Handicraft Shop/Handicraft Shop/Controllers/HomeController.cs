@@ -32,6 +32,10 @@ namespace Handicraft_Shop.Controllers
         {
             return View();
         }
+        public ActionResult dapp()
+        {
+            return View();
+        }
 
         public ActionResult About()
         {
