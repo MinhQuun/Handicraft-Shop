@@ -11,7 +11,7 @@ namespace Handicraft_Shop.Controllers
     {
         // GET: Admin
         HandicraftShopDataContext data = new HandicraftShopDataContext();
-        public ActionResult Index()
+        public ActionResult IndexAdmin()
         {
             List<SANPHAM> sp = data.SANPHAMs.ToList();
             return View(sp);

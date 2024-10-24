@@ -348,8 +348,8 @@
     <Content Include="Views\Shared\Mainlayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\AdminLayout.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\ManageUsers.cshtml" />
+    <Content Include="Views\Admin\IndexAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

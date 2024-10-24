@@ -44,7 +44,7 @@ namespace Handicraft_Shop.Controllers
 
                     // Điều hướng người dùng đến Controller tương ứng theo quyền
                     if (userRole == "Admin")
-                        return RedirectToAction("ManageUsers", "Admin");
+                        return RedirectToAction("IndexAdmin", "Admin");
                     else if (userRole == "NhanVien")
                         return RedirectToAction("Index", "NhanVien");
                     else if (userRole == "KhachHang")
