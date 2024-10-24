@@ -113,28 +113,13 @@
                                 Danh Mục Sản phẩm
                             </a>
                             <div class="submenu">
-                                @*@Html.Action("Menuc1", "Home")*@
+                                @Html.Action("AdminMenuCap1", "Admin")
                             </div>
                         </div>
                     </li>
 
-                    <li><a href="/Home/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
+                    <li><a href="/Admin/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
                     <li><a href="/Admin/ManageUsers" class="nav-link px-2 text-white">Quản lý Người dùng</a></li>
-                    @*<li>
-                        <div class="header__nav">
-                            <a href="javascript:;" class="nav-link px-2 text-white">
-                                Tùy Chọn
-                            </a>
-                            <div class="submenu">
-
-                                <a class="dropdown-item" href="/Admin/CreateUser">Thêm Sản Phẩm</a>
-                              
-                            </div>
-                        </div>
-
-
-
-                    </li>*@
 
                 </ul>
 
@@ -144,50 +129,52 @@
 
 
                     @*@if (Session["kh"] == null)
-                        {*@
+            {*@
                     @*<a href="/Home/Login" class="btn btn-outline-light me-2">Đăng Nhập</a>
-                    <a href="/Home/SignUp" class="btn btn-outline-success me-2">Đăng Ký</a>*@
+            <a href="/Home/SignUp" class="btn btn-outline-success me-2">Đăng Ký</a>*@
                     @*}*@
                     @*else
-                        {
-                            <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
+            {
+                <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
 
-                            if (Session["kh"] != null)
-                            {
-                                var kh = Session["kh"] as KhachHang;
-                                <label>Chào bạn, @kh.TenKhachHang</label>
-                            }
-                            else
-                            {
-                                <label></label>
-                            }
+                if (Session["kh"] != null)
+                {
+                    var kh = Session["kh"] as KhachHang;
+                    <label>Chào bạn, @kh.TenKhachHang</label>
+                }
+                else
+                {
+                    <label></label>
+                }
 
-                        }*@
-                    <a href="/Home/TimKiem">
-
-
-
-                        <img src="~/Hinh/search-icon-2044x2048-psdrpqwp.jpg" style="width:25px;height:25px" />
-                    </a>
-                    <a href="/Home/Xemgiohang">
-
-
-                        <img src="~/Hinh/icon_muahang.jpg" style="width:25px;height:25px" />
-                        @*@{
-                            if (Session["GioHang"] != null)
-                            {
-                                var gio = Session["GioHang"] as GioHang;*@
-                        @*<label class="rounded-circle bg-light pl-2 pr-2">@gio.SoMatHang()</label>*@
-                        @*}
-                            else
-                            {*@
-                        <label class="rounded-circle bg-light pl-2 pr-2">0</label>
-
-                        @*}*@
-                        }
-                    </a>
+            }*@
 
                 </div>
+                <div class="col-md-3 d-flex justify-content-center">
+                    @using (Html.BeginForm("AdminSearch", "Admin", FormMethod.Get, new { @class = "form-inline" }))
+                    {
+                        <div class="form-group">
+                            <input type="Text" class="form-control mx-sm-3" value="@ViewBag.Keyword" name="searchString" placeholder="Nhập tên cần tìm">
+                            <a href="/Admin/AdminSearch">
+                                <img class="icon-search" src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png" alt="icon-search" style="width:25px;height:25px;color:white">
+
+                            </a>
+                        </div>
+                    }
+                </div>
+                @*<a href="/Home/XemGioHang">
+                    <img class="cart-icon" src="https://salt.tikicdn.com/ts/upload/51/e2/92/8ca7e2cc5ede8c09e34d1beb50267f4f.png"
+                         alt="header_header_img_Cart" style="width:25px;height:25px;color:white;padding-left:5px">
+                    @if (Session["Cart"] != null)
+                    {
+                        var cart = Session["Cart"] as List<CartItem>;
+                        <span class="badge bg-light text-dark">@cart.Count</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-dark">0</span>
+                    }
+                </a>*@
             </div>
         </div>
     </header>

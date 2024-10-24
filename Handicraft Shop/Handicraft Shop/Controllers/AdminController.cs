@@ -93,5 +93,50 @@ namespace Handicraft_Shop.Controllers
             }
             return RedirectToAction("ManageUsers");
         }
+
+        public ActionResult AdminDetails(string id)
+        {
+            // Tìm sản phẩm chi tiết bằng cách sử dụng LINQ to SQL
+            var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == id);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound(); // Xử lý khi sản phẩm không tồn tại
+            }
+
+            // Truy vấn các sản phẩm liên quan dựa trên LOAISANPHAM
+            var relatedProducts = data.SANPHAMs
+                                    .Where(sp => sp.MALOAI == sanPham.MALOAI && sp.MASANPHAM != id)
+                                    .ToList();
+
+            // Truyền dữ liệu sang View
+            ViewBag.RelatedProducts = relatedProducts;
+            return View(sanPham);
+        }
+        public ActionResult AdminMenuCap1()
+        {
+            List<DANHMUCSANPHAM> dmsp = data.DANHMUCSANPHAMs.ToList();
+
+            return PartialView(dmsp);
+        }
+        public ActionResult AdminMenuCap2(int madm)
+        {
+            List<LOAI> dsloai = data.LOAIs.Where(t => t.MADANHMUC == madm).ToList();
+            return PartialView(dsloai);
+        }
+        public ActionResult AdminLocDL_Theoloai(string mdm)
+        {
+            List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
+            return View("IndexAdmin", ds);
+        }
+        public ActionResult AdminSearch(string searchString, int[] categoryIds)
+        {
+            var sp = from a in data.SANPHAMs select a;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                sp = sp.Where(s => s.TENSANPHAM.Contains(searchString));
+            }
+            return View("AdminSearch", sp.ToList());
+        }
     }
 }

@@ -357,6 +357,11 @@
     <Content Include="Views\Home\MenuCap2.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\XemGioHang.cshtml" />
+    <Content Include="Views\Admin\AdminMenuCap2.cshtml" />
+    <Content Include="Views\Admin\AdminMenuCap1.cshtml" />
+    <Content Include="Views\Admin\AdminDetails.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\AdminSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

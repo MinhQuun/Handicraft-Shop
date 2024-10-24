@@ -1,18 +1,15 @@
 ﻿@using Handicraft_Shop.Models;
 @model NGUOIDUNG
 @{
-    ViewBag.Title = "CreateUser";
+    ViewBag.Title = "EditUser";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h2>Thêm Người dùng mới</h2>
+<h2>Sửa Thông tin Người dùng</h2>
 
 @using (Html.BeginForm())
 {
-    <div class="form-group">
-        <label>Mã người dùng:</label>
-        @Html.EditorFor(model => model.MANGUOIDUNG, new { htmlAttributes = new { @class = "form-control" } })
-    </div>
+    @Html.HiddenFor(model => model.MANGUOIDUNG)
     <div class="form-group">
         <label>Tên người dùng:</label>
         @Html.EditorFor(model => model.TENNGUOIDUNG, new { htmlAttributes = new { @class = "form-control" } })
@@ -33,6 +30,6 @@
         <label>Số điện thoại:</label>
         @Html.EditorFor(model => model.SODIENTHOAI, new { htmlAttributes = new { @class = "form-control" } })
     </div>
-    <button type="submit" class="btn btn-success">Lưu</button>
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
 }
 
