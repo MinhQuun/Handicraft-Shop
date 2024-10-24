@@ -354,6 +354,7 @@
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Home\Menuc1.cshtml" />
     <Content Include="Views\Home\MenuCap2.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

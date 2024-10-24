@@ -107,7 +107,6 @@
 
                 <ul class="nav col-11 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
-
                         <div class="header__nav">
                             <a href="javascript:;" class="nav-link px-2 text-white">
                                 Danh Mục Sản phẩm
@@ -117,43 +116,39 @@
                             </div>
                         </div>
                     </li>
-
                     <li><a href="/Home/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
                     @*<li><a href="/Home/LichSuDonHang" class="nav-link px-2 text-white">Lịch Sử Đơn Hàng</a></li>*@
                     @*<li>
-                        <div class="header__nav">
-                            <a href="javascript:;" class="nav-link px-2 text-white">
-                                Tùy Chọn
-                            </a>
-                            <div class="submenu">
+                            <div class="header__nav">
+                                <a href="javascript:;" class="nav-link px-2 text-white">
+                                    Tùy Chọn
+                                </a>
+                                <div class="submenu">
 
-                                <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
                             </div>
-                        </div>
 
 
 
-                    </li>*@
+                        </li>*@
 
                 </ul>
 
-
-
                 <div class="text-end">
 
+                    @if (Session["kh"] == null)
+                    {
+                        <a href="/Home/Login" class="btn btn-outline-light me-2">Đăng Nhập</a>
+                        <a href="/Home/SignUp" class="btn btn-outline-success me-2">Đăng Ký</a>
+                    }
+                    else
+                    {
+                        <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
 
-                    @*@if (Session["kh"] == null)
-                        {*@
-                    <a href="/Home/Login" class="btn btn-outline-light me-2">Đăng Nhập</a>
-                    <a href="/Home/SignUp" class="btn btn-outline-success me-2">Đăng Ký</a>
-                    @*}*@
-                    @*else
-                        {
-                            <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
-
-                            if (Session["kh"] != null)
+                        @*if (Session["kh"] != null)
                             {
                                 var kh = Session["kh"] as KhachHang;
                                 <label>Chào bạn, @kh.TenKhachHang</label>
@@ -161,18 +156,28 @@
                             else
                             {
                                 <label></label>
-                            }
+                            }*@
 
-                        }*@
-                <a href="/Home/TimKiem">
-                    <img class="icon-search" src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png" alt="icon-search" style="width:25px;height:25px;color:white">
-                    @*<img src="~/Hinh/search-icon-2044x2048-psdrpqwp.jpg" style="width:25px;height:25px" />*@
-                </a>
-                    @*<a href="/Home/Xemgiohang">
+                    }
 
 
-                        <img src="~/Hinh/icon_muahang.jpg" style="width:25px;height:25px" />
-                        @{
+
+                </div>
+                <div class="col-md-3 d-flex justify-content-center">
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "form-inline" }))
+                    {
+                        <div class="form-group">
+                            <input type="Text" class="form-control mx-sm-3" value="@ViewBag.Keyword" name="searchString" placeholder="Nhập tên cần tìm">
+                            <a href="/Home/Search">
+                                <img class="icon-search" src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png" alt="icon-search" style="width:25px;height:25px;color:white">
+                               
+                            </a>
+                        </div>
+                    }
+                </div>
+                <a href="/Home/Xemgiohang">
+                    <img class="cart-icon" src="https://salt.tikicdn.com/ts/upload/51/e2/92/8ca7e2cc5ede8c09e34d1beb50267f4f.png" alt="header_header_img_Cart" style="width:25px;height:25px;color:white;padding-left:5px">
+                    @*@{
                             if (Session["GioHang"] != null)
                             {
                                 var gio = Session["GioHang"] as GioHang;
@@ -183,10 +188,8 @@
                         <label class="rounded-circle bg-light pl-2 pr-2">0</label>
 
                         }
-                        }
-                    </a>*@
-
-                </div>
+                        }*@
+                </a>
             </div>
         </div>
     </header>

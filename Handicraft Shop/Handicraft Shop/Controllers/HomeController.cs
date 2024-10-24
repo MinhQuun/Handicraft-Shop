@@ -110,5 +110,14 @@ namespace Handicraft_Shop.Controllers
             List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
             return View("Index", ds);
         }
+        public ActionResult Search(string searchString, int[] categoryIds)
+        {
+            var sp = from a in data.SANPHAMs select a;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                sp = sp.Where(s => s.TENSANPHAM.Contains(searchString));
+            }
+            return View("Search", sp.ToList());
+        }
     }
 }
