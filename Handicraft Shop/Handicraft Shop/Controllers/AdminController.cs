@@ -13,7 +13,17 @@ namespace Handicraft_Shop.Controllers
         HandicraftShopDataContext data = new HandicraftShopDataContext();
         public ActionResult Index()
         {
-            return View();
+            List<SANPHAM> sp = data.SANPHAMs.ToList();
+            return View(sp);
+        }
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var role = Session["UserRole"] as string;
+            if (role != "Admin")
+            {
+                filterContext.Result = RedirectToAction("Login", "Home");
+            }
+            base.OnActionExecuting(filterContext);
         }
         // Hiển thị danh sách người dùng
         public ActionResult ManageUsers()

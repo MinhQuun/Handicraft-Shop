@@ -1,0 +1,65 @@
+﻿@using Handicraft_Shop.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@helper Truncate(string input, int length)
+{
+    if (input.Length < length)
+    {
+        @input
+    }
+    else
+    {
+        @input.Substring(0, length) <text>...</text>
+    }
+}
+
+<link href="~/bootstrap/css/bootstrap-grid.css" rel="stylesheet" />
+<link href="~/Content/StyleSheet2.css" rel="stylesheet" />
+<script>
+    window.addEventListener('load', function() {
+        var fragment = '@ViewBag.Fragment';
+        if (fragment) {
+            var element = document.getElementById(fragment);
+            if (element) {
+                element.scrollIntoView();
+            }
+        }
+    });
+</script>
+
+<div class="container">
+
+    <a href="#Product" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+
+        <img src="~/Hinh/banner-home-1.jpg" style="width: 1300px" alt="Image" />
+        <div class="text-overlay">
+            <div>Chào Mừng Đến với Everon</div>
+            <div>Click vào để xem sản Phẩm</div>
+        </div>
+
+    </a>
+</div>
+
+
+<div id="Product">
+    <div class="container w-40">
+        <h2 class="w-100">Danh sách sản phẩm</h2>
+        <div class="row">
+            @foreach (SANPHAM sp in Model)
+            {
+                <div class="col-md-3 text-center mt-4 mb-4">
+                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" class="w-100" />
+                    <p style="height:40px;">@sp.TENSANPHAM</p>
+                    <a href="/Home/Detail/@sp.MASANPHAM" class="btn btn-outline-success">Chi Tiết </a>
+                    <p> @String.Format("{0:#,###}", sp.GIABAN) VNĐ </p>
+                    <a href="/Home/ThemMatHang/@sp.MASANPHAM" class="btn btn-outline-success">Chọn mua</a>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

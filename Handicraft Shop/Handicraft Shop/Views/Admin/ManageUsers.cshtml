@@ -1,0 +1,38 @@
+﻿@model List<Handicraft_Shop.Models.NGUOIDUNG>
+@{
+    ViewBag.Title = "ManageUsers";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Danh sách người dùng</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã người dùng</th>
+            <th>Tên người dùng</th>
+            <th>Tài khoản</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+<tr>
+    <td>@user.MANGUOIDUNG</td>
+    <td>@user.TENNGUOIDUNG</td>
+    <td>@user.TAIKHOAN</td>
+    <td>@user.EMAIL</td>
+    <td>@user.SODIENTHOAI</td>
+    <td>
+        <a href="@Url.Action("EditUser", new { id = user.MANGUOIDUNG })">Sửa</a> |
+        <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })"
+           onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+    </td>
+</tr>}
+    </tbody>
+</table>
+
+<a href="@Url.Action("CreateUser")" class="btn btn-primary">Thêm Người dùng</a>
+
