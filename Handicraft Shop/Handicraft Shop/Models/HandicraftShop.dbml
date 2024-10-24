@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TEST2" Class="HandicraftShopDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=MSI\TRUONGDOAN;Initial Catalog=TEST2;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="TEST2ConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=TRUONGDUY\SQLEXPRESS;Initial Catalog=TEST2;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="TEST2ConnectionString5" Provider="System.Data.SqlClient" />
   <Table Name="dbo.CHITIETDONHANG" Member="CHITIETDONHANGs">
     <Type Name="CHITIETDONHANG">
       <Column Name="MADONHANG" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -8,14 +8,6 @@
       <Column Name="DONGIA" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
       <Association Name="DONHANG_CHITIETDONHANG" Member="DONHANG" ThisKey="MADONHANG" OtherKey="MADONHANG" Type="DONHANG" IsForeignKey="true" />
       <Association Name="SANPHAM_CHITIETDONHANG" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs">
-    <Type Name="SANPHAM_KHUYENMAI">
-      <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
-      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DANHGIA" Member="DANHGIAs">
@@ -88,8 +80,8 @@
       <Column Name="NGAYBATDAU" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="NGAYKETTHUC" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="GIAMGIA" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
-      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="SANPHAM_KHUYENMAI" />
       <Association Name="KHUYENMAI_SANPHAM" Member="SANPHAMs" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="SANPHAM" />
+      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="SANPHAM_KHUYENMAI" />
     </Type>
   </Table>
   <Table Name="dbo.LOAI" Member="LOAIs">
@@ -148,11 +140,19 @@
       <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="MANHACUNGCAP" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="SANPHAM_CHITIETDONHANG" Member="CHITIETDONHANGs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="CHITIETDONHANG" />
-      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM_KHUYENMAI" />
       <Association Name="SANPHAM_DANHGIA" Member="DANHGIAs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="DANHGIA" />
+      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM_KHUYENMAI" />
       <Association Name="KHUYENMAI_SANPHAM" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
       <Association Name="LOAI_SANPHAM" Member="LOAI" ThisKey="MALOAI" OtherKey="MALOAI" Type="LOAI" IsForeignKey="true" />
       <Association Name="NHACUNGCAP_SANPHAM" Member="NHACUNGCAP" ThisKey="MANHACUNGCAP" OtherKey="MANHACUNGCAP" Type="NHACUNGCAP" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs">
+    <Type Name="SANPHAM_KHUYENMAI">
+      <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
+      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

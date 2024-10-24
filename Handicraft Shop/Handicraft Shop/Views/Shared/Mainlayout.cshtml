@@ -119,21 +119,21 @@
                     <li><a href="/Home/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
                     @*<li><a href="/Home/LichSuDonHang" class="nav-link px-2 text-white">Lịch Sử Đơn Hàng</a></li>*@
                     @*<li>
-                            <div class="header__nav">
-                                <a href="javascript:;" class="nav-link px-2 text-white">
-                                    Tùy Chọn
-                                </a>
-                                <div class="submenu">
+                <div class="header__nav">
+                    <a href="javascript:;" class="nav-link px-2 text-white">
+                        Tùy Chọn
+                    </a>
+                    <div class="submenu">
 
-                                    <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
+                        <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
 
 
 
-                        </li>*@
+            </li>*@
 
                 </ul>
 
@@ -149,14 +149,14 @@
                         <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
 
                         @*if (Session["kh"] != null)
-                            {
-                                var kh = Session["kh"] as KhachHang;
-                                <label>Chào bạn, @kh.TenKhachHang</label>
-                            }
-                            else
-                            {
-                                <label></label>
-                            }*@
+                {
+                    var kh = Session["kh"] as KhachHang;
+                    <label>Chào bạn, @kh.TenKhachHang</label>
+                }
+                else
+                {
+                    <label></label>
+                }*@
 
                     }
 
@@ -170,25 +170,23 @@
                             <input type="Text" class="form-control mx-sm-3" value="@ViewBag.Keyword" name="searchString" placeholder="Nhập tên cần tìm">
                             <a href="/Home/Search">
                                 <img class="icon-search" src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png" alt="icon-search" style="width:25px;height:25px;color:white">
-                               
+
                             </a>
                         </div>
                     }
                 </div>
-                <a href="/Home/Xemgiohang">
-                    <img class="cart-icon" src="https://salt.tikicdn.com/ts/upload/51/e2/92/8ca7e2cc5ede8c09e34d1beb50267f4f.png" alt="header_header_img_Cart" style="width:25px;height:25px;color:white;padding-left:5px">
-                    @*@{
-                            if (Session["GioHang"] != null)
-                            {
-                                var gio = Session["GioHang"] as GioHang;
-                        <label class="rounded-circle bg-light pl-2 pr-2">@gio.SoMatHang()</label>
-                        }
-                            else
-                            {
-                        <label class="rounded-circle bg-light pl-2 pr-2">0</label>
-
-                        }
-                        }*@
+                <a href="/Home/XemGioHang">
+                    <img class="cart-icon" src="https://salt.tikicdn.com/ts/upload/51/e2/92/8ca7e2cc5ede8c09e34d1beb50267f4f.png"
+                         alt="header_header_img_Cart" style="width:25px;height:25px;color:white;padding-left:5px">
+                    @if (Session["Cart"] != null)
+                    {
+                        var cart = Session["Cart"] as List<CartItem>;
+                        <span class="badge bg-light text-dark">@cart.Count</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-dark">0</span>
+                    }
                 </a>
             </div>
         </div>

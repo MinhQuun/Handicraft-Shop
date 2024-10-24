@@ -119,5 +119,77 @@ namespace Handicraft_Shop.Controllers
             }
             return View("Search", sp.ToList());
         }
+
+        public List<CartItem> GetCart()
+        {
+            var cart = Session["Cart"] as List<CartItem>;
+            if (cart == null)
+            {
+                cart = new List<CartItem>();
+                Session["Cart"] = cart;
+            }
+            return cart;
+        }
+
+        public ActionResult XemGioHang()
+        {
+            var cart = GetCart();
+            return View(cart);
+        }
+
+        public ActionResult ThemVaoGio(string id, int quantity = 1)
+        {
+            var product = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == id);
+            if (product != null)
+            {
+                var cart = GetCart();
+                var existingItem = cart.FirstOrDefault(c => c.Product.MASANPHAM == id);
+
+                if (existingItem != null)
+                {
+                    existingItem.Quantity += quantity; // Cộng dồn số lượng nếu sản phẩm đã có trong giỏ
+                }
+                else
+                {
+                    cart.Add(new CartItem { Product = product, Quantity = quantity });
+                }
+
+                Session["Cart"] = cart; // Cập nhật lại Session giỏ hàng
+            }
+
+            return RedirectToAction("XemGioHang"); // Điều hướng về giỏ hàng
+        }
+
+        public ActionResult XoaKhoiGio(string id)
+        {
+            var cart = GetCart();
+            var itemToRemove = cart.FirstOrDefault(c => c.Product.MASANPHAM == id);
+
+            if (itemToRemove != null)
+            {
+                cart.Remove(itemToRemove);
+                Session["Cart"] = cart;
+            }
+            return RedirectToAction("XemGioHang");
+        }
+
+        [HttpPost]
+        public ActionResult CapNhatGio(string id, int quantity)
+        {
+            var cart = GetCart();
+            var item = cart.FirstOrDefault(c => c.Product.MASANPHAM == id);
+
+            if (item != null && quantity > 0)
+            {
+                item.Quantity = quantity;
+                Session["Cart"] = cart;
+            }
+            else if (quantity <= 0)
+            {
+                cart.Remove(item);
+                Session["Cart"] = cart;
+            }
+            return RedirectToAction("XemGioHang");
+        }
     }
 }
