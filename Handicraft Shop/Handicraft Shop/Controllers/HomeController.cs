@@ -75,5 +75,40 @@ namespace Handicraft_Shop.Controllers
 
             return View();
         }
+        public ActionResult Details(string id)
+        {
+            // Tìm sản phẩm chi tiết bằng cách sử dụng LINQ to SQL
+            var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == id);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound(); // Xử lý khi sản phẩm không tồn tại
+            }
+
+            // Truy vấn các sản phẩm liên quan dựa trên LOAISANPHAM
+            var relatedProducts = data.SANPHAMs
+                                    .Where(sp => sp.MALOAI == sanPham.MALOAI && sp.MASANPHAM != id)
+                                    .ToList();
+
+            // Truyền dữ liệu sang View
+            ViewBag.RelatedProducts = relatedProducts;
+            return View(sanPham);
+        }
+        public ActionResult Menuc1()
+        {
+            List<DANHMUCSANPHAM> dmsp = data.DANHMUCSANPHAMs.ToList();
+
+            return PartialView(dmsp);
+        }
+        public ActionResult MenuCap2(int madm)
+        {
+            List<LOAI> dsloai = data.LOAIs.Where(t => t.MADANHMUC == madm).ToList();
+            return PartialView(dsloai);
+        }
+        public ActionResult LocDL_Theoloai(string mdm)
+        {
+            List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
+            return View("Index", ds);
+        }
     }
 }

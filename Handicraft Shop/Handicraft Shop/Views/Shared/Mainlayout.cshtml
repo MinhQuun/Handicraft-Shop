@@ -113,14 +113,14 @@
                                 Danh Mục Sản phẩm
                             </a>
                             <div class="submenu">
-                                @*@Html.Action("Menuc1", "Home")*@
+                                @Html.Action("Menuc1", "Home")
                             </div>
                         </div>
                     </li>
 
                     <li><a href="/Home/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
-                    <li><a href="/Home/LichSuDonHang" class="nav-link px-2 text-white">Lịch Sử Đơn Hàng</a></li>
-                    <li>
+                    @*<li><a href="/Home/LichSuDonHang" class="nav-link px-2 text-white">Lịch Sử Đơn Hàng</a></li>*@
+                    @*<li>
                         <div class="header__nav">
                             <a href="javascript:;" class="nav-link px-2 text-white">
                                 Tùy Chọn
@@ -128,14 +128,14 @@
                             <div class="submenu">
 
                                 <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
-                                @*<a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>*@
+                                <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                         </div>
 
 
 
-                    </li>
+                    </li>*@
 
                 </ul>
 
@@ -164,29 +164,27 @@
                             }
 
                         }*@
-                    <a href="/Home/TimKiem">
-
-
-
-                        <img src="~/Hinh/search-icon-2044x2048-psdrpqwp.jpg" style="width:25px;height:25px" />
-                    </a>
-                    <a href="/Home/Xemgiohang">
+                <a href="/Home/TimKiem">
+                    <img class="icon-search" src="https://salt.tikicdn.com/ts/upload/33/d0/37/6fef2e788f00a16dc7d5a1dfc5d0e97a.png" alt="icon-search" style="width:25px;height:25px;color:white">
+                    @*<img src="~/Hinh/search-icon-2044x2048-psdrpqwp.jpg" style="width:25px;height:25px" />*@
+                </a>
+                    @*<a href="/Home/Xemgiohang">
 
 
                         <img src="~/Hinh/icon_muahang.jpg" style="width:25px;height:25px" />
-                        @*@{
+                        @{
                             if (Session["GioHang"] != null)
                             {
-                                var gio = Session["GioHang"] as GioHang;*@
-                        @*<label class="rounded-circle bg-light pl-2 pr-2">@gio.SoMatHang()</label>*@
-                        @*}
+                                var gio = Session["GioHang"] as GioHang;
+                        <label class="rounded-circle bg-light pl-2 pr-2">@gio.SoMatHang()</label>
+                        }
                             else
-                            {*@
+                            {
                         <label class="rounded-circle bg-light pl-2 pr-2">0</label>
 
-                        @*}*@
                         }
-                    </a>
+                        }
+                    </a>*@
 
                 </div>
             </div>

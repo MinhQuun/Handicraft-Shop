@@ -234,3 +234,4 @@ E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Han
 E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.csproj.CopyComplete
 E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.dll
 E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.pdb
+D:\user\Truong Doan\CNPM\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.csproj.AssemblyReference.cache
