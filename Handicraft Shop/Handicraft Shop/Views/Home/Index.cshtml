@@ -15,21 +15,68 @@
         @input.Substring(0, length) <text>...</text>
     }
 }
-<div class="product-group">
-    <div class="row">
-        @foreach (SANPHAM sp in Model)
-        {
-            <div class="col-lg-3 card mr-2 mt-2 text-center">
-                <div class="card-prodcut">
-                    <img style="width:200px;height:200px;" class="card-img-top mt-2" src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" />
-                    <div class="card-body">
-                        <h5 style="font-size:20px;" class="card-title">@Truncate(sp.TENSANPHAM, 18)</h5>
-                        @Html.ActionLink("Chi tiết", "Details", "Home", new { id = @sp.MASANPHAM }, new { @class = "btn btn-warning" })
-                        <p class="text-danger"> @String.Format("{0:#,###}", sp.GIABAN) VNĐ </p>
-                        <a href="/Home/ThemMatHang/@sp.MASANPHAM" class="btn btn-outline-success">Chọn mua</a>
+
+<link href="~/bootstrap/css/bootstrap-grid.css" rel="stylesheet" />
+<link href="~/Content/StyleSheet2.css" rel="stylesheet" />
+<script>
+    window.addEventListener('load', function() {
+        var fragment = '@ViewBag.Fragment';
+        if (fragment) {
+            var element = document.getElementById(fragment);
+            if (element) {
+                element.scrollIntoView();
+            }
+        }
+    });
+</script>
+
+<div class="container">
+
+    <a href="#Product" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+
+        <img src="~/Hinh/banner-home-1.jpg" style="width: 1300px" alt="Image" />
+        <div class="text-overlay">
+            <div>Chào Mừng Đến với Everon</div>
+            <div>Click vào để xem sản Phẩm</div>
+        </div>
+
+    </a>
+</div>
+
+@*<div class="product-group">
+        <div class="row">
+            @foreach (SANPHAM sp in Model)
+            {
+                <div class="col-lg-3 card mr-2 mt-2 text-center">
+                    <div class="card-prodcut">
+                        <img style="width:200px;height:200px;" class="card-img-top mt-2" src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" />
+                        <div class="card-body">
+                            <h5 style="font-size:20px;" class="card-title">@Truncate(sp.TENSANPHAM, 18)</h5>
+                            @Html.ActionLink("Chi tiết", "Details", "Home", new { id = @sp.MASANPHAM }, new { @class = "btn btn-warning" })
+                            <p class="text-danger"> @String.Format("{0:#,###}", sp.GIABAN) VNĐ </p>
+                            <a href="/Home/ThemMatHang/@sp.MASANPHAM" class="btn btn-outline-success">Chọn mua</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+    </div>*@
+
+<div id="Product">
+    <div class="container w-40">
+        <h2 class="w-100">Danh sách sản phẩm</h2>
+        <div class="row">
+            @foreach (SANPHAM sp in Model)
+            {
+                <div class="col-md-3 text-center mt-4 mb-4">
+                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" class="w-100" />
+                    <p style="height:40px;">@sp.TENSANPHAM</p>
+                    <a href="/Home/Detail/@sp.MASANPHAM" class="btn btn-outline-success">Chi Tiết </a>
+                    <p> @String.Format("{0:#,###}", sp.GIABAN) VNĐ </p>
+                    <a href="/Home/ThemMatHang/@sp.MASANPHAM" class="btn btn-outline-success">Chọn mua</a>
+
+                </div>
+            }
+        </div>
     </div>
 </div>
