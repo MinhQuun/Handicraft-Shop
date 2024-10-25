@@ -99,24 +99,20 @@ namespace Handicraft_Shop.Controllers
 
             if (user != null && ModelState.IsValid)
             {
-                // Cập nhật thông tin người dùng
                 user.TENNGUOIDUNG = updatedUser.TENNGUOIDUNG;
                 user.TAIKHOAN = updatedUser.TAIKHOAN;
                 user.MATKHAU = updatedUser.MATKHAU;
                 user.EMAIL = updatedUser.EMAIL;
                 user.SODIENTHOAI = updatedUser.SODIENTHOAI;
 
-                // Kiểm tra quyền hiện tại
                 var userRole = data.QUYEN_NGUOIDUNGs.FirstOrDefault(q => q.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
 
                 if (userRole != null)
                 {
-                    // Nếu quyền đã thay đổi, xóa quyền cũ và thêm mới
                     if (userRole.MAQUYEN != SelectedRole)
                     {
                         data.QUYEN_NGUOIDUNGs.DeleteOnSubmit(userRole);
 
-                        // Thêm quyền mới
                         QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
                         {
                             MANGUOIDUNG = updatedUser.MANGUOIDUNG,
@@ -127,7 +123,6 @@ namespace Handicraft_Shop.Controllers
                 }
                 else
                 {
-                    // Nếu chưa có quyền, thêm mới
                     QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
                     {
                         MANGUOIDUNG = updatedUser.MANGUOIDUNG,
@@ -136,13 +131,12 @@ namespace Handicraft_Shop.Controllers
                     data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
                 }
 
-                // Lưu thay đổi vào cơ sở dữ liệu
                 data.SubmitChanges();
 
                 return RedirectToAction("ManageUsers");
             }
 
-            ViewBag.SelectedRole = SelectedRole; // Trả về quyền đã chọn
+            ViewBag.SelectedRole = SelectedRole; 
             return View(updatedUser);
         }
 

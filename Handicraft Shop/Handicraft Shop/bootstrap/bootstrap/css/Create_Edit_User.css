@@ -54,7 +54,7 @@ select.form-control {
     padding-right: 35px;
 }
 
-.btn {
+.save {
     width: 100%;
     padding: 10px;
     background-color: #28a745;
@@ -66,7 +66,7 @@ select.form-control {
     transition: background-color 0.3s ease;
 }
 
-    .btn:hover {
+    .save:hover {
         background-color: #218838;
     }
 
@@ -76,7 +76,7 @@ select.form-control {
         width: 90%;
     }
 
-    .btn {
+    .save {
         font-size: 14px;
     }
 }

@@ -24,13 +24,12 @@ namespace Handicraft_Shop.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            // Tìm người dùng có tài khoản và mật khẩu trùng khớp
             var user = data.NGUOIDUNGs.FirstOrDefault(u =>
                             u.TAIKHOAN == username && u.MATKHAU == password);
 
             if (user != null)
             {
-                // Lấy quyền của người dùng từ bảng QUYEN_NGUOIDUNG
+                Session["kh"] = user;
                 var userRole = (from quyenNguoiDung in data.QUYEN_NGUOIDUNGs
                                 join quyen in data.QUYENs on quyenNguoiDung.MAQUYEN equals quyen.MAQUYEN
                                 where quyenNguoiDung.MANGUOIDUNG == user.MANGUOIDUNG
@@ -48,16 +47,60 @@ namespace Handicraft_Shop.Controllers
                     else if (userRole == "NhanVien")
                         return RedirectToAction("Index", "NhanVien");
                     else if (userRole == "KhachHang")
-                        return RedirectToAction("Index", "KhachHang");
+                        return RedirectToAction("Index");
                 }
             }
 
             ViewBag.Message = "Tên đăng nhập hoặc mật khẩu không đúng!";
             return View();
         }
+        [HttpGet]
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SignUp(NGUOIDUNG newUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var lastUser = data.NGUOIDUNGs
+                                  .OrderByDescending(u => u.MANGUOIDUNG)
+                                  .FirstOrDefault();
+
+                int nextId = 1;
+                if (lastUser != null)
+                {
+                    string lastIdString = lastUser.MANGUOIDUNG.Substring(2); 
+                    nextId = int.Parse(lastIdString) + 1; 
+                }
+
+                newUser.MANGUOIDUNG = "ND" + nextId.ToString("D2");
+
+                data.NGUOIDUNGs.InsertOnSubmit(newUser);
+                data.SubmitChanges();
+
+                QUYEN_NGUOIDUNG userRole = new QUYEN_NGUOIDUNG
+                {
+                    MANGUOIDUNG = newUser.MANGUOIDUNG,
+                    MAQUYEN = "Q03" 
+                };
+                data.QUYEN_NGUOIDUNGs.InsertOnSubmit(userRole);
+                data.SubmitChanges();
+
+                return RedirectToAction("Success");
+            }
+
+            return View(newUser);
+        }
+        public ActionResult Success()
+        {
+            return View();
+        }
+
         public ActionResult Logout()
         {
-            // Xóa Session và điều hướng về trang đăng nhập
             Session.Clear();
             return RedirectToAction("Login", "Home");
         }
