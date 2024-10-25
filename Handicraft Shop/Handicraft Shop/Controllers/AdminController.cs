@@ -39,14 +39,41 @@ namespace Handicraft_Shop.Controllers
             return View();
         }
 
-        // [POST] Thêm người dùng mới
+        
         [HttpPost]
-        public ActionResult CreateUser(NGUOIDUNG newUser)
+        public ActionResult CreateUser(NGUOIDUNG newUser, string SelectedRole)
         {
             if (ModelState.IsValid)
             {
+                
+                var lastUser = data.NGUOIDUNGs
+                    .OrderByDescending(u => u.MANGUOIDUNG)
+                    .FirstOrDefault();
+
+                int nextId = 1;
+                if (lastUser != null)
+                {
+                    
+                    string lastIdString = lastUser.MANGUOIDUNG.Substring(2);
+                    nextId = int.Parse(lastIdString) + 1;
+                }
+
+                
+                newUser.MANGUOIDUNG = "ND" + nextId.ToString("D2");
+
+                
                 data.NGUOIDUNGs.InsertOnSubmit(newUser);
                 data.SubmitChanges();
+
+                
+                QUYEN_NGUOIDUNG userRole = new QUYEN_NGUOIDUNG
+                {
+                    MANGUOIDUNG = newUser.MANGUOIDUNG,
+                    MAQUYEN = SelectedRole
+                };
+                data.QUYEN_NGUOIDUNGs.InsertOnSubmit(userRole);
+                data.SubmitChanges();
+
                 return RedirectToAction("ManageUsers");
             }
             return View(newUser);
@@ -66,33 +93,81 @@ namespace Handicraft_Shop.Controllers
 
         // [POST] Cập nhật thông tin người dùng
         [HttpPost]
-        public ActionResult EditUser(NGUOIDUNG updatedUser)
+        public ActionResult EditUser(NGUOIDUNG updatedUser, string SelectedRole)
         {
             var user = data.NGUOIDUNGs.FirstOrDefault(u => u.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
+
             if (user != null && ModelState.IsValid)
             {
+                // Cập nhật thông tin người dùng
                 user.TENNGUOIDUNG = updatedUser.TENNGUOIDUNG;
                 user.TAIKHOAN = updatedUser.TAIKHOAN;
                 user.MATKHAU = updatedUser.MATKHAU;
                 user.EMAIL = updatedUser.EMAIL;
                 user.SODIENTHOAI = updatedUser.SODIENTHOAI;
+
+                // Kiểm tra quyền hiện tại
+                var userRole = data.QUYEN_NGUOIDUNGs.FirstOrDefault(q => q.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
+
+                if (userRole != null)
+                {
+                    // Nếu quyền đã thay đổi, xóa quyền cũ và thêm mới
+                    if (userRole.MAQUYEN != SelectedRole)
+                    {
+                        data.QUYEN_NGUOIDUNGs.DeleteOnSubmit(userRole);
+
+                        // Thêm quyền mới
+                        QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
+                        {
+                            MANGUOIDUNG = updatedUser.MANGUOIDUNG,
+                            MAQUYEN = SelectedRole
+                        };
+                        data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
+                    }
+                }
+                else
+                {
+                    // Nếu chưa có quyền, thêm mới
+                    QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
+                    {
+                        MANGUOIDUNG = updatedUser.MANGUOIDUNG,
+                        MAQUYEN = SelectedRole
+                    };
+                    data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
+                }
+
+                // Lưu thay đổi vào cơ sở dữ liệu
                 data.SubmitChanges();
+
                 return RedirectToAction("ManageUsers");
             }
+
+            ViewBag.SelectedRole = SelectedRole; // Trả về quyền đã chọn
             return View(updatedUser);
         }
+
+
 
         // Xóa người dùng
         public ActionResult DeleteUser(string id)
         {
+            
             var user = data.NGUOIDUNGs.FirstOrDefault(u => u.MANGUOIDUNG == id);
+
             if (user != null)
             {
+               
+                var userRoles = data.QUYEN_NGUOIDUNGs.Where(q => q.MANGUOIDUNG == id).ToList();
+                data.QUYEN_NGUOIDUNGs.DeleteAllOnSubmit(userRoles);
+
+                
                 data.NGUOIDUNGs.DeleteOnSubmit(user);
                 data.SubmitChanges();
             }
+
             return RedirectToAction("ManageUsers");
         }
+
 
         public ActionResult AdminDetails(string id)
         {

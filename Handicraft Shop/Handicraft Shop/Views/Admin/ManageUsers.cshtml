@@ -19,20 +19,93 @@
     <tbody>
         @foreach (var user in Model)
         {
-<tr>
-    <td>@user.MANGUOIDUNG</td>
-    <td>@user.TENNGUOIDUNG</td>
-    <td>@user.TAIKHOAN</td>
-    <td>@user.EMAIL</td>
-    <td>@user.SODIENTHOAI</td>
-    <td>
-        <a href="@Url.Action("EditUser", new { id = user.MANGUOIDUNG })">Sửa</a> |
-        <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })"
-           onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
-    </td>
-</tr>}
+            <tr>
+                <td>@user.MANGUOIDUNG</td>
+                <td>@user.TENNGUOIDUNG</td>
+                <td>@user.TAIKHOAN</td>
+                <td>@user.EMAIL</td>
+                <td>@user.SODIENTHOAI</td>
+                <td>
+                    <a href="@Url.Action("EditUser", new { id = user.MANGUOIDUNG })">Sửa</a> |
+                    <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+                </td>
+            </tr>
+}
     </tbody>
 </table>
 
 <a href="@Url.Action("CreateUser")" class="btn btn-primary">Thêm Người dùng</a>
 
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    h2 {
+        margin: 20px 0;
+        text-align: center;
+        color: #343a40;
+    }
+
+    .table {
+        width: 80%;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th {
+        background-color: #343a40;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .table td {
+        padding: 10px 15px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    .btn {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Responsive Design */
+   
+</style>
+<link href="~/bootstrap/bootstrap/css/ManageUsers.css" rel="stylesheet" />

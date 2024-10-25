@@ -141,6 +141,8 @@
     <Content Include="bootstrap\bootstrap\css\bootstrap-reboot.min.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap.min.css" />
+    <Content Include="bootstrap\bootstrap\css\Create_Edit_User.css" />
+    <Content Include="bootstrap\bootstrap\css\ManageUsers.css" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.js" />

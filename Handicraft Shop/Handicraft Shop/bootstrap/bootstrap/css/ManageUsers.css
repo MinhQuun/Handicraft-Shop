@@ -1,0 +1,13 @@
+﻿@media (max-width: 768px) {
+    .table {
+        width: 95%;
+    }
+
+    th, td {
+        font-size: 14px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
