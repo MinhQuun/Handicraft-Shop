@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden; 
+            overflow: hidden;
         }
     </style>
 
@@ -126,22 +126,7 @@
                     </li>
                     <li><a href="/Home/Index#Product" class="nav-link px-2 text-white">Danh Sách Sản Phẩm</a></li>
                     @*<li><a href="/Home/LichSuDonHang" class="nav-link px-2 text-white">Lịch Sử Đơn Hàng</a></li>*@
-                    @*<li>
-                <div class="header__nav">
-                    <a href="javascript:;" class="nav-link px-2 text-white">
-                        Tùy Chọn
-                    </a>
-                    <div class="submenu">
-
-                        <a class="dropdown-item" href="/Home/AddItem">Thêm Sản Phẩm</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-
-
-
-            </li>*@
+                    
 
                 </ul>
 
@@ -156,15 +141,15 @@
                     {
                         <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
 
-                        @*if (Session["kh"] != null)
-                {
-                    var kh = Session["kh"] as KhachHang;
-                    <label>Chào bạn, @kh.TenKhachHang</label>
-                }
-                else
-                {
-                    <label></label>
-                }*@
+                        if (Session["kh"] != null)
+                        {
+                            var kh = Session["kh"] as KHACHHANG;
+                            <label>Chào bạn, @kh.HOTEN</label>
+                        }
+                        else
+                        {
+                            <label></label>
+                        }
 
                     }
 
@@ -186,10 +171,10 @@
                 <a href="/Home/XemGioHang">
                     <img class="cart-icon" src="https://salt.tikicdn.com/ts/upload/51/e2/92/8ca7e2cc5ede8c09e34d1beb50267f4f.png"
                          alt="header_header_img_Cart" style="width:25px;height:25px;color:white;padding-left:5px">
-                    @if (Session["GioHang"] != null)
+                    @if (Session["Cart"] != null)
                     {
-                        var cart = Session["GioHang"] as GioHang;
-                        <span class="badge bg-light text-dark">@cart.SoMatHang()</span>
+                        var cart = Session["Cart"] as List<CartItem>;
+                        <span class="badge bg-light text-dark">@cart.Count</span>
                     }
                     else
                     {

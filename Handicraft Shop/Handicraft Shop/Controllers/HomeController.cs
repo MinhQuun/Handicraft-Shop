@@ -47,7 +47,7 @@ namespace Handicraft_Shop.Controllers
                     else if (userRole == "NhanVien")
                         return RedirectToAction("Index", "NhanVien");
                     else if (userRole == "KhachHang")
-                        return RedirectToAction("Index");
+                        return RedirectToAction("IndexKhachHang", "KhachHang");
                 }
             }
 
@@ -163,76 +163,115 @@ namespace Handicraft_Shop.Controllers
             return View("Search", sp.ToList());
         }
 
-        public List<CartItem> GetCart()
+        //Thêm mặt hàng
+        public ActionResult ThemMatHang(string id)
         {
-            var cart = Session["Cart"] as List<CartItem>;
-            if (cart == null)
+            GioHang gh = Session["GioHang"] as GioHang;
+            if (gh == null)
             {
-                cart = new List<CartItem>();
-                Session["Cart"] = cart;
+                gh = new GioHang();
             }
-            return cart;
+            gh.Them(id);
+            Session["GioHang"] = gh;
+            return RedirectToAction("Index");
+        }
+        //Them gio hang co SL
+        [HttpPost]
+        public ActionResult ThemMatHang(FormCollection c)
+        {
+            string ma = c["txtMa"];
+            int sl = int.Parse(c["SoLuong"]);
+
+            GioHang gh = Session["GioHang"] as GioHang;
+            if (gh == null)
+            {
+                gh = new GioHang();
+            }
+
+            gh.Them(ma, sl);
+            Session["GioHang"] = gh;
+            return RedirectToAction("Index");
         }
 
+        //Xem giỏ hàng
         public ActionResult XemGioHang()
         {
-            var cart = GetCart();
-            return View(cart);
-        }
-
-        public ActionResult ThemVaoGio(string id, int quantity = 1)
-        {
-            var product = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == id);
-            if (product != null)
+            GioHang gh = Session["GioHang"] as GioHang;
+            if (gh == null)
             {
-                var cart = GetCart();
-                var existingItem = cart.FirstOrDefault(c => c.Product.MASANPHAM == id);
-
-                if (existingItem != null)
-                {
-                    existingItem.Quantity += quantity; // Cộng dồn số lượng nếu sản phẩm đã có trong giỏ
-                }
-                else
-                {
-                    cart.Add(new CartItem { Product = product, Quantity = quantity });
-                }
-
-                Session["Cart"] = cart; // Cập nhật lại Session giỏ hàng
+                gh = new GioHang();
             }
-
-            return RedirectToAction("XemGioHang"); // Điều hướng về giỏ hàng
+            return View(gh);
         }
 
-        public ActionResult XoaKhoiGio(string id)
+        //Tăng mặt hàng trong giỏ hàng
+        public ActionResult TangMatHang(string id)
         {
-            var cart = GetCart();
-            var itemToRemove = cart.FirstOrDefault(c => c.Product.MASANPHAM == id);
-
-            if (itemToRemove != null)
+            GioHang gh = Session["GioHang"] as GioHang;
+            if (gh == null)
             {
-                cart.Remove(itemToRemove);
-                Session["Cart"] = cart;
+                gh = new GioHang();
             }
-            return RedirectToAction("XemGioHang");
+            gh.Them(id);
+            Session["GioHang"] = gh;
+            return RedirectToAction("Xemgiohang");
         }
 
+        //Giảm mặt hàng trong giỏ hàng
+        public ActionResult GiamMatHang(string id)
+        {
+            GioHang gh = Session["GioHang"] as GioHang;
+            if (gh == null)
+            {
+                gh = new GioHang();
+            }
+            int result = gh.Giam(id);
+            Session["GioHang"] = gh;
+            if (result == -1)
+            {
+                ViewBag.ErrorMessage = "Mặt hàng không tồn tại trong giỏ hàng.";
+            }
+            else if (result == -2)
+            {
+                ViewBag.ErrorMessage = "Số lượng mặt hàng đã là 0 và không thể giảm thêm.";
+            }
+            return RedirectToAction("Xemgiohang");
+        }
+        //Xóa hàng trong giỏ hàng
+        public ActionResult XoaGioHang(string id)
+        {
+            GioHang gh = Session["GioHang"] as GioHang;
+            gh.XoaSanPham(id);
+            return RedirectToAction("Xemgiohang");
+        }
         [HttpPost]
-        public ActionResult CapNhatGio(string id, int quantity)
+        public ActionResult CapNhatGioHang(string maSanPham, int soLuong)
         {
-            var cart = GetCart();
-            var item = cart.FirstOrDefault(c => c.Product.MASANPHAM == id);
 
-            if (item != null && quantity > 0)
+            GioHang gh = Session["GioHang"] as GioHang;
+            if (gh == null)
             {
-                item.Quantity = quantity;
-                Session["Cart"] = cart;
+                return Json(new { success = false, message = "Giỏ hàng rỗng" });
             }
-            else if (quantity <= 0)
+
+
+            var gioHangItem = gh.list.FirstOrDefault(item => item.MaSP == maSanPham);
+            if (gioHangItem != null)
             {
-                cart.Remove(item);
-                Session["Cart"] = cart;
+
+                gioHangItem.SoLuong = soLuong;
+
+
+                Session["GioHang"] = gh;
+                return Json(new { success = true });
             }
-            return RedirectToAction("XemGioHang");
+
+            return Json(new { success = false, message = "Không tìm thấy sản phẩm trong giỏ hàng" });
         }
+        public ActionResult Unauthorized()
+        {
+            return View();
+        }
+
     }
 }

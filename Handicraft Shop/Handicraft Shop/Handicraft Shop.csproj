@@ -123,9 +123,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KhachHangController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\GioHang.cs" />
     <Compile Include="Models\HandicraftShop.designer.cs">
       <AutoGen>True</AutoGen>
@@ -368,6 +370,9 @@
     <Content Include="Views\Admin\AdminSearch.cshtml" />
     <Content Include="Views\Home\SignUp.cshtml" />
     <Content Include="Views\Home\Success.cshtml" />
+    <Content Include="Views\Home\Unauthorized.cshtml" />
+    <Content Include="Views\Shared\KhachHangLayout.cshtml" />
+    <Content Include="Views\KhachHang\IndexKhachHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,58 +1,86 @@
-﻿@model List<CartItem>
-
+﻿@using Handicraft_Shop.Models;
 @{
     ViewBag.Title = "Giỏ Hàng";
     Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
-<h2>Giỏ Hàng</h2>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Thông Tin Giỏ Hàng</h2>
 
-@if (Model.Count == 0)
-{
-    <p>Giỏ hàng của bạn đang trống!</p>
-}
-else
-{
-    <table class="table">
-        <thead>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Thông báo:</strong> @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-hover table-bordered text-center">
+        <thead class="table-dark">
             <tr>
-                <th>Sản Phẩm</th>
+                <th>Mã Sản Phẩm</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Ảnh</th>
                 <th>Số Lượng</th>
-                <th>Giá</th>
-                <th>Tổng</th>
+                <th>Đơn Giá</th>
+                <th>Thành Tiền</th>
                 <th>Hành Động</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (CartItem item in Model.list)
             {
                 <tr>
-                    <td>@item.Product.TENSANPHAM</td>
+                    <td>@item.MaSP</td>
+                    <td>@item.TenSP</td>
                     <td>
-                        @using (Html.BeginForm("CapNhatGio", "Home", FormMethod.Post))
-                        {
-                            <input type="hidden" name="id" value="@item.Product.MASANPHAM" />
-                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" />
-                            <input type="submit" value="Cập Nhật" class="btn btn-primary" />
-                        }
+                        <img src="@Url.Content("~/HinhAnhSP/MUC HINH ANH CHUNG/" + item.AnhBia)" class="img-thumbnail" style="width:100px; height:100px;" />
                     </td>
-                    <td>@String.Format("{0:N0}", item.Product.GIABAN) đ</td>
-                    <td>@String.Format("{0:N0}", item.TotalPrice) đ</td>
                     <td>
-                        <a href="@Url.Action("XoaKhoiGio", "Home", new { id = item.Product.MASANPHAM })"
-                           class="btn btn-danger">Xóa</a>
+                        <div class="d-flex justify-content-center align-items-center">
+                            @using (Html.BeginForm("GiamMatHang", "Home", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", item.MaSP)
+                                <button type="submit" class="btn btn-outline-danger me-2">-</button>
+                            }
+
+                            <span>@item.SoLuong</span>
+
+                            @using (Html.BeginForm("TangMatHang", "Home", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", item.MaSP)
+                                <button type="submit" class="btn btn-outline-success ms-2">+</button>
+                            }
+                        </div>
+                    </td>
+                    <td>@String.Format("{0:#,###}", item.DonGia) VNĐ</td>
+                    <td>@String.Format("{0:#,###}", item.ThanhTien) VNĐ</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Home", new { id = item.MaSP })" class="btn btn-info me-2">Chi Tiết</a>
+                        <a href="@Url.Action("XoaGioHang", "Home", new { id = item.MaSP })" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
             }
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><strong>Tổng Tiền:</strong></td>
-                <td colspan="2">@String.Format("{0:N0}", Model.Sum(i => i.TotalPrice)) đ</td>
-            </tr>
-        </tfoot>
     </table>
 
-    <a href="/Home/Index" class="btn btn-secondary">Tiếp Tục Mua Sắm</a>
-}
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Tổng Số Lượng: <span class="text-danger">@((Session["GioHang"] as GioHang)?.TongSLHang() ?? 0)</span></h4>
+        </div>
+        <div class="col-md-6 text-end">
+            <h4>Tổng Thành Tiền: <span class="text-danger">@String.Format("{0:#,###}", (Session["GioHang"] as GioHang)?.TongThanhTien() ?? 0) VNĐ</span></h4>
+        </div>
+    </div>
+
+    <div class="text-end mt-4">
+        <a href="@Url.Action("DatHang", "Home")" class="btn btn-success btn-lg">Xác Nhận Đặt Hàng</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-KyZXEAg3QhqLMpG8r+Knujsl5/1hb5O2y0/9S/u6P1E=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-sxYRA1tbbQDCbw4jaJZxwy1HFvHTlJMiMAFpbwcoAEr24vUj7kLsqaMuMKNkGZNoQRy2YNvbO3UKmFz0cvjMTA==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
