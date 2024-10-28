@@ -18,5 +18,8 @@
         <button type="submit" class="btn btn-primary">Đăng nhập</button>
     </form>
 </div>
+@if (ViewBag.Message != null)
+{
+<p class="text-danger">@ViewBag.Message</p>}
 
 <link href="~/bootstrap/bootstrap/css/Login.css" rel="stylesheet" />

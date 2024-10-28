@@ -21,15 +21,20 @@ namespace Handicraft_Shop.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
+            // Kiểm tra thông tin đăng nhập từ CSDL
             var user = data.NGUOIDUNGs.FirstOrDefault(u =>
                             u.TAIKHOAN == username && u.MATKHAU == password);
 
             if (user != null)
             {
+                // Gán người dùng vào session
                 Session["kh"] = user;
+
+                // Lấy quyền của người dùng
                 var userRole = (from quyenNguoiDung in data.QUYEN_NGUOIDUNGs
                                 join quyen in data.QUYENs on quyenNguoiDung.MAQUYEN equals quyen.MAQUYEN
                                 where quyenNguoiDung.MANGUOIDUNG == user.MANGUOIDUNG
@@ -37,23 +42,31 @@ namespace Handicraft_Shop.Controllers
 
                 if (userRole != null)
                 {
-                    // Lưu thông tin đăng nhập vào Session
+                    // Gán quyền và tên người dùng vào session
                     Session["UserName"] = user.TENNGUOIDUNG;
                     Session["UserRole"] = userRole;
 
-                    // Điều hướng người dùng đến Controller tương ứng theo quyền
-                    if (userRole == "Admin")
-                        return RedirectToAction("IndexAdmin", "Admin");
-                    else if (userRole == "NhanVien")
-                        return RedirectToAction("Index", "NhanVien");
-                    else if (userRole == "KhachHang")
-                        return RedirectToAction("IndexKhachHang", "KhachHang");
+                    // Điều hướng dựa trên quyền
+                    switch (userRole)
+                    {
+                        case "Admin":
+                            return RedirectToAction("IndexAdmin", "Admin");
+                        case "NhanVien":
+                            return RedirectToAction("Index", "NhanVien");
+                        case "KhachHang":
+                            return RedirectToAction("IndexKhachHang", "KhachHang");
+                        default:
+                            ViewBag.Message = "Không có quyền truy cập hợp lệ.";
+                            return View();
+                    }
                 }
             }
 
+            // Thông báo nếu thông tin đăng nhập không đúng
             ViewBag.Message = "Tên đăng nhập hoặc mật khẩu không đúng!";
             return View();
         }
+
         [HttpGet]
         public ActionResult SignUp()
         {

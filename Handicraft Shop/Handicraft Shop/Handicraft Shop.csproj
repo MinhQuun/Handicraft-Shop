@@ -373,6 +373,11 @@
     <Content Include="Views\Home\Unauthorized.cshtml" />
     <Content Include="Views\Shared\KhachHangLayout.cshtml" />
     <Content Include="Views\KhachHang\IndexKhachHang.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangDetails.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangMenuCap1.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangMenuCap2.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangSearch.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangXemGioHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
