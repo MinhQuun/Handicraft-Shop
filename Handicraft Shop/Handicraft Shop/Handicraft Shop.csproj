@@ -124,6 +124,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
+    <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -378,6 +379,12 @@
     <Content Include="Views\KhachHang\KhachHangMenuCap2.cshtml" />
     <Content Include="Views\KhachHang\KhachHangSearch.cshtml" />
     <Content Include="Views\KhachHang\KhachHangXemGioHang.cshtml" />
+    <Content Include="Views\Shared\NhanVienLayout.cshtml" />
+    <Content Include="Views\NhanVien\IndexNhanVien.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienDetails.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienMenuCap1.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienMenuCap2.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

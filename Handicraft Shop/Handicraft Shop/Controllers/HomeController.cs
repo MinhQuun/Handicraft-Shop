@@ -52,7 +52,7 @@ namespace Handicraft_Shop.Controllers
                         case "Admin":
                             return RedirectToAction("IndexAdmin", "Admin");
                         case "NhanVien":
-                            return RedirectToAction("Index", "NhanVien");
+                            return RedirectToAction("IndexNhanVien", "NhanVien");
                         case "KhachHang":
                             return RedirectToAction("IndexKhachHang", "KhachHang");
                         default:
