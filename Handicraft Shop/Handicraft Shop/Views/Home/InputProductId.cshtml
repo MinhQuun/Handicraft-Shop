@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Nhập Mã Sản Phẩm";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-primary">Nhập Mã Sản Phẩm</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @using (Html.BeginForm("InputProductId", "Home", FormMethod.Post))
+    {
+        <div class="form-group">
+            <label for="productId">Mã Sản Phẩm</label>
+            <input type="text" name="productId" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Tiếp Tục</button>
+    }
+</div>

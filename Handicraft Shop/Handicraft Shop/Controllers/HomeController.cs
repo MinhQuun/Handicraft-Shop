@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Handicraft_Shop.Models;
-
+using System.IO;
 namespace Handicraft_Shop.Controllers
 {
     public class HomeController : Controller
@@ -21,20 +21,16 @@ namespace Handicraft_Shop.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            // Kiểm tra thông tin đăng nhập từ CSDL
+            // Tìm người dùng có tài khoản và mật khẩu trùng khớp
             var user = data.NGUOIDUNGs.FirstOrDefault(u =>
                             u.TAIKHOAN == username && u.MATKHAU == password);
 
             if (user != null)
             {
-                // Gán người dùng vào session
-                Session["kh"] = user;
-
-                // Lấy quyền của người dùng
+                // Lấy quyền của người dùng từ bảng QUYEN_NGUOIDUNG
                 var userRole = (from quyenNguoiDung in data.QUYEN_NGUOIDUNGs
                                 join quyen in data.QUYENs on quyenNguoiDung.MAQUYEN equals quyen.MAQUYEN
                                 where quyenNguoiDung.MANGUOIDUNG == user.MANGUOIDUNG
@@ -42,78 +38,26 @@ namespace Handicraft_Shop.Controllers
 
                 if (userRole != null)
                 {
-                    // Gán quyền và tên người dùng vào session
+                    // Lưu thông tin đăng nhập vào Session
                     Session["UserName"] = user.TENNGUOIDUNG;
                     Session["UserRole"] = userRole;
 
-                    // Điều hướng dựa trên quyền
-                    switch (userRole)
-                    {
-                        case "Admin":
-                            return RedirectToAction("IndexAdmin", "Admin");
-                        case "NhanVien":
-                            return RedirectToAction("IndexNhanVien", "NhanVien");
-                        case "KhachHang":
-                            return RedirectToAction("IndexKhachHang", "KhachHang");
-                        default:
-                            ViewBag.Message = "Không có quyền truy cập hợp lệ.";
-                            return View();
-                    }
+                    // Điều hướng người dùng đến Controller tương ứng theo quyền
+                    if (userRole == "Admin")
+                        return RedirectToAction("IndexAdmin", "Admin");
+                    else if (userRole == "NhanVien")
+                        return RedirectToAction("Index", "NhanVien");
+                    else if (userRole == "KhachHang")
+                        return RedirectToAction("Index", "KhachHang");
                 }
             }
 
-            // Thông báo nếu thông tin đăng nhập không đúng
             ViewBag.Message = "Tên đăng nhập hoặc mật khẩu không đúng!";
             return View();
         }
-
-        [HttpGet]
-        public ActionResult SignUp()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult SignUp(NGUOIDUNG newUser)
-        {
-            if (ModelState.IsValid)
-            {
-                var lastUser = data.NGUOIDUNGs
-                                  .OrderByDescending(u => u.MANGUOIDUNG)
-                                  .FirstOrDefault();
-
-                int nextId = 1;
-                if (lastUser != null)
-                {
-                    string lastIdString = lastUser.MANGUOIDUNG.Substring(2); 
-                    nextId = int.Parse(lastIdString) + 1; 
-                }
-
-                newUser.MANGUOIDUNG = "ND" + nextId.ToString("D2");
-
-                data.NGUOIDUNGs.InsertOnSubmit(newUser);
-                data.SubmitChanges();
-
-                QUYEN_NGUOIDUNG userRole = new QUYEN_NGUOIDUNG
-                {
-                    MANGUOIDUNG = newUser.MANGUOIDUNG,
-                    MAQUYEN = "Q03" 
-                };
-                data.QUYEN_NGUOIDUNGs.InsertOnSubmit(userRole);
-                data.SubmitChanges();
-
-                return RedirectToAction("Success");
-            }
-
-            return View(newUser);
-        }
-        public ActionResult Success()
-        {
-            return View();
-        }
-
         public ActionResult Logout()
         {
+            // Xóa Session và điều hướng về trang đăng nhập
             Session.Clear();
             return RedirectToAction("Login", "Home");
         }
@@ -161,11 +105,26 @@ namespace Handicraft_Shop.Controllers
             List<LOAI> dsloai = data.LOAIs.Where(t => t.MADANHMUC == madm).ToList();
             return PartialView(dsloai);
         }
+        //public ActionResult LocDL_Theoloai(string mdm)
+        //{
+        //    List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
+        //    return View("Index", ds);
+        //}
         public ActionResult LocDL_Theoloai(string mdm)
         {
-            List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
+            System.Diagnostics.Debug.WriteLine("Mã loại nhận được: " + mdm);
+
+            var ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
+            System.Diagnostics.Debug.WriteLine("Số sản phẩm lọc được: " + ds.Count);
+
+            if (ds.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Không có sản phẩm nào thuộc loại này.";
+            }
+
             return View("Index", ds);
         }
+
         public ActionResult Search(string searchString, int[] categoryIds)
         {
             var sp = from a in data.SANPHAMs select a;
@@ -176,115 +135,212 @@ namespace Handicraft_Shop.Controllers
             return View("Search", sp.ToList());
         }
 
-        //Thêm mặt hàng
-        public ActionResult ThemMatHang(string id)
-        {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
-            {
-                gh = new GioHang();
-            }
-            gh.Them(id);
-            Session["GioHang"] = gh;
-            return RedirectToAction("Index");
-        }
-        //Them gio hang co SL
-        [HttpPost]
-        public ActionResult ThemMatHang(FormCollection c)
-        {
-            string ma = c["txtMa"];
-            int sl = int.Parse(c["SoLuong"]);
-
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
-            {
-                gh = new GioHang();
-            }
-
-            gh.Them(ma, sl);
-            Session["GioHang"] = gh;
-            return RedirectToAction("Index");
-        }
-
-        //Xem giỏ hàng
-        public ActionResult XemGioHang()
-        {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
-            {
-                gh = new GioHang();
-            }
-            return View(gh);
-        }
-
-        //Tăng mặt hàng trong giỏ hàng
-        public ActionResult TangMatHang(string id)
-        {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
-            {
-                gh = new GioHang();
-            }
-            gh.Them(id);
-            Session["GioHang"] = gh;
-            return RedirectToAction("Xemgiohang");
-        }
-
-        //Giảm mặt hàng trong giỏ hàng
-        public ActionResult GiamMatHang(string id)
-        {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
-            {
-                gh = new GioHang();
-            }
-            int result = gh.Giam(id);
-            Session["GioHang"] = gh;
-            if (result == -1)
-            {
-                ViewBag.ErrorMessage = "Mặt hàng không tồn tại trong giỏ hàng.";
-            }
-            else if (result == -2)
-            {
-                ViewBag.ErrorMessage = "Số lượng mặt hàng đã là 0 và không thể giảm thêm.";
-            }
-            return RedirectToAction("Xemgiohang");
-        }
-        //Xóa hàng trong giỏ hàng
-        public ActionResult XoaGioHang(string id)
-        {
-            GioHang gh = Session["GioHang"] as GioHang;
-            gh.XoaSanPham(id);
-            return RedirectToAction("Xemgiohang");
-        }
-        [HttpPost]
-        public ActionResult CapNhatGioHang(string maSanPham, int soLuong)
-        {
-
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
-            {
-                return Json(new { success = false, message = "Giỏ hàng rỗng" });
-            }
-
-
-            var gioHangItem = gh.list.FirstOrDefault(item => item.MaSP == maSanPham);
-            if (gioHangItem != null)
-            {
-
-                gioHangItem.SoLuong = soLuong;
-
-
-                Session["GioHang"] = gh;
-                return Json(new { success = true });
-            }
-
-            return Json(new { success = false, message = "Không tìm thấy sản phẩm trong giỏ hàng" });
-        }
-        public ActionResult Unauthorized()
+        // them
+        [HttpGet]
+        public ActionResult AddItem()
         {
             return View();
         }
 
+        [HttpPost]
+        public ActionResult AddItem(SANPHAM item, HttpPostedFileBase HINHANH)
+        {
+            var existingProduct = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == item.MASANPHAM);
+            if (existingProduct != null)
+            {
+                ModelState.AddModelError("MASANPHAM", "Mã sản phẩm đã tồn tại. Vui lòng nhập mã khác.");
+                return View(item);
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (HINHANH != null && HINHANH.ContentLength > 0)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(HINHANH.FileName)
+                                          + "_" + DateTime.Now.Ticks + Path.GetExtension(HINHANH.FileName);
+                        string folderPath = Server.MapPath("~/HinhAnhSP/MUC HINH ANH CHUNG/");
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+                        string filePath = Path.Combine(folderPath, fileName);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            ModelState.AddModelError("", "Tệp đã tồn tại. Vui lòng chọn tệp khác.");
+                            return View(item);
+                        }
+                        HINHANH.SaveAs(filePath);
+                        item.HINHANH = "" + fileName;
+                    }
+                    data.SANPHAMs.InsertOnSubmit(item);
+                    data.SubmitChanges();
+
+                    TempData["SuccessMessage"] = "Sản phẩm đã được thêm thành công.";
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.");
+                }
+            }
+
+            return View(item);
+        }
+        public ActionResult DeleteProductById()
+        {
+            return View();
+        }
+
+        // POST: Nhận mã sản phẩm và hiển thị thông tin sản phẩm
+        [HttpPost]
+        public ActionResult DeleteProductById(string productId)
+        {
+            var sanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == productId);
+            if (sanPham == null)
+            {
+                TempData["ErrorMessage"] = "Sản phẩm không tồn tại.";
+                return RedirectToAction("DeleteProductById");
+            }
+
+            // Nếu tìm thấy sản phẩm, trả về view với thông tin sản phẩm
+            return View("DeleteConfirmed", sanPham);
+        }
+
+        // POST: Xác nhận xóa sản phẩm
+        [HttpPost, ActionName("DeleteConfirmed")]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            var sanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == id);
+            if (sanPham == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy sản phẩm để xóa.";
+                return RedirectToAction("DeleteProductById");
+            }
+
+            // Xóa sản phẩm và lưu thay đổi
+            data.SANPHAMs.DeleteOnSubmit(sanPham);
+            data.SubmitChanges();
+
+            TempData["SuccessMessage"] = "Sản phẩm đã được xóa thành công.";
+            return RedirectToAction("DeleteProductById");
+        }
+
+
+        // GET: Hiển thị trang nhập mã sản phẩm
+        public ActionResult InputProductId()
+        {
+            return View();
+        }
+
+        // POST: Kiểm tra mã sản phẩm và chuyển đến trang chỉnh sửa nếu hợp lệ
+        [HttpPost]
+        public ActionResult InputProductId(string productId)
+        {
+            var sanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == productId);
+            if (sanPham == null)
+            {
+                TempData["ErrorMessage"] = "Mã sản phẩm không tồn tại.";
+                return RedirectToAction("InputProductId");
+            }
+
+            // Chuyển đến trang chỉnh sửa với thông tin sản phẩm
+            return View("EditProduct", sanPham);
+        }
+
+        // POST: Lưu thông tin sản phẩm sau khi chỉnh sửa
+        //[HttpPost]
+        //public ActionResult EditProduct(SANPHAM updatedProduct)
+        //{
+        //    var sanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == updatedProduct.MASANPHAM);
+        //    if (sanPham == null)
+        //    {
+        //        TempData["ErrorMessage"] = "Không tìm thấy sản phẩm.";
+        //        return RedirectToAction("InputProductId");
+        //    }
+
+        //    // Cập nhật thông tin sản phẩm
+        //    sanPham.TENSANPHAM = updatedProduct.TENSANPHAM;
+        //    sanPham.GIABAN = updatedProduct.GIABAN;
+        //    sanPham.HINHANH = updatedProduct.HINHANH;
+        //    sanPham.MOTA = updatedProduct.MOTA;
+        //    sanPham.SOLUONGTON = updatedProduct.SOLUONGTON;
+        //    sanPham.MALOAI = updatedProduct.MALOAI;
+
+        //    // Lưu thay đổi vào cơ sở dữ liệu
+        //    data.SubmitChanges();
+
+        //    TempData["SuccessMessage"] = "Sản phẩm đã được cập nhật thành công.";
+        //    return RedirectToAction("InputProductId");
+        //}
+
+        [HttpGet]
+        public ActionResult EditProduct(string productId)
+        {
+            var sanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == productId);
+            if (sanPham == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy sản phẩm.";
+                return RedirectToAction("InputProductId");
+            }
+            return View(sanPham);
+        }
+
+        [HttpPost]
+        public ActionResult EditProduct(SANPHAM updatedProduct, HttpPostedFileBase HINHANH)
+        {
+            var sanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == updatedProduct.MASANPHAM);
+            if (sanPham == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy sản phẩm.";
+                return RedirectToAction("InputProductId");
+            }
+
+            try
+            {
+                if (HINHANH != null && HINHANH.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(HINHANH.FileName)
+                                      + "_" + DateTime.Now.Ticks + Path.GetExtension(HINHANH.FileName);
+                    string folderPath = Server.MapPath("~/HinhAnhSP/MUC HINH ANH CHUNG/");
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    string filePath = Path.Combine(folderPath, fileName);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        ModelState.AddModelError("", "Tệp đã tồn tại. Vui lòng chọn tệp khác.");
+                        return View(updatedProduct);
+                    }
+                    HINHANH.SaveAs(filePath);
+                    sanPham.HINHANH = "" + fileName;
+                }
+                sanPham.TENSANPHAM = updatedProduct.TENSANPHAM;
+                sanPham.GIABAN = updatedProduct.GIABAN;
+                sanPham.MOTA = updatedProduct.MOTA;
+                sanPham.SOLUONGTON = updatedProduct.SOLUONGTON;
+                sanPham.MALOAI = updatedProduct.MALOAI;
+                data.SubmitChanges();
+
+                TempData["SuccessMessage"] = "Sản phẩm đã được cập nhật thành công.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return error message
+                System.Diagnostics.Debug.WriteLine("Lỗi: " + ex.Message);
+                ModelState.AddModelError("", "Có lỗi xảy ra khi cập nhật sản phẩm. Vui lòng thử lại.");
+                return View(updatedProduct);
+            }
+        }
     }
 }
+   
+   
+
+
+

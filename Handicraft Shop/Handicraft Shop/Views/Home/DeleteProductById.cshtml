@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Xóa Sản Phẩm Theo Mã";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-danger">Xóa Sản Phẩm Theo Mã</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @using (Html.BeginForm("DeleteProductById", "Home", FormMethod.Post))
+    {
+        <div class="form-group">
+            <label for="productId">Nhập Mã Sản Phẩm:</label>
+            <input type="text" name="productId" id="productId" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-danger mt-3">Xem Thông Tin Sản Phẩm</button>
+    }
+</div>

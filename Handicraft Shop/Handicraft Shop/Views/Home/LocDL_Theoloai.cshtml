@@ -1,0 +1,24 @@
+﻿@model List<Handicraft_Shop.Models.SANPHAM>
+
+<div class="container mt-5">
+    <h2 class="text-center">Danh sách sản phẩm</h2>
+
+    <div class="row">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var sp in Model)
+            {
+                <div class="col-md-3 text-center mt-4 mb-4">
+                    <img src="@Url.Content("~/HinhAnhSP/" + sp.HINHANH)" class="w-100" alt="@sp.TENSANPHAM" />
+                    <p>@sp.TENSANPHAM</p>
+                    <p>@String.Format("{0:#,###} VNĐ", sp.GIABAN)</p>
+                    <a href="@Url.Action("Details", "Home", new { id = sp.MASANPHAM })" class="btn btn-outline-success">Chi Tiết</a>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center text-danger">Không có sản phẩm nào được tìm thấy.</p>
+        }
+    </div>
+</div>

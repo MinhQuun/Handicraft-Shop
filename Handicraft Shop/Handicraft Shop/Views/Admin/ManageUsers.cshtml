@@ -1,42 +1,38 @@
 ﻿@model List<Handicraft_Shop.Models.NGUOIDUNG>
-@{ ViewBag.Title = "Manage Users";
-    Layout = "~/Views/Shared/AdminLayout.cshtml"; // Sử dụng layout chuẩn }
- }
-<div class="manage-users-container mt-5">
-    <h2 class="text-center">Danh sách người dùng</h2>
-
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover custom-table">
-            <thead class="table-dark">
-                <tr>
-                    <th>Mã người dùng</th>
-                    <th>Tên người dùng</th>
-                    <th>Tài khoản</th>
-                    <th>Email</th>
-                    <th>Số điện thoại</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
-    <tr>
-        <td>@user.MANGUOIDUNG</td>
-        <td>@user.TENNGUOIDUNG</td>
-        <td>@user.TAIKHOAN</td>
-        <td>@user.EMAIL</td>
-        <td>@user.SODIENTHOAI</td>
-        <td>
-            <a href="@Url.Action("EditUser", new { id = user.MANGUOIDUNG })">Sửa</a> |
-            <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })"
-               onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
-        </td>
-    </tr>
+@{
+    ViewBag.Title = "ManageUsers";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
-            </tbody>
-        </table>
-    </div>
 
-    <a href="@Url.Action("CreateUser")" class="btn btn-primary add-user-button">Thêm Người dùng</a>
-</div>
-<link href="~/bootstrap/bootstrap/css/ManageUsers.css" rel="stylesheet" />
+<h2>Danh sách người dùng</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã người dùng</th>
+            <th>Tên người dùng</th>
+            <th>Tài khoản</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+<tr>
+    <td>@user.MANGUOIDUNG</td>
+    <td>@user.TENNGUOIDUNG</td>
+    <td>@user.TAIKHOAN</td>
+    <td>@user.EMAIL</td>
+    <td>@user.SODIENTHOAI</td>
+    <td>
+        <a href="@Url.Action("EditUser", new { id = user.MANGUOIDUNG })">Sửa</a> |
+        <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })"
+           onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+    </td>
+</tr>}
+    </tbody>
+</table>
+
+<a href="@Url.Action("CreateUser")" class="btn btn-primary">Thêm Người dùng</a>
+

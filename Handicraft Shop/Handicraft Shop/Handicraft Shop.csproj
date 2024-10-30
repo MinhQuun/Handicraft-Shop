@@ -123,13 +123,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\KhachHangController.cs" />
-    <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CartItem.cs" />
-    <Compile Include="Models\GioHang.cs" />
     <Compile Include="Models\HandicraftShop.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -144,10 +140,6 @@
     <Content Include="bootstrap\bootstrap\css\bootstrap-reboot.min.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap.min.css" />
-    <Content Include="bootstrap\bootstrap\css\Create_Edit_User.css" />
-    <Content Include="bootstrap\bootstrap\css\Login.css" />
-    <Content Include="bootstrap\bootstrap\css\ManageUsers.css" />
-    <Content Include="bootstrap\bootstrap\css\SignUp.css" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.js" />
@@ -302,6 +294,7 @@
     <Content Include="HinhAnhSP\TRE\khaytrecotaycam.jpg" />
     <Content Include="HinhAnhSP\TRE\longbancokhay.jpg" />
     <Content Include="HinhAnhSP\TRE\longbantruyenthong.jpg" />
+    <Content Include="HinhAnhSP\TRE\rotre1.jpg" />
     <Content Include="HinhAnhSP\TUI XACH\tuicoisangtrong.jpg" />
     <Content Include="HinhAnhSP\TUI XACH\tuidantaytruyenthong.jpg" />
     <Content Include="HinhAnhSP\TUI XACH\tuimaytruyenthong.jpg" />
@@ -327,9 +320,6 @@
       <LastGenOutput>HandicraftShop.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Models\HandicraftShop.dbml.layout">
-      <DependentUpon>HandicraftShop.dbml</DependentUpon>
-    </None>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -363,28 +353,12 @@
     <Content Include="Views\Home\Menuc1.cshtml" />
     <Content Include="Views\Home\MenuCap2.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
-    <Content Include="Views\Home\XemGioHang.cshtml" />
-    <Content Include="Views\Admin\AdminMenuCap2.cshtml" />
-    <Content Include="Views\Admin\AdminMenuCap1.cshtml" />
-    <Content Include="Views\Admin\AdminDetails.cshtml" />
-    <Content Include="Views\Admin\EditUser.cshtml" />
-    <Content Include="Views\Admin\AdminSearch.cshtml" />
-    <Content Include="Views\Home\SignUp.cshtml" />
-    <Content Include="Views\Home\Success.cshtml" />
-    <Content Include="Views\Home\Unauthorized.cshtml" />
-    <Content Include="Views\Shared\KhachHangLayout.cshtml" />
-    <Content Include="Views\KhachHang\IndexKhachHang.cshtml" />
-    <Content Include="Views\KhachHang\KhachHangDetails.cshtml" />
-    <Content Include="Views\KhachHang\KhachHangMenuCap1.cshtml" />
-    <Content Include="Views\KhachHang\KhachHangMenuCap2.cshtml" />
-    <Content Include="Views\KhachHang\KhachHangSearch.cshtml" />
-    <Content Include="Views\KhachHang\KhachHangXemGioHang.cshtml" />
-    <Content Include="Views\Shared\NhanVienLayout.cshtml" />
-    <Content Include="Views\NhanVien\IndexNhanVien.cshtml" />
-    <Content Include="Views\NhanVien\NhanVienDetails.cshtml" />
-    <Content Include="Views\NhanVien\NhanVienMenuCap1.cshtml" />
-    <Content Include="Views\NhanVien\NhanVienMenuCap2.cshtml" />
-    <Content Include="Views\NhanVien\NhanVienSearch.cshtml" />
+    <Content Include="Views\Home\AddItem.cshtml" />
+    <Content Include="Views\Home\DeleteProductById.cshtml" />
+    <Content Include="Views\Home\DeleteConfirmed.cshtml" />
+    <Content Include="Views\Home\InputProductId.cshtml" />
+    <Content Include="Views\Home\EditProduct.cshtml" />
+    <Content Include="Views\Home\LocDL_Theoloai.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -404,6 +378,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\HandicraftShop.dbml.layout">
+      <DependentUpon>HandicraftShop.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

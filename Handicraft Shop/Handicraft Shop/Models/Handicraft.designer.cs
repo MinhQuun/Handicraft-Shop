@@ -23,7 +23,7 @@ namespace Handicraft_Shop.Models
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TEST2")]
-	public partial class HandicraftShopDataContext : System.Data.Linq.DataContext
+	public partial class HandicraftDataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
@@ -74,31 +74,31 @@ namespace Handicraft_Shop.Models
     partial void DeleteSANPHAM(SANPHAM instance);
     #endregion
 		
-		public HandicraftShopDataContext() : 
+		public HandicraftDataContext() : 
 				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["TEST2ConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public HandicraftShopDataContext(string connection) : 
+		public HandicraftDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public HandicraftShopDataContext(System.Data.IDbConnection connection) : 
+		public HandicraftDataContext(System.Data.IDbConnection connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public HandicraftShopDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public HandicraftDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public HandicraftShopDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public HandicraftDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
