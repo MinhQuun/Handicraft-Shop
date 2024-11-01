@@ -25,19 +25,14 @@ namespace Handicraft_Shop.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            // Kiểm tra thông tin đăng nhập từ CSDL
-            var user = data.NGUOIDUNGs.FirstOrDefault(u =>
-                            u.TAIKHOAN == username && u.MATKHAU == password);
+            var user = data.NGUOIDUNGs.FirstOrDefault(u => u.TAIKHOAN == username && u.MATKHAU == password);
 
             if (user != null)
             {
-                // Gán người dùng vào session
-                Session["kh"] = user;
-                if (Session["kh"] != null)
-                {
-                    Console.WriteLine("Session kh đã được lưu thành công.");
-                }
-                // Lấy quyền của người dùng
+                // Lưu người dùng và vai trò vào session
+                Session["User"] = user;
+                Session["UserName"] = user.TENNGUOIDUNG;
+
                 var userRole = (from quyenNguoiDung in data.QUYEN_NGUOIDUNGs
                                 join quyen in data.QUYENs on quyenNguoiDung.MAQUYEN equals quyen.MAQUYEN
                                 where quyenNguoiDung.MANGUOIDUNG == user.MANGUOIDUNG
@@ -45,11 +40,8 @@ namespace Handicraft_Shop.Controllers
 
                 if (userRole != null)
                 {
-                    // Gán quyền và tên người dùng vào session
-                    Session["UserName"] = user.TENNGUOIDUNG;
                     Session["UserRole"] = userRole;
 
-                    // Điều hướng dựa trên quyền
                     switch (userRole)
                     {
                         case "Admin":
@@ -65,10 +57,10 @@ namespace Handicraft_Shop.Controllers
                 }
             }
 
-            // Thông báo nếu thông tin đăng nhập không đúng
             ViewBag.Message = "Tên đăng nhập hoặc mật khẩu không đúng!";
             return View();
         }
+
 
         [HttpGet]
         public ActionResult SignUp()

@@ -177,31 +177,20 @@
                 </ul>
 
                 <div class="text-end">
-
-                    @if (Session["kh"] == null)
+                    @if (Session["User"] == null)
                     {
+                        <!-- Nếu chưa đăng nhập -->
                         <a href="/Home/Login" class="btn btn-outline-light me-2">Đăng Nhập</a>
                         <a href="/Home/SignUp" class="btn btn-outline-success me-2">Đăng Ký</a>
                     }
                     else
                     {
+                        <!-- Nếu đã đăng nhập -->
+                        <span class="text-white me-2">Xin chào, @Session["UserName"]!</span>
                         <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
-
-                        @*if (Session["kh"] != null)
-                            {
-                                var kh = Session["kh"] as KHACHHANG;
-                                <label>Chào bạn, @kh.HOTEN</label>
-                            }
-                            else
-                            {
-                                <label></label>
-                            }*@
-
                     }
-
-
-
                 </div>
+
                 <div class="col-md-3 d-flex justify-content-center">
                     @using (Html.BeginForm("KhachHangSearch", "KhachHang", FormMethod.Get, new { @class = "form-inline" }))
                     {

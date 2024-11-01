@@ -1,35 +1,67 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "KhachHangLichSuDonHang";
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
 
 @model List<Handicraft_Shop.Models.DONHANG>
 
-<h2>Lịch Sử Đơn Hàng</h2>
+<!-- CSS Tùy chỉnh -->
+<style>
+    /* Căn giữa tiêu đề */
+    h2.text-center {
+        font-size: 1.8rem;
+        color: #333;
+        font-weight: bold;
+    }
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Mã Đơn Hàng</th>
-            <th>Ngày Đặt</th>
-            <th>Ngày Giao</th>
-            <th>Tổng Số Lượng Hàng</th>
-            <th>Tổng Thành Tiền</th>
-            <th>Trạng Thái</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var donHang in Model)
-        {
+    /* Bảng Bootstrap */
+    .table {
+        font-size: 16px; /* Tăng cỡ chữ */
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    tbody tr:hover {
+        background-color: #f5f5f5; /* Màu nền khi hover */
+    }
+
+    /* Tăng khoảng cách giữa các hàng */
+    .table td, .table th {
+        vertical-align: middle;
+        padding: 12px;
+        text-align: center; /* Căn giữa nội dung */
+    }
+</style>
+
+<h2 class="text-center my-4">Lịch Sử Đơn Hàng</h2>
+
+<div class="container">
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
             <tr>
-                <td>@donHang.MADONHANG</td>
-                <td>@donHang.NGAYDAT.ToString("dd/MM/yyyy")</td>
-                <td>@donHang.NGAYGIAO?.ToString("dd/MM/yyyy")</td> <!-- Sử dụng `?` để kiểm tra null -->
-                <td>@donHang.TONGSLHANG</td>
-                <td>@String.Format("{0:#,###} VND", donHang.TONGTHANHTIEN)</td>
-                <td>@donHang.TRANGTHAI</td>
+                <th>Mã Đơn Hàng</th>
+                <th>Ngày Đặt</th>
+                <th>Ngày Giao</th>
+                <th>Tổng Số Lượng Hàng</th>
+                <th>Tổng Thành Tiền</th>
+                <th>Trạng Thái</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var donHang in Model)
+            {
+                <tr>
+                    <td>@donHang.MADONHANG</td>
+                    <td>@(donHang.NGAYDAT.HasValue ? donHang.NGAYDAT.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                    <td>@(donHang.NGAYGIAO.HasValue ? donHang.NGAYGIAO.Value.ToString("dd/MM/yyyy") : "Chưa giao")</td>
+                    <td>@donHang.TONGSLHANG</td>
+                    <td>@String.Format("{0:#,###} VND", donHang.TONGTHANHTIEN)</td>
+                    <td>@donHang.TRANGTHAI</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

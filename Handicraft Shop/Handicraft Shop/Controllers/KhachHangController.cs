@@ -286,26 +286,31 @@ namespace Handicraft_Shop.Controllers
         }
         public ActionResult KhachHangLichSuDonHang()
         {
-            if (Session["kh"] == null)
+            if (Session["UserRole"]?.ToString() != "KhachHang")
             {
                 return RedirectToAction("Login", "Home");
             }
 
-            KHACHHANG khach = Session["kh"] as KHACHHANG;
-
-            if (khach == null)
+            var user = Session["User"] as NGUOIDUNG;
+            if (user == null)
             {
                 return RedirectToAction("Login", "Home");
             }
 
-            // Tiếp tục lấy dữ liệu đơn hàng nếu session hợp lệ
+            var khachHang = data.KHACHHANGs.SingleOrDefault(k => k.MANGUOIDUNG == user.MANGUOIDUNG);
+            if (khachHang == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             var donHangs = data.DONHANGs
-                .Where(d => d.MAKHACHHANG == khach.MAKHACHHANG)
+                .Where(d => d.MAKHACHHANG == khachHang.MAKHACHHANG)
                 .OrderByDescending(d => d.NGAYDAT)
                 .ToList();
 
             return View(donHangs);
         }
+
 
 
     }
