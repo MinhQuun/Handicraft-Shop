@@ -196,7 +196,7 @@ namespace Handicraft_Shop.Controllers
             return View(gh);
         }
         [HttpPost]
-        public ActionResult ConfirmOrder(string diachigh, string SelectedRole, string ghiChu)
+        public ActionResult KhachHangConfirmOrder(string diachigh, string SelectedRole, string ghiChu)
         {
             // Kiểm tra người dùng đã đăng nhập
             var nguoiDung = Session["kh"] as NGUOIDUNG;
@@ -275,15 +275,38 @@ namespace Handicraft_Shop.Controllers
             Session["GioHang"] = null;
 
             // Chuyển hướng đến trang xác nhận đơn hàng
-            return RedirectToAction("OrderConfirmation", new { id = donHang.MADONHANG });
+            return RedirectToAction("KhachHangOrderConfirmation", new { id = donHang.MADONHANG });
         }
 
 
-        public ActionResult OrderConfirmation(  )
+        public ActionResult KhachHangOrderConfirmation(  )
         {
             // Lấy thông tin đơn hàng theo ID
             return View();
         }
+        public ActionResult KhachHangLichSuDonHang()
+        {
+            if (Session["kh"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            KHACHHANG khach = Session["kh"] as KHACHHANG;
+
+            if (khach == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            // Tiếp tục lấy dữ liệu đơn hàng nếu session hợp lệ
+            var donHangs = data.DONHANGs
+                .Where(d => d.MAKHACHHANG == khach.MAKHACHHANG)
+                .OrderByDescending(d => d.NGAYDAT)
+                .ToList();
+
+            return View(donHangs);
+        }
+
 
     }
 }

@@ -33,7 +33,10 @@ namespace Handicraft_Shop.Controllers
             {
                 // Gán người dùng vào session
                 Session["kh"] = user;
-
+                if (Session["kh"] != null)
+                {
+                    Console.WriteLine("Session kh đã được lưu thành công.");
+                }
                 // Lấy quyền của người dùng
                 var userRole = (from quyenNguoiDung in data.QUYEN_NGUOIDUNGs
                                 join quyen in data.QUYENs on quyenNguoiDung.MAQUYEN equals quyen.MAQUYEN

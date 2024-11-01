@@ -389,7 +389,8 @@
     <Content Include="Views\NhanVien\NhanVienMenuCap2.cshtml" />
     <Content Include="Views\NhanVien\NhanVienSearch.cshtml" />
     <Content Include="Views\KhachHang\KhachHangDatHang.cshtml" />
-    <Content Include="Views\KhachHang\OrderConfirmation.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangOrderConfirmation.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangLichSuDonHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
