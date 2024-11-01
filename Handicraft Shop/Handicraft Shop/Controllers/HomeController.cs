@@ -190,21 +190,29 @@ namespace Handicraft_Shop.Controllers
         }
         //Them gio hang co SL
         [HttpPost]
-        public ActionResult ThemMatHang(FormCollection c)
+        public ActionResult ThemMatHangAjax(string id)
         {
-            string ma = c["txtMa"];
-            int sl = int.Parse(c["SoLuong"]);
-
             GioHang gh = Session["GioHang"] as GioHang;
             if (gh == null)
             {
                 gh = new GioHang();
             }
-
-            gh.Them(ma, sl);
+            gh.Them(id);
             Session["GioHang"] = gh;
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new
+                {
+                    success = true,
+                    cartCount = gh.SoMatHang() // Số lượng sản phẩm trong giỏ hàng
+                }, JsonRequestBehavior.AllowGet);
+            }
+
             return RedirectToAction("Index");
         }
+
+
 
         //Xem giỏ hàng
         public ActionResult XemGioHang()

@@ -12,6 +12,7 @@
     <script src="~/bootstrap/bootstrap/js/bootstrap.min.js"></script>
     <title>@ViewBag.Title</title>
 
+    @RenderSection("Styles", required: false)
     <style>
         /* Đảm bảo layout có thể cuộn đúng */
         html, body {
@@ -191,14 +192,14 @@
                         <a href="/Home/Logout" class="btn btn-outline-danger me-2">Đăng Xuất</a>
 
                         @*if (Session["kh"] != null)
-                        {
-                            var kh = Session["kh"] as KhachHang;
-                            <label>Chào bạn, @kh.TenKhachHang</label>
-                        }
-                        else
-                        {
-                            <label></label>
-                        }*@
+                            {
+                                var kh = Session["kh"] as KhachHang;
+                                <label>Chào bạn, @kh.TenKhachHang</label>
+                            }
+                            else
+                            {
+                                <label></label>
+                            }*@
 
                     }
 
@@ -231,7 +232,7 @@
             </div>
         </div>
     </header>
-
+    @RenderSection("Scripts", required: false)
     <div>
         @RenderBody()
     </div>

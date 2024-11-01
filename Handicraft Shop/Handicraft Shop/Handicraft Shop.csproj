@@ -145,6 +145,8 @@
     <Content Include="bootstrap\bootstrap\css\bootstrap.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap.min.css" />
     <Content Include="bootstrap\bootstrap\css\Create_Edit_User.css" />
+    <Content Include="bootstrap\bootstrap\css\Index.css" />
+    <Content Include="bootstrap\bootstrap\css\KhachHangDatHang.css" />
     <Content Include="bootstrap\bootstrap\css\Login.css" />
     <Content Include="bootstrap\bootstrap\css\ManageUsers.css" />
     <Content Include="bootstrap\bootstrap\css\SignUp.css" />
@@ -153,6 +155,7 @@
     <Content Include="bootstrap\bootstrap\js\bootstrap.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.min.js" />
     <Content Include="bootstrap\bootstrap\js\jquery-3.3.1.min.js" />
+    <Content Include="bootstrap\bootstrap\js\KhachHangDatHang.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -385,6 +388,8 @@
     <Content Include="Views\NhanVien\NhanVienMenuCap1.cshtml" />
     <Content Include="Views\NhanVien\NhanVienMenuCap2.cshtml" />
     <Content Include="Views\NhanVien\NhanVienSearch.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangDatHang.cshtml" />
+    <Content Include="Views\KhachHang\OrderConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

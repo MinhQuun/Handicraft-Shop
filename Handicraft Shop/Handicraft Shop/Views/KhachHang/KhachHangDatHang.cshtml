@@ -1,0 +1,97 @@
+﻿@using Handicraft_Shop.Models;
+@{
+    ViewBag.Title = "DatHang";
+    NGUOIDUNG kh = (NGUOIDUNG)Session["kh"];
+    Layout = "~/Views/Shared/KhachHangLayout.cshtml";
+}
+
+@section Styles {
+
+    <link href="~/bootstrap/bootstrap/css/KhachHangDatHang.css" rel="stylesheet" />
+}
+
+@section Scripts {
+
+
+    <script src="~/bootstrap/bootstrap/js/KhachHangDatHang.js"></script>
+
+}
+
+<div class="compact-order-container">
+    <h2 class="compact-order-header">Xác Nhận Đơn Hàng</h2>
+    <form action="/KhachHang/ConfirmOrder" method="post">
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Họ tên:</label>
+            <span>@kh.TENNGUOIDUNG</span>
+        </div>
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Điện thoại:</label>
+            <span>@kh.SODIENTHOAI</span>
+        </div>
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Email:</label>
+            <span>@kh.EMAIL</span>
+        </div>
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Địa chỉ:</label>
+            <input type="text" name="diachigh" class="compact-order-form-input" required />
+        </div>
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Ngày đặt:</label>
+            <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
+        </div>
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Hình thức thanh toán:</label>
+            <select class="compact-order-form-input" name="SelectedRole">
+                <option value="HT01">ATM Banking</option>
+                <option value="HT02">Tiền mặt</option>
+            </select>
+        </div>
+
+        <div class="compact-order-form-group">
+            <label class="compact-order-form-label">Ghi chú:</label>
+            <input type="text" name="ghiChu" class="compact-order-form-input" required />
+        </div>
+
+        <table class="compact-summary-table table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5">Thông tin đơn hàng</th>
+                </tr>
+                <tr>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Ảnh</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (CartItem item in Model.list)
+                {
+                    <tr>
+                        <td>@item.TenSP</td>
+                        <td><img src="@Url.Content("~/HinhAnhSP/MUC HINH ANH CHUNG/" + item.AnhBia)" /></td>
+                        <td>@item.SoLuong</td>
+                        <td>@String.Format("{0:#,###}", item.DonGia) VND</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><strong>Tổng số lượng:</strong> @Model.TongSLHang()</td>
+                    <td colspan="3">@String.Format("{0:#,###}", Model.TongThanhTien()) VND</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="compact-footer">
+            <input type="submit" value="Đồng ý đặt hàng" class="btn btn-confirm" />
+        </div>
+    </form>
+</div>

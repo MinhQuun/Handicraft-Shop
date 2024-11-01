@@ -83,20 +83,26 @@ namespace Handicraft_Shop.Controllers
         }
         //Them gio hang co SL
         [HttpPost]
-        public ActionResult KhachHangThemMatHang(FormCollection c)
+        public ActionResult KhachHangThemMatHangAjax(string id)
         {
-            string ma = c["txtMa"];
-            int sl = int.Parse(c["SoLuong"]);
-
             GioHang gh = Session["GioHang"] as GioHang;
             if (gh == null)
             {
                 gh = new GioHang();
             }
-
-            gh.Them(ma, sl);
+            gh.Them(id);
             Session["GioHang"] = gh;
-            return RedirectToAction("IndexKhachHang");
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new
+                {
+                    success = true,
+                    cartCount = gh.SoMatHang() // Số lượng sản phẩm trong giỏ hàng
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return RedirectToAction("Index");
         }
 
         //Xem giỏ hàng
@@ -174,5 +180,110 @@ namespace Handicraft_Shop.Controllers
 
             return Json(new { success = false, message = "Không tìm thấy sản phẩm trong giỏ hàng" });
         }
+        public ActionResult KhachHangDatHang()
+        {
+            //kiem tra khach hang da dang nhap
+            //chua
+            if (Session["kh"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            GioHang gh = Session["GioHang"] as GioHang;
+
+            NGUOIDUNG khach = Session["kh"] as NGUOIDUNG;
+            ViewBag.k = khach;
+            return View(gh);
+        }
+        [HttpPost]
+        public ActionResult ConfirmOrder(string diachigh, string SelectedRole, string ghiChu)
+        {
+            // Kiểm tra người dùng đã đăng nhập
+            var nguoiDung = Session["kh"] as NGUOIDUNG;
+            if (nguoiDung == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            // Lấy mã người dùng từ bảng NGUOIDUNG (dưới dạng chuỗi)
+            string maNguoiDung = nguoiDung.MANGUOIDUNG;
+
+            // Kiểm tra xem người dùng này đã có thông tin trong bảng KHACHHANG chưa
+            var khachHang = data.KHACHHANGs.SingleOrDefault(k => k.MANGUOIDUNG == maNguoiDung);
+            if (khachHang == null)
+            {
+                // Nếu chưa có, tạo bản ghi mới trong KHACHHANG
+                khachHang = new KHACHHANG
+                {
+                    MANGUOIDUNG = maNguoiDung, // Liên kết mã người dùng
+                    HOTEN = nguoiDung.TENNGUOIDUNG,
+                    SODIENTHOAI = nguoiDung.SODIENTHOAI,
+                    EMAIL = nguoiDung.EMAIL
+                };
+                data.KHACHHANGs.InsertOnSubmit(khachHang);
+                data.SubmitChanges();
+            }
+
+            // Lấy giỏ hàng từ session
+            var gh = Session["GioHang"] as GioHang;
+            if (gh == null || !gh.list.Any())
+            {
+                ViewBag.ErrorMessage = "Giỏ hàng trống.";
+                return RedirectToAction("KhachHangXemGioHang", "KhachHang");
+            }
+
+            // Thêm địa chỉ vào bảng DIACHI_GIAOHANG
+            var diaChiGiaoHang = new DIACHI_GIAOHANG
+            {
+                MAKHACHHANG = khachHang.MAKHACHHANG,
+                DIACHI = diachigh
+            };
+            data.DIACHI_GIAOHANGs.InsertOnSubmit(diaChiGiaoHang);
+            data.SubmitChanges();
+
+            // Thêm đơn hàng vào bảng DONHANG
+            var donHang = new DONHANG
+            {
+                MAKHACHHANG = khachHang.MAKHACHHANG,
+                MADIACHI = diaChiGiaoHang.MADIACHI,
+                NGAYDAT = DateTime.Now,
+                NGAYGIAO = null,
+                MATT = SelectedRole,
+                GHICHU = ghiChu,
+                TONGSLHANG = gh.TongSLHang(),
+                TONGTHANHTIEN = (decimal)gh.TongThanhTien(),
+                TRANGTHAI = "Chờ xử lý"
+            };
+            data.DONHANGs.InsertOnSubmit(donHang);
+            data.SubmitChanges();
+
+            // Thêm từng sản phẩm trong giỏ vào bảng CHITIETDONHANG
+            foreach (var item in gh.list)
+            {
+                var chiTietDonHang = new CHITIETDONHANG
+                {
+                    MADONHANG = donHang.MADONHANG,
+                    MASANPHAM = item.MaSP,
+                    SOLUONG = item.SoLuong,
+                    DONGIA = (decimal)item.DonGia
+                };
+                data.CHITIETDONHANGs.InsertOnSubmit(chiTietDonHang);
+            }
+            data.SubmitChanges();
+
+            // Xóa giỏ hàng sau khi đơn hàng đã được xác nhận
+            Session["GioHang"] = null;
+
+            // Chuyển hướng đến trang xác nhận đơn hàng
+            return RedirectToAction("OrderConfirmation", new { id = donHang.MADONHANG });
+        }
+
+
+        public ActionResult OrderConfirmation(  )
+        {
+            // Lấy thông tin đơn hàng theo ID
+            return View();
+        }
+
     }
 }
