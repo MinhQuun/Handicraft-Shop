@@ -1,46 +1,4 @@
-﻿/* File: wwwroot/css/HomePage.css */
-
-/* Style cho banner trang chủ */
-.homepage-banner {
-    position: relative;
-    max-width: 100%;
-    height: 400px;
-    overflow: hidden;
-}
-
-.banner-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.7);
-}
-
-.banner-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    text-align: center;
-}
-
-    .banner-text h1 {
-        font-size: 2.5em;
-        font-weight: bold;
-    }
-
-    .banner-text p {
-        font-size: 1.2em;
-        margin-top: 10px;
-    }
-
-    .banner-text .btn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 1em;
-    }
-
-/* Style cho phần sản phẩm */
+﻿/* Style cho phần sản phẩm */
 .product-section {
     margin-top: 50px;
     text-align: center;
@@ -51,14 +9,19 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 30px;
+    font-weight:600;
 }
 
+/* Thiết kế thẻ sản phẩm */
 .product-card {
+    background-color: #fff;
     border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
 }
 
     .product-card:hover {
@@ -70,71 +33,115 @@
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
 }
 
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+/* Tên sản phẩm */
 .product-title {
     font-size: 1.1em;
     color: #333;
-    margin-top: 10px;
+    margin-top: 15px;
     font-weight: bold;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Hiển thị tối đa 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
 }
 
+/* Giá sản phẩm */
 .product-price {
     color: #28a745;
-    font-size: 1.1em;
+    font-size: 1.2em;
     margin: 10px 0;
-}
-
-.product-card .btn-outline-primary {
-    margin: 5px 0;
-}
-
-.product-card .btn-success {
-    margin-top: 5px;
-}
-/* Đảm bảo các nút có cùng chiều rộng và được căn giữa */
-.product-card .btn {
-    width: 100px; /* Đặt chiều rộng cố định cho nút */
-    font-size: 0.9em;
-    padding: 8px 0;
-    text-align: center;
-}
-
-.product-card .btn-outline-primary {
-    border-radius: 20px;
     font-weight: bold;
 }
 
-.product-card .btn-success {
-    border-radius: 20px;
-    font-weight: bold;
-}
-/* Bao bọc các nút trong một container flex */
+/* Nhóm nút */
 .product-card .button-group {
     display: flex;
-    justify-content: space-between;
-    gap: 10px; /* Khoảng cách giữa các nút */
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
 }
 
+/* Style cho nút */
 .product-card .btn {
-    flex: 1; /* Đảm bảo nút chiếm cùng chiều rộng */
+    flex: 1;
     padding: 10px 0;
     text-align: center;
     font-size: 0.9em;
     font-weight: bold;
-    border-radius: 20px;
+    border-radius: 25px;
+    width: 100px;
+    transition: all 0.3s ease;
 }
-/* Đảm bảo tên sản phẩm luôn hiển thị gọn gàng và không làm vỡ layout */
-.product-title {
+
+/* Nút chi tiết sản phẩm */
+.product-card .btn-outline-primary {
+    color: #007bff;
+    border: 2px solid #007bff;
+}
+
+    .product-card .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+/* Nút chọn mua */
+.product-card .btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border: 2px solid #28a745;
+}
+
+    .product-card .btn-success:hover {
+        background-color: #218838;
+        border-color: #218838;
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+    }
+
+/* CSS cho phân trang */
+.pagination {
     font-size: 1.1em;
-    color: #333;
-    margin-top: 10px;
-    font-weight: bold;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Giới hạn hiển thị trong 2 dòng */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 3em; /* Đảm bảo chiều cao cố định để tránh thay đổi layout */
 }
+
+    .pagination .page-item {
+        margin: 0 3px;
+    }
+
+    .pagination .page-link {
+        color: #007bff;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+        border-radius: 50%; /* Làm cho các nút phân trang tròn */
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .pagination .page-link:hover {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .pagination .page-link:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+

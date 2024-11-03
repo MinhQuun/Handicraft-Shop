@@ -7,22 +7,56 @@
 @section Styles {
 
     <link href="~/bootstrap/bootstrap/css/Index.css" rel="stylesheet" />
+    <link href="~/bootstrap/bootstrap/css/Banner.css" rel="stylesheet" />
+
 }
 
+<script src="~/bootstrap/bootstrap/js/jquery-3.3.1.min.js"></script>
+<script src="~/bootstrap/bootstrap/js/bootstrap.bundle.min.js"></script>
+@Html.Partial("KhachHang_Banner")
 
-<div class="homepage-banner">
-    <img src="~/Hinh/banner-home-1.jpg" class="banner-image" alt="Banner">
-    <div class="banner-text">
-        <h1>Chào Mừng Đến với Everon</h1>
-        <p>Khám phá các sản phẩm thủ công độc đáo</p>
-        
-    </div>
-</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Khởi chạy carousel của banner
+            $('#customBannerCarousel').carousel({
+                interval: 3000, // Thời gian chuyển ảnh (3 giây)
+                ride: 'carousel' // Tự động chạy carousel
+            });
+
+            // Cuộn đến phần tiêu đề "Danh Sách Sản Phẩm" nếu không phải trang đầu tiên
+            const currentPage = @ViewBag.CurrentPage;
+            if (currentPage > 1) {
+                $('html, body').animate({
+                    scrollTop: $('#Product').offset().top
+                }, 800); // 800ms là thời gian cuộn, bạn có thể điều chỉnh
+            }
+        });
+
+        function addToCartAjax(productId) {
+            $.ajax({
+                url: '/KhachHang/KhachHangThemMatHangAjax',
+                type: 'POST',
+                data: { MASANPHAM: productId },
+                success: function (response) {
+                    if (response.success) {
+                        $('.cart-icon + .badge').text(response.cartCount);
+                    } else {
+                        alert(response.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+                    }
+                },
+                error: function () {
+                    console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                }
+            });
+        }
+    </script>
+}
 
 <div class="container product-section" id="Product">
     <h2 class="section-title">Danh Sách Sản Phẩm</h2>
     <div class="row">
-        @foreach (SANPHAM sp in Model)
+        @foreach (var sp in Model)
         {
             <div class="col-md-3 col-sm-6 text-center mt-4 mb-4">
                 <div class="product-card">
@@ -37,23 +71,30 @@
             </div>
         }
     </div>
-</div>
-<script>
-    function addToCartAjax(productId) {
-        $.ajax({
-            url: '/KhachHang/KhachHangThemMatHangAjax', // Sử dụng đúng tên action
-            type: 'POST',
-            data: { id: productId },
-            success: function (response) {
-                if (response.success) {
-                    // Cập nhật số lượng sản phẩm trong giỏ hàng
-                    $('.cart-icon + .badge').text(response.cartCount);
-                }
-            },
-            error: function () {
-                console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
-            }
-        });
-    }
 
-</script>
+    <!-- Phân trang -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("IndexKhachHang", new { page = ViewBag.CurrentPage - 1 })">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("IndexKhachHang", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("IndexKhachHang", new { page = ViewBag.CurrentPage + 1 })">Sau</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

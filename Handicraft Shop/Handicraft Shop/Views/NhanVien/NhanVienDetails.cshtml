@@ -1,32 +1,187 @@
 ﻿@using Handicraft_Shop.Models;
 @{
-    ViewBag.Title = "NhanVienDetails";
+    ViewBag.Title = "Chi Tiết Sản Phẩm";
     Layout = "~/Views/Shared/NhanVienLayout.cshtml";
 }
 
-div class="container product-detail">
-<div class="row">
-    <div class="col-md-4">
-        <img src="/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="@Model.TENSANPHAM" class="img-fluid" />
-    </div>
-    <div class="col-md-8 product-info">
-        <h2 class="product-title">@Model.TENSANPHAM</h2>
-        <p class="product-price"> @String.Format("{0:#,###}", @Model.GIABAN) VNĐ </p>
-        <p class="product-description"><strong>Mô tả:</strong> @Model.MOTA</p>
+@section Styles {
+    <style>
+        /* Tổng thể của trang chi tiết sản phẩm */
+        .product-detail {
+            margin-top: 20px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-        @*@using (Html.BeginForm("ThemVaoGio", "Home", FormMethod.Post, new { @class = "form-inline" }))
-            {
-                <input type="hidden" name="id" value="@Model.MASANPHAM" />
-                <input type="number" name="quantity" placeholder="Số lượng" value="1" min="1" class="form-control" />
-                <input type="submit" class="btn btn-outline-success" value="Thêm vào giỏ hàng">
-            }*@
-        <div>
-            <a href="#" class="btn btn-outline-success" onclick="window.history.back(); return false;">Trở lại danh sách</a>
+            .product-detail:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            }
+
+        /* Hình ảnh sản phẩm */
+        .product-image {
+            text-align: center;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .product-image img {
+                max-width: 100%;
+                height: auto;
+                transition: transform 0.4s ease;
+            }
+
+                .product-image img:hover {
+                    transform: scale(1.1);
+                }
+
+        /* Thông tin sản phẩm */
+        .product-info {
+            padding-left: 20px;
+        }
+
+        .product-title {
+            font-size: 30px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .product-price {
+            font-size: 26px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .product-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+
+        /* Nút trở lại */
+        .btn-outline-success {
+            font-size: 16px;
+            padding: 10px 25px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+
+            .btn-outline-success:hover {
+                background-color: #218838;
+                color: #fff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        /* Sản phẩm liên quan */
+        .related-products-container {
+            margin-top: 40px;
+        }
+
+            .related-products-container h3 {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 20px;
+                text-align: center;
+                text-transform: uppercase;
+            }
+
+        .related-product {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px; /* Tăng khoảng cách giữa các sản phẩm theo chiều dọc */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+            .related-product:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            .related-product img {
+                width: 100%;
+                height: 200px; /* Đặt chiều cao cố định cho hình ảnh */
+                object-fit: cover; /* Đảm bảo ảnh giữ tỉ lệ */
+                border-radius: 8px;
+                transition: transform 0.3s ease;
+            }
+
+                .related-product img:hover {
+                    transform: scale(1.05);
+                }
+
+        .related-product-title {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 50px; /* Chiều cao tối thiểu cho tiêu đề */
+            text-align: center;
+        }
+
+        .related-product-price {
+            font-size: 16px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Nút xem chi tiết */
+        .btn-warning {
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: #fff;
+            background-color: #ffc107;
+            border: none;
+            width: 100%;
+            margin-top: auto;
+        }
+
+            .btn-warning:hover {
+                background-color: #e0a800;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+    </style>
+}
+
+<div class="container product-detail">
+    <div class="row">
+        <div class="col-md-5 product-image">
+            <img src="/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="@Model.TENSANPHAM" />
+        </div>
+        <div class="col-md-7 product-info">
+            <h2 class="product-title">@Model.TENSANPHAM</h2>
+            <p class="product-price">@String.Format("{0:#,###}", @Model.GIABAN) VNĐ</p>
+            <p class="product-description"><strong>Mô tả:</strong> @Model.MOTA</p>
+            <div>
+                <a href="#" class="btn btn-outline-success" onclick="window.history.back(); return false;">Trở lại danh sách</a>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
+    <div class="related-products-container">
         <h3>Sản phẩm liên quan</h3>
         <div class="row">
             @foreach (var item in ViewBag.RelatedProducts as List<Handicraft_Shop.Models.SANPHAM>)
@@ -35,7 +190,7 @@ div class="container product-detail">
                     <div class="related-product">
                         <img src="/HinhAnhSP/MUC HINH ANH CHUNG/@item.HINHANH" alt="@item.TENSANPHAM" class="img-fluid" />
                         <h4 class="related-product-title">@item.TENSANPHAM</h4>
-                        <p class="related-product-price" style="color:red">@String.Format("{0:#,###}", @item.GIABAN) VNĐ</p>
+                        <p class="related-product-price">@String.Format("{0:#,###}", @item.GIABAN) VNĐ</p>
                         <a href="@Url.Action("NhanVienDetails", "NhanVien", new { id = item.MASANPHAM })" class="btn btn-warning">Xem chi tiết</a>
                     </div>
                 </div>
@@ -43,38 +198,21 @@ div class="container product-detail">
         </div>
     </div>
 </div>
-</div>
 
+@section Scripts {
+    <script>
+        // Cuộn đến phần sản phẩm liên quan với hiệu ứng mượt
+        document.addEventListener("DOMContentLoaded", function () {
+            const relatedSection = document.querySelector(".related-products-container");
 
-<style>
-    .product-detail {
-        margin-top: 20px;
-    }
-
-    .product-image {
-        text-align: center;
-    }
-
-    .product-info {
-        padding: 20px;
-    }
-
-    .product-title {
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .product-price {
-        font-size: 20px;
-        color: red;
-    }
-
-    .product-description {
-        margin-top: 10px;
-    }
-
-    .btn-group {
-        margin-top: 20px;
-    }
-</style>
-
+            // Thêm sự kiện cuộn mềm mại cho tất cả các liên kết 'Xem chi tiết'
+            document.querySelectorAll(".related-product a").forEach(link => {
+                link.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute("href");
+                    document.querySelector(targetId).scrollIntoView({ behavior: "smooth" });
+                });
+            });
+        });
+    </script>
+}

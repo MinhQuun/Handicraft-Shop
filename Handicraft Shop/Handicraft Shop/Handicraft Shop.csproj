@@ -138,6 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap\bootstrap\css\Banner.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap-grid.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap-grid.min.css" />
     <Content Include="bootstrap\bootstrap\css\bootstrap-reboot.css" />
@@ -147,15 +148,17 @@
     <Content Include="bootstrap\bootstrap\css\Create_Edit_User.css" />
     <Content Include="bootstrap\bootstrap\css\Index.css" />
     <Content Include="bootstrap\bootstrap\css\KhachHangDatHang.css" />
-    <Content Include="bootstrap\bootstrap\css\Login.css" />
+    <Content Include="bootstrap\bootstrap\css\Layout.css" />
+    <Content Include="bootstrap\bootstrap\css\LogIn_SignUp.css" />
     <Content Include="bootstrap\bootstrap\css\ManageUsers.css" />
-    <Content Include="bootstrap\bootstrap\css\SignUp.css" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.js" />
     <Content Include="bootstrap\bootstrap\js\bootstrap.min.js" />
     <Content Include="bootstrap\bootstrap\js\jquery-3.3.1.min.js" />
     <Content Include="bootstrap\bootstrap\js\KhachHangDatHang.js" />
+    <Content Include="bootstrap\bootstrap\js\Layout.js" />
+    <Content Include="bootstrap\bootstrap\js\SignInUp.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -164,6 +167,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="HinhAnhSP\BANNER\Banner1.jpg" />
+    <Content Include="HinhAnhSP\BANNER\Banner2.jpg" />
+    <Content Include="HinhAnhSP\BANNER\Banner3.jpg" />
+    <Content Include="HinhAnhSP\BANNER\Banner4.jpg" />
     <Content Include="HinhAnhSP\COI\depcoi.jpg" />
     <Content Include="HinhAnhSP\COI\hopdendien.jpg" />
     <Content Include="HinhAnhSP\COI\hopdungdonu.jpg" />
@@ -203,6 +210,7 @@
     <Content Include="HinhAnhSP\GIO TO\thunggiatvuongdanlat.jpg" />
     <Content Include="HinhAnhSP\GUOT\gioguottronconap.jpg" />
     <Content Include="HinhAnhSP\GUOT\hopgiayguotcaocap.jpg" />
+    <Content Include="HinhAnhSP\LOGO\Logo.jpg" />
     <Content Include="HinhAnhSP\LONG BAN LUOI\longbanluoi2lop.jpg" />
     <Content Include="HinhAnhSP\LONG BAN LUOI\longbanluoichunhat.jpg" />
     <Content Include="HinhAnhSP\LONG BAN LUOI\longbanluoitron.jpg" />
@@ -355,7 +363,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\LogIn_SignUp.cshtml" />
     <Content Include="Views\Shared\Mainlayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\AdminLayout.cshtml" />
@@ -372,7 +380,6 @@
     <Content Include="Views\Admin\AdminDetails.cshtml" />
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Admin\AdminSearch.cshtml" />
-    <Content Include="Views\Home\SignUp.cshtml" />
     <Content Include="Views\Home\Success.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
     <Content Include="Views\Shared\KhachHangLayout.cshtml" />
@@ -391,6 +398,10 @@
     <Content Include="Views\KhachHang\KhachHangDatHang.cshtml" />
     <Content Include="Views\KhachHang\KhachHangOrderConfirmation.cshtml" />
     <Content Include="Views\KhachHang\KhachHangLichSuDonHang.cshtml" />
+    <Content Include="Views\Home\Banner.cshtml" />
+    <Content Include="Views\NhanVien\NhanVien_Banner.cshtml" />
+    <Content Include="Views\Admin\Admin_Banner.cshtml" />
+    <Content Include="Views\KhachHang\KhachHang_Banner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

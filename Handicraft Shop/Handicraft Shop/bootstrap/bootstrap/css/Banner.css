@@ -1,0 +1,59 @@
+﻿/* Đảm bảo banner hiển thị toàn chiều rộng và cố định chiều cao */
+.custom-carousel {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Chiều cao cố định */
+    overflow: hidden;
+    background-color: #f5f5f5; /* Màu nền nếu ảnh không tải */
+}
+
+.custom-banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /*filter: brightness(0.7);*/ /* Hiệu ứng làm mờ */
+}
+
+/* Đảm bảo các mục carousel có vị trí và chuyển động mượt */
+.custom-carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.custom-carousel-item {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s ease-in-out; /* Hiệu ứng chuyển động mượt mà */
+}
+
+/* Tùy chỉnh nút điều khiển của carousel */
+.custom-carousel-control-prev,
+.custom-carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-carousel-control-prev {
+    left: 10px;
+}
+
+.custom-carousel-control-next {
+    right: 10px;
+}
+
+.custom-carousel-control-prev-icon,
+.custom-carousel-control-next-icon {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+}

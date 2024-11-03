@@ -4,60 +4,82 @@
     Layout = "~/Views/Shared/NhanVienLayout.cshtml";
 }
 
-@helper Truncate(string input, int length)
-{
-    if (input.Length < length)
-    {
-        @input
-    }
-    else
-    {
-        @input.Substring(0, length) <text>...</text>
-    }
+
+@section Styles {
+
+    <link href="~/bootstrap/bootstrap/css/Index.css" rel="stylesheet" />
+    <link href="~/bootstrap/bootstrap/css/Banner.css" rel="stylesheet" />
+
 }
 
-<link href="~/bootstrap/css/bootstrap-grid.css" rel="stylesheet" />
-<link href="~/Content/StyleSheet2.css" rel="stylesheet" />
-<script>
-    window.addEventListener('load', function() {
-        var fragment = '@ViewBag.Fragment';
-        if (fragment) {
-            var element = document.getElementById(fragment);
-            if (element) {
-                element.scrollIntoView();
-            }
-        }
-    });
-</script>
+<script src="~/bootstrap/bootstrap/js/jquery-3.3.1.min.js"></script>
+<script src="~/bootstrap/bootstrap/js/bootstrap.bundle.min.js"></script>
+@Html.Partial("NhanVien_Banner")
 
-<div class="container">
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#customBannerCarousel').carousel({
+                interval: 3000, // Thời gian chuyển ảnh (3 giây)
+                ride: 'carousel' // Tự động chạy carousel
+            });
+        });
+    </script>
+}
 
-    <a href="#Product" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-
-        <img src="~/Hinh/banner-home-1.jpg" style="width: 1300px" alt="Image" />
-        <div class="text-overlay">
-            <div>Chào Mừng Đến với Everon</div>
-            <div>Click vào để xem sản Phẩm</div>
-        </div>
-
-    </a>
-</div>
-<div id="Product">
-    <div class="container w-40">
-        <h2 class="w-100">Sản phẩm tìm kiếm</h2>
-        <div class="row">
-            @foreach (SANPHAM sp in Model)
-            {
-                <div class="col-md-3 text-center mt-4 mb-4">
-                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" class="w-100" />
-                    <p style="height:40px;">@sp.TENSANPHAM</p>
-                    <a href="/NhanVien/NhanVienDetails/@sp.MASANPHAM" class="btn btn-outline-success">Chi Tiết </a>
-                    <p> @String.Format("{0:#,###}", sp.GIABAN) VNĐ </p>
-                    @*<a href="/Home/ThemMatHang/@sp.MASANPHAM" class="btn btn-outline-success">Chọn mua</a>*@
-
+<div class="container product-section" id="Product">
+    <h2>
+        @if (!string.IsNullOrEmpty(ViewBag.SearchString))
+        {
+            <text>Sản phẩm được tìm kiếm dựa trên từ khóa: @ViewBag.SearchString</text> }
+        else
+        {
+            <text>Sản Phẩm Tìm Kiếm</text>}
+    </h2>
+    <div class="row">
+        @foreach (SANPHAM sp in Model)
+        {
+            <div class="col-md-3 col-sm-6 text-center mt-4 mb-4">
+                <div class="product-card">
+                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" class="product-image" alt="@sp.TENSANPHAM">
+                    <h5 class="product-title">@sp.TENSANPHAM</h5>
+                    <p class="product-price">@String.Format("{0:#,###}", sp.GIABAN) VNĐ</p>
+                    <div class="button-group">
+                        <a href="/Home/Details/@sp.MASANPHAM" class="btn btn-outline-primary">Chi Tiết</a>
+                        <a href="javascript:void(0);" onclick="addToCartAjax('@sp.MASANPHAM')" class="btn btn-success">Chọn Mua</a>
+                    </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
 
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("NhanVienSearch", new { searchString = ViewBag.SearchString, page = ViewBag.CurrentPage - 1 })">Trước</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("NhanVienSearch", new { searchString = ViewBag.SearchString, page = i })">@i</a>
+            </li>
+        }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("NhanVienSearch", new { searchString = ViewBag.SearchString, page = ViewBag.CurrentPage + 1 })">Sau</a>
+            </li>
+        }
+    </ul>
+</nav>
+    <script>
+        
+
+
+    </script>

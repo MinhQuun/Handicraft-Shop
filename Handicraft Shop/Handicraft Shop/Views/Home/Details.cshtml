@@ -1,80 +1,278 @@
 ﻿@using Handicraft_Shop.Models;
 @model SANPHAM
+
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Chi Tiết Sản Phẩm";
     Layout = "~/Views/Shared/Mainlayout.cshtml";
 }
 
+
+
 <div class="container product-detail">
     <div class="row">
-        <div class="col-md-4">
-            <img src="/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="@Model.TENSANPHAM" class="img-fluid" />
+        <div class="col-md-5 product-image">
+            <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="@Model.TENSANPHAM" class="img-fluid" />
         </div>
-        <div class="col-md-8 product-info">
+        <div class="col-md-7 product-info">
             <h2 class="product-title">@Model.TENSANPHAM</h2>
-            <p class="product-price"> @String.Format("{0:#,###}", @Model.GIABAN) VNĐ </p>
+            <p class="product-price">@String.Format("{0:#,###}", @Model.GIABAN) VNĐ</p>
             <p class="product-description"><strong>Mô tả:</strong> @Model.MOTA</p>
 
-            @using (Html.BeginForm("ThemMatHang", "Home", FormMethod.Post, new { @class = "form-inline" }))
-            {
-                <input type="hidden" name="txtMa" value="@Model.MASANPHAM" />
-                <input type="number" name="SoLuong" placeholder="Số lượng" value="1" min="1" class="form-control" />
-                <input type="submit" class="btn btn-outline-success" value="Thêm vào giỏ hàng">
-            }
+            <!-- Input cho số lượng và nút thêm vào giỏ hàng -->
+            <div class="form-inline mt-3">
+                <input type="number" id="quantity" placeholder="Số lượng" value="1" min="1" class="form-control quantity-input" />
+                <button class="btn btn-outline-success add-to-cart-btn" onclick="addToCartAjax('@Model.MASANPHAM', '@Model.TENSANPHAM', '@Model.HINHANH', '@Model.GIABAN')">Thêm vào giỏ hàng</button>
+            </div>
+
             <div>
-                <a href="#" class="btn btn-outline-success" onclick="window.history.back(); return false;">Trở lại danh sách</a>
+                <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-outline-secondary back-btn mt-3">Trở lại danh sách</a>
             </div>
         </div>
     </div>
-    <div class="row">
+
+    <!-- Sản phẩm liên quan -->
+    <div class="row mt-5">
         <div class="col-md-12">
-            <h3>Sản phẩm liên quan</h3>
+            <h3 class="related-products-title">SẢN PHẨM LIÊN QUAN</h3>
             <div class="row">
                 @foreach (var item in ViewBag.RelatedProducts as List<Handicraft_Shop.Models.SANPHAM>)
                 {
-                    <div class="col-md-3">
-                        <div class="related-product">
-                            <img src="/HinhAnhSP/MUC HINH ANH CHUNG/@item.HINHANH" alt="@item.TENSANPHAM" class="img-fluid" />
-                            <h4 class="related-product-title">@item.TENSANPHAM</h4>
-                            <p class="related-product-price" style="color:red">@String.Format("{0:#,###}", @item.GIABAN) VNĐ</p>
-                            <a href="@Url.Action("Details", "Home", new { id = item.MASANPHAM })" class="btn btn-warning">Xem chi tiết</a>
-                        </div>
-                    </div>
-                }
+    <div class="col-md-3">
+        <div class="related-product text-center">
+            <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HINHANH" alt="@item.TENSANPHAM" class="img-fluid related-product-img" />
+            <h4 class="related-product-title">@item.TENSANPHAM</h4>
+            <p class="related-product-price">@String.Format("{0:#,###}", item.GIABAN) VNĐ</p>
+            <a href="@Url.Action("Details", "Home", new { id = item.MASANPHAM })" class="btn btn-warning view-details-btn">Xem chi tiết</a>
+        </div>
+    </div>}
             </div>
         </div>
     </div>
 </div>
 
+@section Styles {
+    <style>
+        /* Tổng quan về bố cục sản phẩm */
+        .product-detail {
+            margin-top: 20px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-<style>
-    .product-detail {
-        margin-top: 20px;
+            .product-detail:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            }
+
+        .product-image {
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+            .product-image img {
+                max-width: 100%;
+                height: auto;
+                transition: transform 0.4s ease;
+            }
+
+                .product-image img:hover {
+                    transform: scale(1.1);
+                }
+
+        .product-info {
+            padding-left: 20px;
+        }
+
+        /* Tiêu đề sản phẩm */
+        .product-title {
+            font-size: 30px;
+            color: #333;
+            font-weight: bold;
+            text-align: left; /* Căn trái tiêu đề */
+            margin-bottom: 15px;
+        }
+
+        /* Giá sản phẩm */
+        .product-price {
+            font-size: 26px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: left; /* Căn trái giá */
+        }
+
+        /* Mô tả sản phẩm */
+        .product-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify; /* Căn đều mô tả */
+        }
+
+        /* Input số lượng và nút thêm vào giỏ hàng */
+        .form-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Khoảng cách giữa input và nút */
+        }
+
+        .quantity-input {
+            width: 80px;
+            margin-right: 10px;
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        /* Nút thêm vào giỏ hàng */
+        .add-to-cart-btn {
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            min-width: 150px; /* Chiều rộng tối thiểu của nút */
+            text-align: center;
+        }
+
+            .add-to-cart-btn:hover {
+                background-color: #218838;
+                color: #fff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        /* Nút trở lại */
+        .back-btn {
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: #6c757d;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+        }
+
+            .back-btn:hover {
+                background-color: #e2e6ea;
+                color: #6c757d;
+            }
+
+        /* Sản phẩm liên quan */
+        .related-products-title {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .related-product {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%; /* Đảm bảo chiều cao đồng nhất */
+        }
+
+            .related-product:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+
+        .related-product-img {
+            width: 100%;
+            height: 200px; /* Đặt chiều cao cố định cho hình ảnh */
+            object-fit: cover; /* Đảm bảo ảnh giữ tỉ lệ */
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+            .related-product-img:hover {
+                transform: scale(1.05);
+            }
+
+        /* Tiêu đề sản phẩm liên quan */
+        .related-product-title {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Giá sản phẩm liên quan */
+        .related-product-price {
+            font-size: 16px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        /* Nút xem chi tiết sản phẩm liên quan */
+        .view-details-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: #fff;
+            background-color: #ffc107;
+            border: none;
+            width: 100%; /* Đặt chiều rộng nút */
+            text-align: center;
+        }
+
+            .view-details-btn:hover {
+                background-color: #e0a800;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+
+    </style>
+}
+
+<script>
+    function addToCartAjax(productId, productName, productImage, productPrice) {
+        var quantity = parseInt(document.getElementById("quantity").value);
+
+        // Kiểm tra tham số trước khi gọi Ajax
+        console.log("MASANPHAM:", productId, "TENSANPHAM:", productName, "HINHANH:", productImage, "GIABAN:", productPrice, "SoLuong:", quantity);
+
+        $.ajax({
+            url: '/Home/ThemMatHangAjax',
+            type: 'POST',
+            data: {
+                MASANPHAM: productId,
+                TENSANPHAM: productName,
+                HINHANH: productImage,
+                GIABAN: productPrice,
+                SoLuong: quantity
+            },
+            success: function (response) {
+                if (response.success) {
+                    // Cập nhật số lượng sản phẩm trong giỏ hàng
+                    $('.cart-icon + .badge').text(response.cartCount);
+
+                }
+            },
+            error: function () {
+                console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+            }
+        });
     }
 
-    .product-image {
-        text-align: center;
-    }
-
-    .product-info {
-        padding: 20px;
-    }
-
-    .product-title {
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .product-price {
-        font-size: 20px;
-        color: red;
-    }
-
-    .product-description {
-        margin-top: 10px;
-    }
-
-    .btn-group {
-        margin-top: 20px;
-    }
-</style>
+</script>

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In & Sign Up Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+    <link href="~/bootstrap/bootstrap/css/LogIn_SignUp.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container" id="container">
+        <!-- Sign Up Form -->
+        <div class="form-container sign-up-container">
+            <form action="/Home/SignUp" method="post">
+                <h1>Đăng Ký</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>hoặc sử dụng email của bạn để đăng ký</span>
+                <input type="text" name="TENNGUOIDUNG" placeholder="Họ Tên" required/>
+                <input type="text" name="TAIKHOAN" placeholder="Tên Đăng Nhập" required />
+                <input type="email" name="EMAIL" placeholder="Email" required />
+                <input type="password" name="MATKHAU" placeholder="Mật Khẩu" required />
+                <input type="text" name="SODIENTHOAI" placeholder="Số Điện Thoại" required />
+                <button type="submit">Đăng Ký</button>
+            </form>
+        </div>
+
+        <!-- Sign In Form -->
+        <div class="form-container sign-in-container">
+            <form action="/Home/Login" method="post">
+                <h1>Đăng Nhập</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>hoặc sử dụng tài khoản của bạn</span>
+                <input type="text" name="username" placeholder="Tên Đăng Nhập" required autofocus/>
+                <input type="password" name="password" placeholder="Mật Khẩu" required />
+                @if (ViewData.ModelState.ContainsKey("Password") && ViewData.ModelState["Password"].Errors.Count > 0)
+                {
+                    <div class="error-message">
+                        @foreach (var error in ViewData.ModelState["Password"].Errors)
+                        {
+                            <p>@error.ErrorMessage</p>}
+                    </div>
+                 }
+                <a href="#">Bạn quên mật khẩu?</a>
+                <button type="submit">Đăng Nhập</button>
+            </form>
+        </div>
+
+        <!-- Overlay for Sign In/Sign Up -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Chào mừng trở lại!</h1>
+                    <p>Để duy trì kết nối với chúng tôi vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
+                    <button class="ghost" id="signIn">Đăng Nhập</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Chào bạn!</h1>
+                    <p>Nhập thông tin cá nhân của bạn và bắt đầu cuộc hành trình của bạn với chúng tôi</p>
+                    <button class="ghost" id="signUp">Đăng Ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/bootstrap/bootstrap/js/SignInUp.js"></script>
+</body>
+</html>

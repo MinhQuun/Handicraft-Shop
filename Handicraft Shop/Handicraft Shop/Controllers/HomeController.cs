@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Handicraft_Shop.Models;
 
 namespace Handicraft_Shop.Controllers
@@ -10,29 +11,48 @@ namespace Handicraft_Shop.Controllers
     public class HomeController : Controller
     {
         HandicraftShopDataContext data = new HandicraftShopDataContext();
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 12)
         {
-            List<SANPHAM> sp = data.SANPHAMs.ToList();
-            return View(sp);
+            // Tổng số sản phẩm
+            int totalProducts = data.SANPHAMs.Count();
+
+            // Tính tổng số trang
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            // Lấy sản phẩm cho trang hiện tại
+            var products = data.SANPHAMs
+                              .OrderBy(p => p.MASANPHAM)
+                              .Skip((page - 1) * pageSize)
+                              .Take(pageSize)
+                              .ToList();
+
+            // Truyền dữ liệu phân trang vào ViewBag
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(products);
         }
+
 
         [HttpGet]
         public ActionResult Login()
         {
-            return View();
+            return View("LogIn_SignUp");
         }
 
-        [HttpPost]
+        ////[HttpPost]
         public ActionResult Login(string username, string password)
         {
+            // Kiểm tra thông tin đăng nhập
             var user = data.NGUOIDUNGs.FirstOrDefault(u => u.TAIKHOAN == username && u.MATKHAU == password);
 
             if (user != null)
             {
-                // Lưu người dùng và vai trò vào session
+                // Lưu thông tin người dùng vào session
                 Session["User"] = user;
                 Session["UserName"] = user.TENNGUOIDUNG;
 
+                // Lấy quyền người dùng
                 var userRole = (from quyenNguoiDung in data.QUYEN_NGUOIDUNGs
                                 join quyen in data.QUYENs on quyenNguoiDung.MAQUYEN equals quyen.MAQUYEN
                                 where quyenNguoiDung.MANGUOIDUNG == user.MANGUOIDUNG
@@ -40,8 +60,13 @@ namespace Handicraft_Shop.Controllers
 
                 if (userRole != null)
                 {
+                    // Lưu vai trò vào session
                     Session["UserRole"] = userRole;
 
+                    // Thiết lập cookie đăng nhập với FormsAuthentication
+                    FormsAuthentication.SetAuthCookie(user.TAIKHOAN, false); // `false` nghĩa là cookie không vĩnh viễn
+
+                    // Điều hướng dựa trên vai trò
                     switch (userRole)
                     {
                         case "Admin":
@@ -57,15 +82,16 @@ namespace Handicraft_Shop.Controllers
                 }
             }
 
-            ViewBag.Message = "Tên đăng nhập hoặc mật khẩu không đúng!";
-            return View();
+            // Nếu thông tin đăng nhập không chính xác
+            ModelState.AddModelError("Password", "Tên đăng nhập hoặc mật khẩu không chính xác");
+            return View("LogIn_SignUp");
         }
 
 
         [HttpGet]
         public ActionResult SignUp()
         {
-            return View();
+            return View("LogIn_SignUp");
         }
 
         [HttpPost]
@@ -161,15 +187,24 @@ namespace Handicraft_Shop.Controllers
             List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
             return View("Index", ds);
         }
-        public ActionResult Search(string searchString, int[] categoryIds)
+        public ActionResult Search(string searchString, int page = 1, int pageSize = 12)
         {
-            var sp = from a in data.SANPHAMs select a;
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                sp = sp.Where(s => s.TENSANPHAM.Contains(searchString));
-            }
+            var sp = data.SANPHAMs.Where(s => s.TENSANPHAM.Contains(searchString));
+
+            int totalProducts = sp.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            sp = sp.OrderBy(s => s.MASANPHAM)
+                   .Skip((page - 1) * pageSize)
+                   .Take(pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.SearchString = searchString;
+
             return View("Search", sp.ToList());
         }
+
 
         //Thêm mặt hàng
         public ActionResult ThemMatHang(string id)
@@ -185,27 +220,43 @@ namespace Handicraft_Shop.Controllers
         }
         //Them gio hang co SL
         [HttpPost]
-        public ActionResult ThemMatHangAjax(string id)
+        public ActionResult ThemMatHangAjax(string MASANPHAM, string TENSANPHAM = null, string HINHANH = null, double? GIABAN = null, int SoLuong = 1)
         {
             GioHang gh = Session["GioHang"] as GioHang;
             if (gh == null)
             {
                 gh = new GioHang();
             }
-            gh.Them(id);
-            Session["GioHang"] = gh;
 
-            if (Request.IsAjaxRequest())
+            // Kiểm tra nếu các tham số bổ sung không được truyền (khi gọi từ Index.cshtml)
+            if (string.IsNullOrEmpty(TENSANPHAM) || string.IsNullOrEmpty(HINHANH) || !GIABAN.HasValue)
             {
-                return Json(new
+                // Lấy dữ liệu sản phẩm từ cơ sở dữ liệu dựa trên MASANPHAM
+                var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
+                if (sp != null)
                 {
-                    success = true,
-                    cartCount = gh.SoMatHang() // Số lượng sản phẩm trong giỏ hàng
-                }, JsonRequestBehavior.AllowGet);
+                    TENSANPHAM = sp.TENSANPHAM;
+                    HINHANH = sp.HINHANH;
+                    GIABAN = (double)sp.GIABAN;
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Sản phẩm không tồn tại." });
+                }
             }
 
-            return RedirectToAction("Index");
+            // Thêm sản phẩm vào giỏ hàng với thông tin đầy đủ
+            gh.Them(MASANPHAM, SoLuong);
+            Session["GioHang"] = gh;
+
+            return Json(new
+            {
+                success = true,
+                cartCount = gh.SoMatHang() // Trả về số lượng sản phẩm trong giỏ hàng
+            }, JsonRequestBehavior.AllowGet);
         }
+
+
 
 
 

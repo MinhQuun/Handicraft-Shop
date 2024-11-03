@@ -11,11 +11,28 @@ namespace Handicraft_Shop.Controllers
     {
         // GET: NhanVien
         HandicraftShopDataContext data = new HandicraftShopDataContext();
-        public ActionResult IndexNhanVien()
+        public ActionResult IndexNhanVien(int page = 1, int pageSize = 12)
         {
-            List<SANPHAM> sp = data.SANPHAMs.ToList();
-            return View(sp);
+            // Tổng số sản phẩm
+            int totalProducts = data.SANPHAMs.Count();
+
+            // Tính tổng số trang
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            // Lấy sản phẩm cho trang hiện tại
+            var products = data.SANPHAMs
+                              .OrderBy(p => p.MASANPHAM)
+                              .Skip((page - 1) * pageSize)
+                              .Take(pageSize)
+                              .ToList();
+
+            // Truyền dữ liệu phân trang vào ViewBag
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(products);
         }
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var role = Session["UserRole"] as string;
@@ -60,14 +77,23 @@ namespace Handicraft_Shop.Controllers
             List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
             return View("IndexNhanVien", ds);
         }
-        public ActionResult NhanVienSearch(string searchString, int[] categoryIds)
+        public ActionResult NhanVienSearch(string searchString, int page = 1, int pageSize = 12)
         {
-            var sp = from a in data.SANPHAMs select a;
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                sp = sp.Where(s => s.TENSANPHAM.Contains(searchString));
-            }
+            var sp = data.SANPHAMs.Where(s => s.TENSANPHAM.Contains(searchString));
+
+            int totalProducts = sp.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            sp = sp.OrderBy(s => s.MASANPHAM)
+                   .Skip((page - 1) * pageSize)
+                   .Take(pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.SearchString = searchString; // Truyền từ khóa vào ViewBag để hiển thị lại
+
             return View("NhanVienSearch", sp.ToList());
         }
+
     }
 }
