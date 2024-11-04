@@ -135,6 +135,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HandicraftShop.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DonHangViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

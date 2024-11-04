@@ -321,7 +321,7 @@ namespace Handicraft_Shop.Controllers
         }
 
 
-        public ActionResult KhachHangOrderConfirmation(  )
+        public ActionResult KhachHangOrderConfirmation()
         {
             // Lấy thông tin đơn hàng theo ID
             return View();
@@ -333,20 +333,35 @@ namespace Handicraft_Shop.Controllers
             if (user == null)
             {
                 ViewBag.Message = "Bạn chưa có đơn hàng nào.";
-                return View(new List<DONHANG>());
+                return View(new List<DonHangViewModel>());
             }
 
             var khachHang = data.KHACHHANGs.SingleOrDefault(k => k.MANGUOIDUNG == user.MANGUOIDUNG);
             if (khachHang == null)
             {
                 ViewBag.Message = "Bạn chưa có đơn hàng nào.";
-                return View(new List<DONHANG>());
+                return View(new List<DonHangViewModel>());
             }
 
             var donHangs = data.DONHANGs
-                .Where(d => d.MAKHACHHANG == khachHang.MAKHACHHANG)
-                .OrderByDescending(d => d.NGAYDAT)
-                .ToList();
+           .Where(d => d.MAKHACHHANG == khachHang.MAKHACHHANG)
+           .OrderByDescending(d => d.NGAYDAT)
+           .Select(dh => new DonHangViewModel
+           {
+               DonHang = dh,
+               ChiTietSanPhams = data.CHITIETDONHANGs
+                   .Where(ct => ct.MADONHANG == dh.MADONHANG)
+                   .Select(ct => new ChiTietSanPhamViewModel
+                   {
+                       MaSanPham = ct.MASANPHAM,
+                       SoLuong = ct.SOLUONG.GetValueOrDefault(), // Sử dụng GetValueOrDefault() nếu là nullable
+                       DonGia = ct.DONGIA.GetValueOrDefault(), // Sử dụng GetValueOrDefault() nếu là nullable
+                       TenSanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).TENSANPHAM,
+                       HinhAnh = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).HINHANH
+                   }).ToList()
+           }).ToList();
+
+
 
             if (donHangs.Count == 0)
             {
@@ -355,6 +370,7 @@ namespace Handicraft_Shop.Controllers
 
             return View(donHangs);
         }
+
 
 
 

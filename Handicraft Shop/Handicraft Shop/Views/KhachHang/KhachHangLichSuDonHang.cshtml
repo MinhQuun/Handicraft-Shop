@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
 
-@model List<Handicraft_Shop.Models.DONHANG>
+@model List<Handicraft_Shop.Models.DonHangViewModel>
 
 <!-- CSS Tùy chỉnh -->
 <style>
@@ -34,6 +34,39 @@
         padding: 12px;
         text-align: center; /* Căn giữa nội dung */
     }
+
+    /* Tạo khoảng trống và đường viền cho bảng chi tiết sản phẩm */
+    .details-table-container {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .details-table .table {
+        margin-bottom: 0;
+    }
+
+    /* Căn chỉnh và định dạng hình ảnh */
+    .product-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    /* Định dạng cột tên sản phẩm */
+    .product-name {
+        font-weight: 600;
+        color: #555;
+    }
+
+    /* Màu nền cho phần chi tiết sản phẩm */
+    .details-table {
+        background-color: #ffffff;
+        border-radius: 8px;
+    }
 </style>
 
 <h2 class="text-center my-4">Lịch Sử Đơn Hàng</h2>
@@ -54,12 +87,41 @@
             @foreach (var donHang in Model)
             {
                 <tr>
-                    <td>@donHang.MADONHANG</td>
-                    <td>@(donHang.NGAYDAT.HasValue ? donHang.NGAYDAT.Value.ToString("dd/MM/yyyy") : "N/A")</td>
-                    <td>@(donHang.NGAYGIAO.HasValue ? donHang.NGAYGIAO.Value.ToString("dd/MM/yyyy") : "Chưa giao")</td>
-                    <td>@donHang.TONGSLHANG</td>
-                    <td>@String.Format("{0:#,###} VND", donHang.TONGTHANHTIEN)</td>
-                    <td>@donHang.TRANGTHAI</td>
+                    <td>@donHang.DonHang.MADONHANG</td>
+                    <td>@(donHang.DonHang.NGAYDAT.HasValue ? donHang.DonHang.NGAYDAT.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                    <td>@(donHang.DonHang.NGAYGIAO.HasValue ? donHang.DonHang.NGAYGIAO.Value.ToString("dd/MM/yyyy") : "Chưa giao")</td>
+                    <td>@donHang.DonHang.TONGSLHANG</td>
+                    <td>@String.Format("{0:#,###} VND", donHang.DonHang.TONGTHANHTIEN)</td>
+                    <td>@donHang.DonHang.TRANGTHAI</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="details-table-container">
+                        <table class="table details-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Sản Phẩm</th>
+                                    <th class="product-name">Tên Sản Phẩm</th>
+                                    <th>Hình Ảnh</th>
+                                    <th>Số Lượng</th>
+                                    <th>Đơn Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var chiTiet in donHang.ChiTietSanPhams)
+                                {
+                                    <tr>
+                                        <td>@chiTiet.MaSanPham</td>
+                                        <td class="product-name">@chiTiet.TenSanPham</td>
+                                        <td>
+                                            <img src="@Url.Content("~/HinhAnhSP/MUC HINH ANH CHUNG/" + chiTiet.HinhAnh)" class="product-image" />
+                                        </td>
+                                        <td>@chiTiet.SoLuong</td>
+                                        <td>@String.Format("{0:#,###} VND", chiTiet.DonGia)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
             }
         </tbody>
