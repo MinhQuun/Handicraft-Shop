@@ -108,7 +108,7 @@
     visibility: hidden;
     position: absolute;
     top: 4px;
-    left: 148px;
+    left: 158px;
     background-color: #cfb39b;
     font-weight:600;
     border-radius: 8px;
@@ -139,7 +139,7 @@
 }
 
     .dropdown-item:hover {
-        background-color: #f8f9fa;
+        background-color: #cfb39b;
         color: black;
         border-radius: 5px;
     }
@@ -378,3 +378,29 @@
         background-color: transparent;
         box-shadow: none; 
     }
+
+/* Dropdown menu riêng cho Quản Lý Nghiệp Vụ */
+.quan-ly-nghiep-vu .quan-ly-nghiep-vu-dropdown {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%; /* Hiển thị ngay dưới menu cha */
+    left: -10px;
+        /* Căn chỉnh menu con thẳng dưới menu cha */
+    background-color: #cfb39b;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    padding: 10px 0;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hiển thị menu khi hover vào Quản Lý Nghiệp Vụ */
+.quan-ly-nghiep-vu:hover > .quan-ly-nghiep-vu-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(5px); /* Hiệu ứng di chuyển xuống một chút */
+}

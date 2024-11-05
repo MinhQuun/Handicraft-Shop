@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "NhanVienQuanLyNhaCungCap";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+@model IEnumerable<Handicraft_Shop.Models.NHACUNGCAP>
+
+<div class="container mt-4">
+    <h2>Quản Lý Nhà Cung Cấp</h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Mã Nhà Cung Cấp</th>
+                <th>Tên Nhà Cung Cấp</th>
+                <th>Điện Thoại</th>
+                <th>Địa Chỉ</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ncc in Model)
+            {
+                <tr>
+                    <td>@ncc.MANHACUNGCAP</td>
+                    <td>@ncc.TENNHACUNGCAP</td>
+                    <td>@ncc.DTHOAI</td>
+                    <td>@ncc.DIACHI</td>
+                    <td>
+                        <a href="@Url.Action("EditNhaCungCap", new { id = ncc.MANHACUNGCAP })">Sửa</a> |
+                        <a href="@Url.Action("DeleteNhaCungCap", new { id = ncc.MANHACUNGCAP })" onclick="return confirm('Bạn có chắc chắn muốn xóa nhà cung cấp này?');">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("CreateNhaCungCap")" class="btn btn-primary">Thêm Nhà Cung Cấp</a>
+</div>
+
+

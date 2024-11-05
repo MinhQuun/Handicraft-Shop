@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "NhanVienQuanLySanPham";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+@model IEnumerable<Handicraft_Shop.Models.SANPHAM>
+
+<div class="container mt-4">
+    <h2>Quản Lý Sản Phẩm</h2>
+    <a href="@Url.Action("CreateSanPham", "NhanVien")" class="btn btn-primary mb-3">Thêm Sản Phẩm</a>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã Sản Phẩm</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Hình Ảnh</th>
+                <th>Giá Bán</th>
+                <th>Số Lượng Tồn</th>
+                <th>Nhà Cung Cấp</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sp in Model)
+            {
+                <tr>
+                    <td>@sp.MASANPHAM</td>
+                    <td>@sp.TENSANPHAM</td>
+                    <td>
+                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" alt="@sp.TENSANPHAM" width="100" />
+                    </td>
+                    <td>@string.Format("{0:N0} VND", sp.GIABAN)</td> <!-- Định dạng giá bán -->
+                    <td>@sp.SOLUONGTON</td>
+                    <td>@sp.NHACUNGCAP.TENNHACUNGCAP</td>
+                    <td>
+                        <a href="@Url.Action("EditSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-warning">Sửa</a>
+                        <a href="@Url.Action("DeleteSanPham", new { id = sp.MASANPHAM })" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("NhanVienQuanLySanPham", "NhanVien", new { page = i })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

@@ -403,6 +403,14 @@
     <Content Include="Views\NhanVien\NhanVien_Banner.cshtml" />
     <Content Include="Views\Admin\Admin_Banner.cshtml" />
     <Content Include="Views\KhachHang\KhachHang_Banner.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienQuanLyNhaCungCap.cshtml" />
+    <Content Include="Views\NhanVien\CreateNhaCungCap.cshtml" />
+    <Content Include="Views\NhanVien\EditNhaCungCap.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienQuanLySanPham.cshtml" />
+    <Content Include="Views\NhanVien\CreateSanPham.cshtml" />
+    <Content Include="Views\NhanVien\EditSanPham.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienQuanLyDonHang.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienDonHangDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

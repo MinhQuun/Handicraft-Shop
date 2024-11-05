@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "EditSanPham";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+@model Handicraft_Shop.Models.SANPHAM
+
+<div class="container mt-4">
+    <h2>Sửa Sản Phẩm</h2>
+
+    @using (Html.BeginForm("EditSanPham", "NhanVien", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.MASANPHAM)
+
+        <div class="form-group">
+            <label for="TENSANPHAM">Tên Sản Phẩm</label>
+            @Html.TextBoxFor(model => model.TENSANPHAM, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="GIABAN">Giá Bán</label>
+            @Html.TextBoxFor(model => model.GIABAN, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="SOLUONGTON">Số Lượng Tồn</label>
+            @Html.TextBoxFor(model => model.SOLUONGTON, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="MOTA">Mô Tả</label>
+            @Html.TextAreaFor(model => model.MOTA, new { @class = "form-control", rows = 5 })
+        </div>
+
+        <div class="form-group">
+            <label for="MANHACUNGCAP">Nhà Cung Cấp</label>
+            @Html.DropDownListFor(model => model.MANHACUNGCAP, (SelectList)ViewBag.NhaCungCapList, "Chọn nhà cung cấp", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="HINHANH">Hình Ảnh</label>
+            <input type="file" name="file" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.HINHANH))
+            {
+                <div class="mt-2">
+                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="Hình ảnh sản phẩm" width="150" />
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Lưu Thay Đổi</button>
+        <a href="@Url.Action("NhanVienQuanLySanPham", "NhanVien")" class="btn btn-secondary mt-3">Hủy</a>
+    }
+</div>

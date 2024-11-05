@@ -1,0 +1,53 @@
+﻿@model Handicraft_Shop.Models.SANPHAM
+@{
+    ViewBag.Title = "CreateSanPham";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+<h2>Thêm Sản Phẩm Mới</h2>
+
+@using (Html.BeginForm("CreateSanPham", "NhanVien", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label for="TENSANPHAM">Tên Sản Phẩm</label>
+        @Html.TextBoxFor(model => model.TENSANPHAM, new { @class = "form-control", placeholder = "Nhập tên sản phẩm" })
+    </div>
+
+    <div class="form-group">
+        <label for="HINHANH">Hình Ảnh</label>
+        <input type="file" name="uploadHinhAnh" class="form-control-file" />
+    </div>
+
+    <div class="form-group">
+        <label for="GIABAN">Giá Bán (VNĐ)</label>
+        @Html.TextBoxFor(model => model.GIABAN, new { @class = "form-control", placeholder = "Nhập giá bán", type = "number", step = "1000" })
+    </div>
+
+    <div class="form-group">
+        <label for="SOLUONGTON">Số Lượng Tồn</label>
+        @Html.TextBoxFor(model => model.SOLUONGTON, new { @class = "form-control", placeholder = "Nhập số lượng tồn", type = "number" })
+    </div>
+
+    <div class="form-group">
+        <label for="MOTA">Mô Tả</label>
+        @Html.TextAreaFor(model => model.MOTA, new { @class = "form-control", placeholder = "Nhập mô tả sản phẩm", rows = 4 })
+    </div>
+
+    <div class="form-group">
+        <label for="MALOAI">Loại Sản Phẩm</label>
+        @Html.DropDownList("MALOAI", (SelectList)ViewBag.LoaiSanPhamList, "Chọn loại sản phẩm", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="MANHACUNGCAP">Nhà Cung Cấp</label>
+        @Html.DropDownList("MANHACUNGCAP", (SelectList)ViewBag.NhaCungCapList, "Chọn nhà cung cấp", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="MAKHUYENMAI">Khuyến Mãi</label>
+        @Html.DropDownList("MAKHUYENMAI", (SelectList)ViewBag.KhuyenMaiList, "Chọn khuyến mãi (nếu có)", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
+    <a href="@Url.Action("NhanVienQuanLySanPham", "NhanVien")" class="btn btn-secondary">Hủy</a>
+}

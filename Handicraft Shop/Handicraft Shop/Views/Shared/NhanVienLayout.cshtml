@@ -42,8 +42,8 @@
 
                 <ul class="nav col-11 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li>
-                        <div class="header__nav">
-                            <a href="javascript:;" class="nav-link px-2 ">
+                        <div class="header__nav dropdown quan-ly-nghiep-vu">
+                            <a href="javascript:;" class="nav-link px-2 dropdown-toggle"id="quanLyNghiepVuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Danh Mục Sản phẩm
                             </a>
                             <div class="submenu">
@@ -52,7 +52,18 @@
                         </div>
                     </li>
                     <li><a href="/NhanVien/IndexNhanVien#Product" class="nav-link px-2 ">Danh Sách Sản Phẩm</a></li>
-                    <li><a href="/NhanVien/LichSuDonHang" class="nav-link px-2 ">Quản Lý Sản Phẩm</a></li>
+                    <li class="nav-item dropdown quan-ly-nghiep-vu">
+                        <a href="#" class="nav-link dropdown-toggle px-2" id="quanLyNghiepVuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Quản Lý Nghiệp Vụ
+                        </a>
+                        <ul class="dropdown-menu quan-ly-nghiep-vu-dropdown" aria-labelledby="quanLyNghiepVuDropdown">
+                            <li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLyNhaCungCap">Quản Lý Nhà Cung Cấp</a></li>
+                            <li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLySanPham">Quản Lý Sản Phẩm</a></li>
+                            <li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLyDonHang">Quản Lý Đơn Hàng</a></li>
+                            <li><a class="dropdown-item" href="/NhanVien/BaoCaoThongKe">Báo Cáo Thống Kê</a></li>
+                        </ul>
+                    </li>
+
 
 
                 </ul>

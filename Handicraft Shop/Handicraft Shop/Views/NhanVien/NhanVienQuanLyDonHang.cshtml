@@ -1,0 +1,58 @@
+﻿@using Handicraft_Shop.Models;
+@{
+    ViewBag.Title = "NhanVienQuanLyDonHang";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+@model List<Handicraft_Shop.Models.DONHANG>
+
+<h2>Quản lý Đơn Hàng</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã Đơn Hàng</th>
+            <th>Khách Hàng</th>
+            <th>Ngày Đặt</th>
+            <th>Tổng Số Lượng</th>
+            <th>Tổng Thành Tiền</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var donHang in Model)
+        {
+            <tr>
+                <td>@donHang.MADONHANG</td>
+                <td>@donHang.KHACHHANG.HOTEN</td>
+                <td>@donHang.NGAYDAT</td>
+                <td>@donHang.TONGSLHANG</td>
+                <td>@String.Format("{0:N0}", donHang.TONGTHANHTIEN) VNĐ</td>
+                <td>@donHang.TRANGTHAI</td>
+                <td>
+                    <a href="@Url.Action("NhanVienDonHangDetails", new { id = donHang.MADONHANG })" class="btn btn-info">Chi Tiết</a>
+                    <form action="@Url.Action("NhanVienUpdateTrangThaiDonHang", new { id = donHang.MADONHANG })" method="post" style="display:inline;">
+                        <select name="trangThaiMoi" class="form-control d-inline w-auto">
+                            <option value="Chờ xử lý" @(donHang.TRANGTHAI == "Chờ xử lý" ? "selected" : "")>Chờ xử lý</option>
+                            <option value="Đang giao" @(donHang.TRANGTHAI == "Đang giao" ? "selected" : "")>Đang giao</option>
+                            <option value="Đã giao" @(donHang.TRANGTHAI == "Đã giao" ? "selected" : "")>Đã giao</option>
+                            <option value="Hủy" @(donHang.TRANGTHAI == "Hủy" ? "selected" : "")>Hủy</option>
+                        </select>
+                        <button type="submit" class="btn btn-success">Cập Nhật</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Hiển thị phân trang -->
+<div class="pagination">
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        <a href="@Url.Action("QuanLyDonHang", new { page = i })" class="@(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+    }
+</div>
+
+
