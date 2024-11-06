@@ -6,3 +6,22 @@
 {
     <a class="dropdown-item" href="/KhachHang/KhachHangLocDL_Theoloai/?mdm=@l.MALOAI">@l.TENLOAI</a>
 }
+<script>
+    function addToCartAjax(productId) {
+        $.ajax({
+            url: '/KhachHang/KhachHangThemMatHangAjax',
+            type: 'POST',
+            data: { MASANPHAM: productId },
+            success: function (response) {
+                if (response.success) {
+                    $('.cart-icon + .badge').text(response.cartCount);
+                } else {
+                    alert(response.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+                }
+            },
+            error: function () {
+                console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+            }
+        });
+    }
+</script>

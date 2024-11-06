@@ -165,8 +165,8 @@
 .dropdown-menu .dropdown-menu {
     top: 0;
     left: 100%;
-    margin-left: 10px;
-    background-color: #f9f9f9;
+    margin-left: 0px;
+    background-color: #cfb39b;
     border-radius: 8px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     padding: 10px 0;
@@ -398,47 +398,54 @@
     transition: all 0.3s ease-in-out;
 }
 
-/* Hiển thị menu chính khi hover vào Quản Lý Nghiệp Vụ */
+
 .quan-ly-nghiep-vu:hover > .quan-ly-nghiep-vu-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(5px);
 }
 
-/* Dropdown phụ cho Báo Cáo Thống Kê */
+
 .dropdown-submenu {
     position: relative;
 }
 
-    .dropdown-submenu .bao-cao-thong-ke-dropdown {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 100%;
-        background-color: #f9f9f9;
-        font-weight: 500;
-        border-radius: 8px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        min-width: 200px;
-        padding: 10px 0;
-        z-index: 1000;
-    }
+.bao-cao-thong-ke-dropdown {
+    display: none; 
+    position: absolute;
+    top: 0;
+    left: 90%; 
+    background-color: #cfb39b;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    padding: 10px 0;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
 
-    /* Hiển thị menu con khi hover vào Báo Cáo Thống Kê */
-    .dropdown-submenu:hover > .bao-cao-thong-ke-dropdown {
+
+    .dropdown-submenu:hover > .bao-cao-thong-ke-dropdown,
+    .bao-cao-thong-ke-dropdown:hover {
         display: block;
+        opacity: 1;
+        visibility: visible;
     }
 
-    /* Tùy chỉnh các item trong menu con */
-    .dropdown-submenu .bao-cao-thong-ke-dropdown .dropdown-item {
+
+    .bao-cao-thong-ke-dropdown .dropdown-item {
         padding: 8px 20px;
-        color: #333;
+        color: #00000082;
         font-weight: 400;
         transition: background-color 0.3s;
     }
 
-        /* Hiệu ứng hover cho các item trong menu con */
-        .dropdown-submenu .bao-cao-thong-ke-dropdown .dropdown-item:hover {
+        
+        .bao-cao-thong-ke-dropdown .dropdown-item:hover {
             background-color: #cfb39b;
-            color: #fff;
+            font-weight:600;
+            color: black;
         }
