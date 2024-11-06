@@ -411,6 +411,7 @@
     <Content Include="Views\NhanVien\EditSanPham.cshtml" />
     <Content Include="Views\NhanVien\NhanVienQuanLyDonHang.cshtml" />
     <Content Include="Views\NhanVien\NhanVienDonHangDetails.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienQuanLyKhachHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

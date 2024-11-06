@@ -1,0 +1,38 @@
+﻿@model List<Handicraft_Shop.Models.KHACHHANG>
+@{
+    ViewBag.Title = "NhanVienQuanLyKhachHang";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+<div class="manage-users-container mt-5">
+    <h2 class="text-center">Danh sách khách hàng</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover custom-table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã khách hàng</th>
+                    <th>Tên khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.MAKHACHHANG</td>
+                        <td>@user.HOTEN</td>
+                        <td>@user.SODIENTHOAI</td>
+                        <td>@user.EMAIL</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+  
+
+</div>
+<link href="~/bootstrap/bootstrap/css/ManageUsers.css" rel="stylesheet" />
+

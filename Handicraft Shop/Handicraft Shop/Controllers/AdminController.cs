@@ -121,31 +121,31 @@ namespace Handicraft_Shop.Controllers
                 user.EMAIL = updatedUser.EMAIL;
                 user.SODIENTHOAI = updatedUser.SODIENTHOAI;
 
-                var userRole = data.QUYEN_NGUOIDUNGs.FirstOrDefault(q => q.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
+                //var userRole = data.QUYEN_NGUOIDUNGs.FirstOrDefault(q => q.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
 
-                if (userRole != null)
-                {
-                    if (userRole.MAQUYEN != SelectedRole)
-                    {
-                        data.QUYEN_NGUOIDUNGs.DeleteOnSubmit(userRole);
+                //if (userRole != null)
+                //{
+                //    if (userRole.MAQUYEN != SelectedRole)
+                //    {
+                //        data.QUYEN_NGUOIDUNGs.DeleteOnSubmit(userRole);
 
-                        QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
-                        {
-                            MANGUOIDUNG = updatedUser.MANGUOIDUNG,
-                            MAQUYEN = SelectedRole
-                        };
-                        data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
-                    }
-                }
-                else
-                {
-                    QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
-                    {
-                        MANGUOIDUNG = updatedUser.MANGUOIDUNG,
-                        MAQUYEN = SelectedRole
-                    };
-                    data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
-                }
+                //        QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
+                //        {
+                //            MANGUOIDUNG = updatedUser.MANGUOIDUNG,
+                //            MAQUYEN = SelectedRole
+                //        };
+                //        data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
+                //    }
+                //}
+                //else
+                //{
+                //    QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
+                //    {
+                //        MANGUOIDUNG = updatedUser.MANGUOIDUNG,
+                //        MAQUYEN = SelectedRole
+                //    };
+                //    data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
+                //}
 
                 data.SubmitChanges();
 

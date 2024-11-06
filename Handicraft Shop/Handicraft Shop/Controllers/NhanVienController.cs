@@ -366,6 +366,10 @@ namespace Handicraft_Shop.Controllers
 
             return RedirectToAction("NhanVienQuanLyDonHang");
         }
-
+        public ActionResult NhanVienQuanLyKhachHang()
+        {
+            var users = data.KHACHHANGs.ToList();
+            return View(users);
+        }
     }
 }

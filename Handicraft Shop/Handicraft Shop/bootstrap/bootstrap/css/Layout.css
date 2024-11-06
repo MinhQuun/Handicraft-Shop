@@ -37,7 +37,7 @@
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border-radius:20px;
+    border-radius: 20px;
     z-index: 1;
 }
 
@@ -58,7 +58,7 @@
 
 .btn {
     border-radius: 10px;
-    font-weight:700;
+    font-weight: 700;
 }
 
 .butonLog {
@@ -67,11 +67,12 @@
     background-image: none;
     border-color: transparent;
 }
-.butonLog:hover {
-    color: black;
-    background-color: #cfb39b;
-    border-color: transparent;
-}
+
+    .butonLog:hover {
+        color: black;
+        background-color: #cfb39b;
+        border-color: transparent;
+    }
 
 .form-control {
     border-radius: 10px;
@@ -87,13 +88,13 @@
     margin-right: 10px;
 }
 
-.nav-link{
+.nav-link {
     color: #00000082;
     font-size: 16px;
     padding: 10px 15px;
     transition: background-color 0.3s;
     border-radius: 5px;
-    font-weight:700
+    font-weight: 700
 }
 
     .nav-link:hover, .nav-link:focus {
@@ -110,7 +111,7 @@
     top: 4px;
     left: 158px;
     background-color: #cfb39b;
-    font-weight:600;
+    font-weight: 600;
     border-radius: 8px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     min-width: 200px;
@@ -133,7 +134,7 @@
     padding: 12px 20px;
     font-size: 15px;
     display: flex;
-    font-weight:600;
+    font-weight: 600;
     align-items: center;
     transition: background-color 0.3s ease;
 }
@@ -225,7 +226,7 @@
         display: block;
         padding: 10px 15px;
         color: #00000082;
-        font-weight:600;
+        font-weight: 600;
         text-decoration: none;
         font-size: 14px;
         transition: background-color 0.3s;
@@ -363,31 +364,30 @@
 }
 
 .form-group .btn-light {
-    background-color: transparent; 
-    border: none; 
-    padding: 0; 
-    box-shadow: none; 
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
 }
 
     .form-group .btn-light img.icon-search {
-        width: 20px; 
+        width: 20px;
         height: 20px;
     }
 
     .form-group .btn-light:hover {
         background-color: transparent;
-        box-shadow: none; 
+        box-shadow: none;
     }
 
-/* Dropdown menu riêng cho Quản Lý Nghiệp Vụ */
+/* Dropdown menu chính cho Quản Lý Nghiệp Vụ */
 .quan-ly-nghiep-vu .quan-ly-nghiep-vu-dropdown {
     display: block;
     opacity: 0;
     visibility: hidden;
     position: absolute;
-    top: 100%; /* Hiển thị ngay dưới menu cha */
+    top: 100%;
     left: -10px;
-        /* Căn chỉnh menu con thẳng dưới menu cha */
     background-color: #cfb39b;
     font-weight: 600;
     border-radius: 8px;
@@ -398,9 +398,47 @@
     transition: all 0.3s ease-in-out;
 }
 
-/* Hiển thị menu khi hover vào Quản Lý Nghiệp Vụ */
+/* Hiển thị menu chính khi hover vào Quản Lý Nghiệp Vụ */
 .quan-ly-nghiep-vu:hover > .quan-ly-nghiep-vu-dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateY(5px); /* Hiệu ứng di chuyển xuống một chút */
+    transform: translateY(5px);
 }
+
+/* Dropdown phụ cho Báo Cáo Thống Kê */
+.dropdown-submenu {
+    position: relative;
+}
+
+    .dropdown-submenu .bao-cao-thong-ke-dropdown {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        background-color: #f9f9f9;
+        font-weight: 500;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+
+    /* Hiển thị menu con khi hover vào Báo Cáo Thống Kê */
+    .dropdown-submenu:hover > .bao-cao-thong-ke-dropdown {
+        display: block;
+    }
+
+    /* Tùy chỉnh các item trong menu con */
+    .dropdown-submenu .bao-cao-thong-ke-dropdown .dropdown-item {
+        padding: 8px 20px;
+        color: #333;
+        font-weight: 400;
+        transition: background-color 0.3s;
+    }
+
+        /* Hiệu ứng hover cho các item trong menu con */
+        .dropdown-submenu .bao-cao-thong-ke-dropdown .dropdown-item:hover {
+            background-color: #cfb39b;
+            color: #fff;
+        }
