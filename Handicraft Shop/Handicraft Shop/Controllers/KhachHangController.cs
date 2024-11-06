@@ -370,10 +370,5 @@ namespace Handicraft_Shop.Controllers
 
             return View(donHangs);
         }
-
-
-
-
-
     }
 }

@@ -136,6 +136,9 @@
       <DependentUpon>HandicraftShop.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\DonHangViewModel.cs" />
+    <Compile Include="Models\KhachHangMuaNhieuNhat.cs" />
+    <Compile Include="Models\TonKhoViewModel.cs" />
+    <Compile Include="Models\TopSanPhamViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +415,9 @@
     <Content Include="Views\NhanVien\NhanVienQuanLyDonHang.cshtml" />
     <Content Include="Views\NhanVien\NhanVienDonHangDetails.cshtml" />
     <Content Include="Views\NhanVien\NhanVienQuanLyKhachHang.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienBaoCaoSanPhamBanChay.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienBaoCaoTonKho.cshtml" />
+    <Content Include="Views\NhanVien\NhanVienBaoCaoKhachHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

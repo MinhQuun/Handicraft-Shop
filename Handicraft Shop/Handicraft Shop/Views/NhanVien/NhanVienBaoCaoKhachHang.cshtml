@@ -1,0 +1,153 @@
+﻿@model List<Handicraft_Shop.Models.KhachHangMuaNhieuNhat>
+@{
+    ViewBag.Title = "NhanVienBaoCaoKhachHang";
+    Layout = "~/Views/Shared/NhanVienLayout.cshtml";
+}
+
+<!-- CSS Tùy chỉnh -->
+<style>
+    /* Căn giữa tiêu đề */
+    h2.text-center {
+        font-size: 1.8rem;
+        color: #333;
+        font-weight: bold;
+    }
+
+    /* Bảng Bootstrap */
+    .table {
+        font-size: 16px; /* Tăng cỡ chữ */
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    tbody tr:hover {
+        background-color: #f5f5f5; /* Màu nền khi hover */
+    }
+
+    /* Tăng khoảng cách giữa các hàng */
+    .table td, .table th {
+        vertical-align: middle;
+        padding: 12px;
+        text-align: center; /* Căn giữa nội dung */
+    }
+
+    /* Tạo khoảng trống và đường viền cho bảng chi tiết sản phẩm */
+    .details-table-container {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .details-table .table {
+        margin-bottom: 0;
+    }
+
+    /* Căn chỉnh và định dạng hình ảnh */
+    .product-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    /* Định dạng cột tên sản phẩm */
+    .product-name {
+        font-weight: 600;
+        color: #555;
+    }
+
+    /* Màu nền cho phần chi tiết sản phẩm */
+    .details-table {
+        background-color: #ffffff;
+        border-radius: 8px;
+    }
+    /* Style for product list in report */
+    .product-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .product-image img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .product-name {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .product-quantity {
+        font-size: 0.85em;
+        color: #666;
+        font-weight: 500;
+    }
+
+</style>
+
+<h2 class="text-center my-4">Báo Cáo Khách Hàng Mua Nhiều Nhất</h2>
+<div class="container">
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Mã Khách Hàng</th>
+                <th>Tên Khách Hàng</th>
+                <th>Số Điện Thoại</th>
+                <th>Email</th>
+                <th>Tổng Số Lượng Mua</th>
+                <th>Chi Tiết Sản Phẩm Mua</th>
+                <th>Tổng Số Lượng Tổng Cộng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kh in Model)
+            {
+            <tr>
+                <td>@kh.MaKhachHang</td>
+                <td>@kh.TenKhachHang</td>
+                <td>@kh.SoDienThoai</td>
+                <td>@kh.Email</td>
+                <td>@kh.TongSoLuongMua</td>
+                <td>
+                    <ul class="product-list">
+                        @foreach (var sp in kh.SanPhamsDaMua)
+                        {
+                            <li class="product-item">
+                                <div class="product-image">
+                                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HinhAnh" alt="@sp.TenSanPham" />
+                                </div>
+                                <div class="product-info">
+                                    <span class="product-name">@sp.TenSanPham</span>
+                                    <span class="product-quantity"> - Số lượng: @sp.SoLuongMua</span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>@kh.TongSoLuongTatCaSanPham</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

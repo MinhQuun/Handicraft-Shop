@@ -371,5 +371,85 @@ namespace Handicraft_Shop.Controllers
             var users = data.KHACHHANGs.ToList();
             return View(users);
         }
+
+        public ActionResult NhanVienBaoCaoSanPhamBanChay()
+        {
+            // Lấy danh sách sản phẩm bán chạy nhất dựa trên tổng số lượng bán
+            var topSanPhamBanChay = data.CHITIETDONHANGs
+            .GroupBy(ct => new { ct.MASANPHAM, ct.SANPHAM.TENSANPHAM, ct.SANPHAM.HINHANH }) // Lấy thêm hình ảnh
+            .Select(g => new TopSanPhamViewModel
+            {
+                MaSanPham = g.Key.MASANPHAM,
+                TenSanPham = g.Key.TENSANPHAM,
+                TongSoLuongBan = g.Sum(ct => ct.SOLUONG ?? 0),
+                TongDoanhThu = g.Sum(ct => (ct.SOLUONG ?? 0) * (ct.DONGIA ?? 0)),
+                HinhAnh = g.Key.HINHANH // Gán hình ảnh sản phẩm
+            })
+            .OrderByDescending(x => x.TongSoLuongBan)
+            .Take(10) // Lấy top 10 sản phẩm bán chạy nhất
+            .ToList();
+
+
+            return View(topSanPhamBanChay);
+        }
+
+        public ActionResult NhanVienBaoCaoTonKho()
+        {
+            // Lấy danh sách sản phẩm và tính số lượng tồn kho
+            var tonKhoData = data.SANPHAMs
+                .Select(sp => new TonKhoViewModel
+                {
+                    MaSanPham = sp.MASANPHAM,
+                    TenSanPham = sp.TENSANPHAM,
+                    HinhAnh = sp.HINHANH,
+                    // Tính số lượng tồn kho: số lượng ban đầu - tổng số lượng đã bán
+                    SoLuongTon = (sp.SOLUONGTON ?? 0) - data.CHITIETDONHANGs
+                                            .Where(ct => ct.MASANPHAM == sp.MASANPHAM)
+                                            .Sum(ct => (int?)ct.SOLUONG) ?? 0
+                })
+                        .OrderByDescending(sp => sp.SoLuongTon) // Sắp xếp theo số lượng tồn giảm dần
+                        .ToList();
+
+            return View(tonKhoData);
+        }
+        public ActionResult NhanVienBaoCaoKhachHang()
+        {
+            // Lấy danh sách khách hàng và tính tổng số lượng sản phẩm đã mua cho mỗi khách hàng
+            var topKhachHang = data.KHACHHANGs
+            .Select(kh => new KhachHangMuaNhieuNhat
+            {
+                MaKhachHang = kh.MAKHACHHANG,
+                TenKhachHang = kh.HOTEN,
+                SoDienThoai = kh.SODIENTHOAI,
+                Email = kh.EMAIL,
+                TongSoLuongMua = data.DONHANGs
+                    .Where(dh => dh.MAKHACHHANG == kh.MAKHACHHANG)
+                    .SelectMany(dh => data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == dh.MADONHANG))
+                    .Sum(ct => (int?)ct.SOLUONG) ?? 0,
+                // Tính tổng số lượng của tất cả các sản phẩm cộng lại
+                TongSoLuongTatCaSanPham = data.DONHANGs
+                .Where(dh => dh.MAKHACHHANG == kh.MAKHACHHANG)
+                .SelectMany(dh => data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == dh.MADONHANG))
+                .Sum(ct => ct.SOLUONG) ?? 0,
+                // Danh sách sản phẩm đã mua
+                SanPhamsDaMua = data.DONHANGs
+                    .Where(dh => dh.MAKHACHHANG == kh.MAKHACHHANG)
+                    .SelectMany(dh => data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == dh.MADONHANG))
+                    .Select(ct => new SanPhamMuaViewModel
+                    {
+                        MaSanPham = ct.MASANPHAM,
+                        TenSanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).TENSANPHAM,
+                        SoLuongMua = ct.SOLUONG.GetValueOrDefault(),
+                        HinhAnh = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).HINHANH
+                    })
+                    .ToList()
+            })
+            .OrderByDescending(kh => kh.TongSoLuongMua)
+            .Take(10)
+            .ToList();
+
+            return View(topKhachHang);
+        }
+
     }
 }
