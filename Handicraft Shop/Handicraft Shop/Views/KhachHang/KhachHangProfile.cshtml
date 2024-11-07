@@ -1,0 +1,18 @@
+﻿@model Handicraft_Shop.Models.KHACHHANG
+@{
+    ViewBag.Title = "Hồ Sơ";
+    Layout = "~/Views/Shared/KhachHangLayout.cshtml";
+}
+
+<h2>Thông Tin Cá Nhân</h2>
+
+<div>
+    <p><strong>Mã Khách Hàng:</strong> @Model.MANGUOIDUNG</p>
+    <p><strong>Tên Khách Hàng:</strong> @Model.HOTEN</p>
+    <p><strong>Số Điện Thoại:</strong> @Model.SODIENTHOAI</p>
+    <p><strong>Email:</strong> @Model.EMAIL</p>
+    <p><strong>Tài Khoản:</strong> @Model.NGUOIDUNG.TAIKHOAN</p>
+</div>
+
+<a href="@Url.Action("KhachHangEditProfile", "KhachHang")" class="btn btn-primary">Chỉnh Sửa Thông Tin</a>
+

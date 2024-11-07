@@ -393,3 +393,13 @@ D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Deb
 D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.dll
 D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.pdb
 D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.csproj.AssemblyReference.cache
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\BCrypt.Net-Next.dll
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Buffers.dll
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Memory.dll
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Numerics.Vectors.dll
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Runtime.CompilerServices.Unsafe.dll
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\BCrypt.Net-Next.xml
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Buffers.xml
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Memory.xml
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Numerics.Vectors.xml
+E:\MinhQuun\HUIT - 2022\Nam 3\HK5\Cong Nghe Phan Mem\Project\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Runtime.CompilerServices.Unsafe.xml

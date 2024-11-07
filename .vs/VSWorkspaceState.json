@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Handicraft Shop",
+    "\\Handicraft Shop\\Handicraft Shop",
+    "\\Handicraft Shop\\Handicraft Shop\\bootstrap\\bootstrap",
+    "\\Handicraft Shop\\Handicraft Shop\\bootstrap\\bootstrap\\css",
+    "\\Handicraft Shop\\Handicraft Shop\\Controllers"
   ],
-  "SelectedNode": "\\Handicraft Shop.sln",
+  "SelectedNode": "\\Handicraft Shop\\Handicraft Shop\\Controllers\\NhanVienController.cs",
   "PreviewInSolutionExplorer": false
 }

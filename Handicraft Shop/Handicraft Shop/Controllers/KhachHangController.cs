@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Handicraft_Shop.Models;
+using BCrypt.Net;
 
 namespace Handicraft_Shop.Controllers
 {
@@ -370,5 +371,88 @@ namespace Handicraft_Shop.Controllers
 
             return View(donHangs);
         }
+
+        // Hiển thị thông tin cá nhân
+        public ActionResult KhachHangProfile()
+        {
+            var user = Session["User"] as NGUOIDUNG;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var khachHang = data.KHACHHANGs.SingleOrDefault(kh => kh.MANGUOIDUNG == user.MANGUOIDUNG);
+            if (khachHang == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(khachHang);
+        }
+
+        // Hiển thị form chỉnh sửa thông tin cá nhân
+        public ActionResult KhachHangEditProfile()
+        {
+            var user = Session["User"] as NGUOIDUNG;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var model = new KhachHangEditProfile
+            {
+                Username = user.TAIKHOAN,
+                Email = user.EMAIL,
+                SoDienThoai = user.SODIENTHOAI,
+                HoTen = user.KHACHHANGs.FirstOrDefault()?.HOTEN
+            };
+
+            return View(model);
+        }
+
+        // Cập nhật thông tin cá nhân và mật khẩu
+        [HttpPost]
+        public ActionResult KhachHangUpdateProfile(KhachHangEditProfile model)
+        {
+            var user = Session["User"] as NGUOIDUNG;
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("KhachHangEditProfile", model);
+            }
+
+            // Kiểm tra mật khẩu hiện tại
+            if (user.MATKHAU != model.CurrentPassword)
+            {
+                ModelState.AddModelError("CurrentPassword", "Mật khẩu hiện tại không đúng.");
+                return View("KhachHangEditProfile", model);
+            }
+
+            // Cập nhật mật khẩu mới nếu có
+            if (!string.IsNullOrEmpty(model.NewPassword) && model.NewPassword == model.ConfirmPassword)
+            {
+                user.MATKHAU = model.NewPassword;
+            }
+            else if (!string.IsNullOrEmpty(model.NewPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "Mật khẩu mới và xác nhận mật khẩu không khớp.");
+                return View("KhachHangEditProfile", model);
+            }
+
+            // Lưu thay đổi vào database
+            data.SubmitChanges();
+
+            // Cập nhật lại session
+            Session["User"] = user;
+
+            ViewBag.Message = "Cập nhật thông tin thành công!";
+            return View("KhachHangEditProfile", model);
+        }
+
+
     }
 }
