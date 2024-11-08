@@ -4,74 +4,97 @@
     Layout = "~/Views/Shared/NhanVienLayout.cshtml";
 }
 
-<!-- CSS Tùy chỉnh -->
-<style>
-    /* Căn giữa tiêu đề */
-    h2.text-center {
-        font-size: 1.8rem;
-        color: #333;
-        font-weight: bold;
-    }
+@section Styles {
+    <style>
+        /* Tiêu đề */
+        h2.text-center {
+            font-size: 24px;
+            color: #6d4c41; /* Màu nâu nhẹ */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-    /* Bảng Bootstrap */
-    .table {
-        font-size: 16px; /* Tăng cỡ chữ */
-    }
+        /* Bảng */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fdf7f2; /* Nền nhạt */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-    .thead-dark th {
-        background-color: #343a40;
-        color: #fff;
-    }
+        .custom-header { /* Lớp tùy chỉnh thay thế cho .thead-dark */
+            background-color: #bcaaa4; /* Màu nâu nhạt cho tiêu đề */
+            color: #5d4037; /* Màu nâu đậm cho chữ */
+            font-weight: bold;
+        }
 
-    tbody tr:hover {
-        background-color: #f5f5f5; /* Màu nền khi hover */
-    }
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+        }
 
-    /* Tăng khoảng cách giữa các hàng */
-    .table td, .table th {
-        vertical-align: middle;
-        padding: 12px;
-        text-align: center; /* Căn giữa nội dung */
-    }
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f0e3; /* Nền nhạt cho các dòng chẵn */
+        }
 
-    /* Tạo khoảng trống và đường viền cho bảng chi tiết sản phẩm */
-    .details-table-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 10px;
-        border: 1px solid #ddd;
-    }
+        .table tbody tr:hover {
+            background-color: #ffe0b2; /* Nền khi hover */
+        }
 
-    .details-table .table {
-        margin-bottom: 0;
-    }
+        /* Định dạng hình ảnh sản phẩm */
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
-    /* Căn chỉnh và định dạng hình ảnh */
-    .product-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
+        /* Tăng khoảng cách giữa các mục và định dạng chữ */
+        .product-name {
+            font-weight: 600;
+            color: #6d4c41; /* Màu nâu */
+        }
+        /* Căn giữa và định dạng phần phân trang */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-    /* Định dạng cột tên sản phẩm */
-    .product-name {
-        font-weight: 600;
-        color: #555;
-    }
+            .pagination a, .pagination span {
+                color: #333;
+                padding: 8px 12px;
+                margin: 0 5px;
+                text-decoration: none;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+            }
 
-    /* Màu nền cho phần chi tiết sản phẩm */
-    .details-table {
-        background-color: #ffffff;
-        border-radius: 8px;
-    }
-</style>
+                .pagination a:hover {
+                    background-color: #f2f2f2;
+                    color: #333;
+                }
+
+            .pagination .active {
+                background-color: #a0522d; /* Màu nâu phù hợp với giao diện */
+                color: white;
+                border: 1px solid #a0522d;
+            }
+
+    </style>
+}
 
 <h2 class="text-center my-4">Báo Cáo Số Lượng Tồn Kho</h2>
 <div class="container">
     <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
+        <thead class="custom-header">
+            <!-- Áp dụng lớp custom-header thay vì thead-dark -->
             <tr>
                 <th>Mã Sản Phẩm</th>
                 <th>Tên Sản Phẩm</th>
@@ -86,12 +109,18 @@
                     <td>@item.MaSanPham</td>
                     <td>@item.TenSanPham</td>
                     <td>
-                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HinhAnh" alt="@item.TenSanPham" style="width: 80px; height: auto;" /> <!-- Hiển thị hình ảnh -->
+                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HinhAnh" alt="@item.TenSanPham" class="product-image" />
                     </td>
                     <td>@item.SoLuongTon</td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
+    <div class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a href="@Url.Action("NhanVienBaoCaoTonKho", new { page = i })" class="@(ViewBag.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
 
+</div>

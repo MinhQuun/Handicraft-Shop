@@ -3,74 +3,109 @@
     ViewBag.Title = "NhanVienBaoCaoSanPhamBanChay";
     Layout = "~/Views/Shared/NhanVienLayout.cshtml";
 }
-<!-- CSS Tùy chỉnh -->
-<style>
-    /* Căn giữa tiêu đề */
-    h2.text-center {
-        font-size: 1.8rem;
-        color: #333;
-        font-weight: bold;
-    }
+@section Styles {
+    <style>
+        /* Tiêu đề báo cáo */
+        h2.text-center {
+            font-size: 24px;
+            color: #6d4c41;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-    /* Bảng Bootstrap */
-    .table {
-        font-size: 16px; /* Tăng cỡ chữ */
-    }
+        /* Bảng báo cáo sản phẩm */
+        .table {
+            font-size: 16px;
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fdf7f2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
-    .thead-dark th {
-        background-color: #343a40;
-        color: #fff;
-    }
+        /* Tiêu đề bảng tùy chỉnh */
+        .thead-custom th {
+            background-color: #d7ccc8; /* Màu nâu nhạt */
+            color: #6d4c41; /* Màu chữ nâu đậm */
+            padding: 12px;
+            text-align: center;
+        }
 
-    tbody tr:hover {
-        background-color: #f5f5f5; /* Màu nền khi hover */
-    }
+        /* Dòng dữ liệu trong bảng */
+        .table td, .table th {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+        }
 
-    /* Tăng khoảng cách giữa các hàng */
-    .table td, .table th {
-        vertical-align: middle;
-        padding: 12px;
-        text-align: center; /* Căn giữa nội dung */
-    }
+        /* Màu nền xen kẽ và hover */
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f0e3;
+        }
 
-    /* Tạo khoảng trống và đường viền cho bảng chi tiết sản phẩm */
-    .details-table-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 10px;
-        border: 1px solid #ddd;
-    }
+        .table tbody tr:hover {
+            background-color: #ffe0b2;
+        }
 
-    .details-table .table {
-        margin-bottom: 0;
-    }
+        /* Căn chỉnh và định dạng hình ảnh sản phẩm */
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Căn chỉnh và định dạng hình ảnh */
-    .product-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
+        /* Định dạng cột tên sản phẩm */
+        .product-name {
+            font-weight: 600;
+            color: #6d4c41;
+        }
 
-    /* Định dạng cột tên sản phẩm */
-    .product-name {
-        font-weight: 600;
-        color: #555;
-    }
+        /* Định dạng tổng doanh thu */
+        .revenue {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        /* Căn giữa và định dạng phần phân trang */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-    /* Màu nền cho phần chi tiết sản phẩm */
-    .details-table {
-        background-color: #ffffff;
-        border-radius: 8px;
-    }
-</style>
+            .pagination a, .pagination span {
+                color: #333;
+                padding: 8px 12px;
+                margin: 0 5px;
+                text-decoration: none;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+                .pagination a:hover {
+                    background-color: #f2f2f2;
+                    color: #333;
+                }
+
+            .pagination .active {
+                background-color: #a0522d; /* Màu nâu phù hợp với giao diện */
+                color: white;
+                border: 1px solid #a0522d;
+            }
+
+    </style>
+}
+
 
 <h2 class="text-center my-4">Báo Cáo Sản Phẩm Bán Chạy Nhất</h2>
 <div class="container">
     <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
+        <thead class="thead-custom">
             <tr>
                 <th>Mã Sản Phẩm</th>
                 <th>Tên Sản Phẩm</th>
@@ -82,18 +117,25 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@item.MaSanPham</td>
-                <td>@item.TenSanPham</td>
-                <td>
-                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HinhAnh" alt="@item.TenSanPham" style="width: 80px; height: auto;" /> <!-- Hiển thị hình ảnh -->
-                </td>
-                <td>@item.TongSoLuongBan</td>
-                <td>@item.TongDoanhThu.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</td>
-            </tr>
+                <tr>
+                    <td>@item.MaSanPham</td>
+                    <td>@item.TenSanPham</td>
+                    <td>
+                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HinhAnh" alt="@item.TenSanPham" style="width: 80px; height: auto;" /> <!-- Hiển thị hình ảnh -->
+                    </td>
+                    <td>@item.TongSoLuongBan</td>
+                    <td>@item.TongDoanhThu.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</td>
+                </tr>
             }
         </tbody>
     </table>
+    <div class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a href="@Url.Action("NhanVienBaoCaoSanPhamBanChay", new { page = i })" class="@(ViewBag.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
+
 </div>
 
 

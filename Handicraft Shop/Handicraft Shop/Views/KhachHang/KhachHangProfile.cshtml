@@ -3,10 +3,68 @@
     ViewBag.Title = "Hồ Sơ";
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
+@section Styles {
+    <style>
+        
+        .profile-title {
+            font-size: 2rem;
+            color: #8B4513; 
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
 
-<h2>Thông Tin Cá Nhân</h2>
+        
+        .profile-info {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
 
-<div>
+            .profile-info p {
+                font-size: 1.1rem;
+                margin: 10px 0;
+                color: #333;
+                line-height: 1.6;
+            }
+
+            .profile-info strong {
+                color: #8B4513;
+            }
+
+        
+        .edit-profile-btn-container {
+            text-align: center; 
+        }
+
+        .edit-profile-btn {
+            display: inline-block;
+            background-color: #8B4513; 
+            color: white;
+            font-weight: bold;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+            .edit-profile-btn:hover {
+                background-color: #6b3b10; 
+                color: #fff;
+                text-decoration: none;
+            }
+    </style>
+}
+
+<h2 class="profile-title">Thông Tin Cá Nhân</h2>
+
+<div class="profile-info">
     <p><strong>Mã Khách Hàng:</strong> @Model.MANGUOIDUNG</p>
     <p><strong>Tên Khách Hàng:</strong> @Model.HOTEN</p>
     <p><strong>Số Điện Thoại:</strong> @Model.SODIENTHOAI</p>
@@ -14,5 +72,7 @@
     <p><strong>Tài Khoản:</strong> @Model.NGUOIDUNG.TAIKHOAN</p>
 </div>
 
-<a href="@Url.Action("KhachHangEditProfile", "KhachHang")" class="btn btn-primary">Chỉnh Sửa Thông Tin</a>
-
+<div class="edit-profile-btn-container">
+    <a href="@Url.Action("KhachHangEditProfile", "KhachHang")" class="edit-profile-btn">Chỉnh Sửa Thông Tin</a>
+    <a href="@Url.Action("KhachHangDoiMatKhau", "KhachHang")" class="edit-profile-btn">Thay đổi mật khẩu</a>
+</div>

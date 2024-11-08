@@ -1,12 +1,88 @@
-﻿
+﻿@model Handicraft_Shop.Models.SANPHAM
 @{
     ViewBag.Title = "EditSanPham";
     Layout = "~/Views/Shared/NhanVienLayout.cshtml";
 }
 
-@model Handicraft_Shop.Models.SANPHAM
+@section Styles {
+    <style>
+        /* Căn giữa tiêu đề và thêm khoảng cách */
+        h2 {
+            text-align: center;
+            color: #6d4c41; /* Màu nâu đậm phù hợp với layout */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-<div class="container mt-4">
+        /* Căn chỉnh form trong container để dễ nhìn hơn */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9; /* Màu nền nhẹ */
+        }
+
+        /* Nhãn và Trường nhập liệu */
+        .form-group label {
+            font-weight: 600;
+            color: #5d4037; /* Màu nâu đậm cho nhãn */
+        }
+
+        .form-control {
+            border: 1px solid #8d6e63; /* Viền màu nâu nhạt */
+            padding: 10px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+            .form-control:focus {
+                border-color: #6d4c41; /* Màu viền đậm hơn khi focus */
+                box-shadow: none;
+            }
+
+        /* Ảnh hiển thị */
+        .product-image {
+            display: block;
+            margin-top: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        /* Nút hành động */
+        .btn-primary {
+            background-color: #6d4c41; /* Màu nâu đậm */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #5d4037;
+                transition: background-color 0.2s ease;
+            }
+
+        .btn-secondary {
+            background-color: #a1887f;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+            .btn-secondary:hover {
+                background-color: #8d6e63;
+                transition: background-color 0.2s ease;
+            }
+    </style>
+}
+
+<div class="container mt-4 form-container">
     <h2>Sửa Sản Phẩm</h2>
 
     @using (Html.BeginForm("EditSanPham", "NhanVien", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -43,13 +119,11 @@
             <input type="file" name="file" class="form-control" />
             @if (!string.IsNullOrEmpty(Model.HINHANH))
             {
-                <div class="mt-2">
-                    <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="Hình ảnh sản phẩm" width="150" />
-                </div>
+                <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="Hình ảnh sản phẩm" width="150" class="product-image" />
             }
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Lưu Thay Đổi</button>
-        <a href="@Url.Action("NhanVienQuanLySanPham", "NhanVien")" class="btn btn-secondary mt-3">Hủy</a>
+        <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+        <a href="@Url.Action("NhanVienQuanLySanPham", "NhanVien")" class="btn btn-secondary">Hủy</a>
     }
 </div>

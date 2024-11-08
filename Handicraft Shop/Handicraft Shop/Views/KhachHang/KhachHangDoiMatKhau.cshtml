@@ -1,27 +1,27 @@
-﻿@model Handicraft_Shop.Models.KhachHangEditProfile
+﻿@model Handicraft_Shop.Models.KhachHangEditPass
 @{
-    ViewBag.Title = "Chỉnh Sửa Hồ Sơ";
+    ViewBag.Title = "KhachHangDoiMatKhau";
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
 
 @section Styles {
     <style>
-        
+        /* Định dạng tiêu đề */
         .edit-profile-title {
             font-size: 2rem;
             color: #8B4513;
             font-weight: bold;
             text-align: center;
-            margin: 30px 0 20px; 
+            margin: 30px 0 20px; /* Tạo khoảng cách phía trên và dưới */
         }
 
-        
+        /* Định dạng form chỉnh sửa hồ sơ */
         .edit-profile-form {
             background-color: #f9f9f9;
             border-radius: 8px;
-            padding: 20px 20px 30px; 
+            padding: 20px 20px 30px; /* Giảm padding để gọn hơn */
             max-width: 600px;
-            margin: 0 auto; 
+            margin: 0 auto; /* Căn giữa form */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -33,19 +33,19 @@
             .edit-profile-form .form-control {
                 border-radius: 5px;
                 border: 1px solid #ddd;
-                padding: 8px; 
+                padding: 8px; /* Giảm padding để gọn hơn */
                 font-size: 1rem;
                 color: #333;
             }
 
-        
+        /* Định dạng nút cập nhật */
         .update-profile-button {
             display: block;
             text-align: center;
             background-color: #8B4513;
             color: white;
             font-weight: bold;
-            padding: 8px 16px; 
+            padding: 8px 16px; /* Giảm kích thước nút */
             border-radius: 5px;
             border: none;
             transition: background-color 0.3s ease;
@@ -58,49 +58,43 @@
                 color: #fff;
                 text-decoration: none;
             }
+
         .group{
             display:flex;
         }
     </style>
 }
-
-<h2 class="edit-profile-title">Chỉnh Sửa Hồ Sơ</h2>
-
-@using (Html.BeginForm("KhachHangUpdateProfile", "KhachHang", FormMethod.Post, new { @class = "edit-profile-form" }))
+<h2 class="edit-profile-title">Thay đổi mật khẩu</h2>
+@using (Html.BeginForm("KhachHangDoiMatKhau", "KhachHang", FormMethod.Post, new { @class = "edit-profile-form" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label for="Username">Tên Tài Khoản</label>
-        <input type="text" id="Username" name="Username" class="form-control" value="@Model.Username" readonly />
+        <label for="CurrentPassword">Mật Khẩu Hiện Tại</label>
+        <input type="password" id="CurrentPassword" name="CurrentPassword" class="form-control" />
+        @Html.ValidationMessageFor(m => m.CurrentPassword)
     </div>
 
     <div class="form-group">
-        <label for="HoTen">Họ Tên</label>
-        <input type="text" id="HoTen" name="HoTen" class="form-control" value="@Model.HoTen" required />
+        <label for="NewPassword">Mật Khẩu Mới</label>
+        <input type="password" id="NewPassword" name="NewPassword" class="form-control" />
+        @Html.ValidationMessageFor(m => m.NewPassword)
     </div>
 
     <div class="form-group">
-        <label for="Email">Email</label>
-        <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" required />
-        @Html.ValidationMessageFor(m => m.Email)
-    </div>
-
-    <div class="form-group">
-        <label for="SoDienThoai">Số Điện Thoại</label>
-        <input type="text" id="SoDienThoai" name="SoDienThoai" class="form-control" value="@Model.SoDienThoai" required />
-        @Html.ValidationMessageFor(m => m.SoDienThoai)
+        <label for="ConfirmPassword">Xác Nhận Mật Khẩu Mới</label>
+        <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" />
+        @Html.ValidationMessageFor(m => m.ConfirmPassword)
     </div>
 
     <div class="group">
         <button type="submit" class="btn update-profile-button">Cập Nhật</button>
         <a href="@Url.Action("KhachHangProfile", "KhachHang")" class=" btn update-profile-button">Trở về</a>
     </div>
-
 }
-
 
 @if (!string.IsNullOrEmpty(ViewBag.Message))
 {
     <div class="alert alert-success mt-3">@ViewBag.Message</div>
 }
+
