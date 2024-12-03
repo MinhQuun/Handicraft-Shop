@@ -53,11 +53,11 @@ INSERT INTO DIACHI_GIAOHANG (MAKHACHHANG, DIACHI) VALUES
 
 
 INSERT INTO DONHANG (MAKHACHHANG, MADIACHI, NGAYDAT, NGAYGIAO, MATT, GHICHU, TONGSLHANG, TONGTHANHTIEN, TRANGTHAI) VALUES
-(1, 1, '2024-11-01', NULL, 'HT01', N'Giao nhanh trong tuần', 5, 638000, N'Chờ xử lý'),
-(2, 2, '2024-11-02', NULL, 'HT02', N'Giao vào buổi sáng', 3, 840000, N'Chờ xử lý'),
-(3, 3, '2024-11-03', NULL, 'HT01', N'Không giao vào cuối tuần', 7, 1132000, N'Chờ xử lý'),
+(1, 1, '2024-11-01', NULL, 'HT01', N'Giao nhanh trong tuần', 5, 638000, N'Đang xử lý'),
+(2, 2, '2024-11-02', NULL, 'HT02', N'Giao vào buổi sáng', 3, 840000, N'Đang xử lý'),
+(3, 3, '2024-11-03', NULL, 'HT01', N'Không giao vào cuối tuần', 7, 1132000, N'Đang xử lý'),
 (4, 4, '2024-11-04', NULL, 'HT02', N'Giao trước 5 giờ chiều', 4, 1010000, N'Đang giao'),
-(5, 5, '2024-10-29', NULL, 'HT02', N'Giao sau cổng trường', 10, 12840000, N'Chờ xử lý'),
+(5, 5, '2024-10-29', NULL, 'HT02', N'Giao sau cổng trường', 10, 12840000, N'Đang xử lý'),
 (6, 6, '2024-05-20', NULL, 'HT01', N'Để hàng ở chung cư', 14, 16510000, N'Đang giao');
 
 
