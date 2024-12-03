@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "KhachHangLichSuDonHang";
+    ViewBag.Title = "KhachHangLichSuMuaHang";
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
 
@@ -74,7 +74,7 @@
     }
 </style>
 
-<h2 class="text-center my-4">Đơn Hàng</h2>
+<h2 class="text-center my-4">Lịch Sử Mua Hàng</h2>
 
 <div class="container">
     <table class="table table-bordered table-striped table-hover">
@@ -103,13 +103,9 @@
                         <!-- Button "Chi Tiết" sẽ luôn hiển thị -->
                         <button class="btn btn-info btn-sm" onclick="location.href='@Url.Action("KhachHangChiTietDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })'">Chi Tiết</button>
 
-                        <!-- Button "Hủy Đơn" chỉ hiển thị khi trạng thái là "Đang xử lý" -->
-                        @if (donHang.DonHang.TRANGTHAI == "Đang xử lý")
-                        {
-                            <button class="btn btn-danger btn-sm" onclick="location.href='@Url.Action("KhachHangHuyDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })'">Hủy Đơn</button>
-                        }
+                        <!-- Không có nút hủy đơn vì tất cả đơn hàng trong lịch sử mua hàng đều đã giao -->
                     </td>
-                </tr>   
+                </tr>
             }
         </tbody>
     </table>

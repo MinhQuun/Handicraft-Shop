@@ -439,6 +439,8 @@
     <Content Include="Views\KhachHang\KhachHangProfile.cshtml" />
     <Content Include="Views\KhachHang\KhachHangEditProfile.cshtml" />
     <Content Include="Views\KhachHang\KhachHangDoiMatKhau.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangChiTietDonHang.cshtml" />
+    <Content Include="Views\KhachHang\KhachHangLichSuMuaHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

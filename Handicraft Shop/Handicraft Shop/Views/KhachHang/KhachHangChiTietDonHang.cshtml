@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "KhachHangChiTietDonHang";
+    Layout = "~/Views/Shared/KhachHangLayout.cshtml";
+}
+
+@model Handicraft_Shop.Models.DonHangViewModel
+
+<h2 class="text-center my-4">Chi Tiết Đơn Hàng - @Model.DonHang.MADONHANG</h2>
+
+<div class="container">
+    <!-- Thông tin đơn hàng -->
+    <div class="order-info-card">
+        <h4>Ngày Đặt: @Model.DonHang.NGAYDAT.Value.ToString("dd/MM/yyyy")</h4>
+        <h4>Ngày Giao: @(Model.DonHang.NGAYGIAO.HasValue ? Model.DonHang.NGAYGIAO.Value.ToString("dd/MM/yyyy") : "Chưa giao")</h4>
+        <h4>Trạng Thái: @Model.DonHang.TRANGTHAI</h4>
+        <h4>Tổng Số Lượng Hàng: @Model.DonHang.TONGSLHANG</h4>
+        <h4>Tổng Thành Tiền: @String.Format("{0:#,###} VND", Model.DonHang.TONGTHANHTIEN)</h4>
+    </div>
+
+    <h4 class="my-4">Danh Sách Sản Phẩm:</h4>
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+
+                <th>Tên Sản Phẩm</th>
+                <th>Hình Ảnh</th>
+                <th>Số Lượng</th>
+                <th>Đơn Giá</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var chiTiet in Model.ChiTietSanPhams)
+            {
+                <tr>
+
+                    <td>@chiTiet.TenSanPham</td>
+                    <td><img src="@Url.Content("~/HinhAnhSP/MUC HINH ANH CHUNG/" + chiTiet.HinhAnh)" class="product-image" /></td>
+                    <td>@chiTiet.SoLuong</td>
+                    <td>@String.Format("{0:#,###} VND", chiTiet.DonGia)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+        <a href="@Url.Action("KhachHangLichSuDonHang", "KhachHang")" class="btn btn-primary">Quay lại</a>
+    </div>
+</div>
+
+<!-- CSS Tùy chỉnh -->
+<style>
+    /* Tùy chỉnh kiểu chữ và font */
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:focus {
+            outline: none;
+        }
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+    }
+
+    h2.text-center {
+        font-size: 2rem;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    /* Card thông tin đơn hàng */
+    .order-info-card {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+        .order-info-card h4 {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+    /* Bảng sản phẩm */
+    .table {
+        font-size: 1rem;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: white;
+            font-weight: 600;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: #f5f5f5;
+            }
+
+    /* Kiểu ảnh sản phẩm */
+    .product-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    /* Cải thiện kiểu bảng trong Bootstrap */
+    .thead-dark th {
+        background-color: #343a40;
+        color: white;
+        font-weight: bold;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+</style>

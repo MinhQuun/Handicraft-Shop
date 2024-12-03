@@ -339,6 +339,8 @@ namespace Handicraft_Shop.Controllers
 
             return View(donHangList);
         }
+        
+
         public ActionResult NhanVienDonHangDetails(int id)
         {
             // Lấy đơn hàng dựa vào mã đơn hàng
@@ -360,24 +362,32 @@ namespace Handicraft_Shop.Controllers
         [HttpPost]
         public ActionResult NhanVienUpdateTrangThaiDonHang(int id, string trangThaiMoi)
         {
-            // Tìm đơn hàng
             var donHang = data.DONHANGs.SingleOrDefault(d => d.MADONHANG == id);
-
             if (donHang == null)
             {
                 return HttpNotFound();
             }
 
-            // Cập nhật trạng thái mới cho đơn hàng
-            donHang.TRANGTHAI = trangThaiMoi;
-            data.SubmitChanges();
+            // Cập nhật trạng thái trực tiếp
+            donHang.TRANGTHAI = trangThaiMoi; // "Đã giao", "Đang xử lý", v.v.
 
-            return RedirectToAction("NhanVienQuanLyDonHang");
-        }
-        public ActionResult NhanVienQuanLyKhachHang()
-        {
-            var users = data.KHACHHANGs.ToList();
-            return View(users);
+            // Cập nhật ngày giao nếu trạng thái là "Đã giao"
+            if (trangThaiMoi == "Đã giao")
+            {
+                donHang.NGAYGIAO = DateTime.Now; // Cập nhật ngày giao
+            }
+
+            try
+            {
+                data.SubmitChanges(); // Cập nhật cơ sở dữ liệu
+                return RedirectToAction("NhanVienQuanLyDonHang");
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi, hiển thị thông báo lỗi
+                ViewBag.ErrorMessage = "Có lỗi xảy ra: " + ex.Message;
+                return View("Error");
+            }
         }
 
         public ActionResult NhanVienBaoCaoSanPhamBanChay(int page = 1, int pageSize = 10)

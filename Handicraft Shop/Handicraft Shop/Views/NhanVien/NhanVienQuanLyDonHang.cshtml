@@ -114,9 +114,34 @@
                     background-color: #e0f2f1;
                     color: #6d4c41;
                 }
+
+        /* Lớp CSS làm mờ các đơn hàng đã hủy */
+        .canceled-order {
+            opacity: 0.6;
+            pointer-events: none; /* Không cho phép thao tác với các button */
+        }
+
+            .canceled-order .btn-info,
+            .canceled-order .btn-success,
+            .canceled-order select.form-control {
+                pointer-events: none; /* Không cho phép chọn hoặc nhấp chuột */
+            }
+
+        select.form-control {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding-right: 20px; /* Để có không gian cho mũi tên */
+        }
+
+            select.form-control option.huy {
+                background-color: #f0f0f0; /* Tạo màu nền khác nếu cần */
+                color: #b0b0b0; /* Màu chữ nhẹ */
+                font-weight: bold; /* Tạo nổi bật cho giá trị "Hủy" */
+            }
+
     </style>
 }
-
 
 <h2>Quản lý Đơn Hàng</h2>
 
@@ -135,7 +160,8 @@
     <tbody>
         @foreach (var donHang in Model)
         {
-            <tr>
+            var isCanceled = donHang.TRANGTHAI == "Đã hủy";
+            <tr class="@(isCanceled ? "canceled-order" : "")">
                 <td>@donHang.MADONHANG</td>
                 <td>@donHang.KHACHHANG.HOTEN</td>
                 <td>@string.Format("{0:dd/MM/yyyy HH:mm:ss}", donHang.NGAYDAT)</td>
@@ -143,15 +169,25 @@
                 <td>@String.Format("{0:N0}", donHang.TONGTHANHTIEN) VNĐ</td>
                 <td>@donHang.TRANGTHAI</td>
                 <td>
-                    <a href="@Url.Action("NhanVienDonHangDetails", new { id = donHang.MADONHANG })" class="btn btn-info">Chi Tiết</a>
+                    @if (!isCanceled)
+                    {
+                        <a href="@Url.Action("NhanVienDonHangDetails", new { id = donHang.MADONHANG })" class="btn btn-info">Chi Tiết</a>
+                    }
                     <form action="@Url.Action("NhanVienUpdateTrangThaiDonHang", new { id = donHang.MADONHANG })" method="post" style="display:inline;">
                         <select name="trangThaiMoi" class="form-control">
-                            <option value="Chờ xử lý" @(donHang.TRANGTHAI == "Chờ xử lý" ? "selected" : "")>Chờ xử lý</option>
+                            <option value="Đang xử lý" @(donHang.TRANGTHAI == "Đang xử lý" ? "selected" : "")>Đang xử lý</option>
                             <option value="Đang giao" @(donHang.TRANGTHAI == "Đang giao" ? "selected" : "")>Đang giao</option>
                             <option value="Đã giao" @(donHang.TRANGTHAI == "Đã giao" ? "selected" : "")>Đã giao</option>
-                            <option value="Hủy" @(donHang.TRANGTHAI == "Hủy" ? "selected" : "")>Hủy</option>
+                            @if (isCanceled)
+                            {
+                                <option class="huy" value="Hủy" @(donHang.TRANGTHAI == "Đã hủy" ? "selected" : "")>Hủy</option>
+                            }
+                            
                         </select>
-                        <button type="submit" class="btn btn-success">Cập Nhật</button>
+                        @if (!isCanceled)
+                        {
+                            <button type="submit" class="btn btn-success">Cập Nhật</button>
+                        }
                     </form>
                 </td>
             </tr>

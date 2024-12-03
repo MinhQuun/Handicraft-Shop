@@ -1,14 +1,13 @@
 ﻿@using Handicraft_Shop.Models;
+@model IEnumerable<Handicraft_Shop.Models.SANPHAM>
 @{
     ViewBag.Title = "Trang Chủ";
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
 
 @section Styles {
-
     <link href="~/bootstrap/bootstrap/css/Index.css" rel="stylesheet" />
     <link href="~/bootstrap/bootstrap/css/Banner.css" rel="stylesheet" />
-
 }
 
 <script src="~/bootstrap/bootstrap/js/jquery-3.3.1.min.js"></script>
@@ -18,18 +17,16 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Khởi chạy carousel của banner
             $('#customBannerCarousel').carousel({
-                interval: 3000, // Thời gian chuyển ảnh (3 giây)
-                ride: 'carousel' // Tự động chạy carousel
+                interval: 3000,
+                ride: 'carousel'
             });
 
-            // Cuộn đến phần tiêu đề "Danh Sách Sản Phẩm" nếu không phải trang đầu tiên
             const currentPage = @ViewBag.CurrentPage;
             if (currentPage > 1) {
                 $('html, body').animate({
                     scrollTop: $('#Product').offset().top
-                }, 800); // 800ms là thời gian cuộn, bạn có thể điều chỉnh
+                }, 800);
             }
         });
 
@@ -97,4 +94,25 @@
             }
         </ul>
     </nav>
+
+    <!-- Sản phẩm gợi ý -->
+    <div class="recommended-products mt-5">
+        <h3 class="section-title">Sản phẩm gợi ý</h3>
+        <div class="row">
+            @foreach (var item in ViewBag.RecommendedProducts as List<Handicraft_Shop.Models.SANPHAM>)
+            {
+                <div class="col-md-3 col-sm-6 text-center mt-4 mb-4">
+                    <div class="product-card">
+                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HINHANH" class="product-image" alt="@item.TENSANPHAM">
+                        <h5 class="product-title">@item.TENSANPHAM</h5>
+                        <p class="product-price">@String.Format("{0:#,###}", item.GIABAN) VNĐ</p>
+                        <div class="button-group">
+                            <a href="/KhachHang/KhachHangDetails/@item.MASANPHAM" class="btn btn-outline-primary">Chi Tiết</a>
+                            <a href="javascript:void(0);" onclick="addToCartAjax('@item.MASANPHAM')" class="btn btn-success">Chọn Mua</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

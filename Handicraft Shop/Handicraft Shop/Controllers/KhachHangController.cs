@@ -22,10 +22,14 @@ namespace Handicraft_Shop.Controllers
 
             // Lấy sản phẩm cho trang hiện tại
             var products = data.SANPHAMs
-                              .OrderBy(p => p.MASANPHAM)
-                              .Skip((page - 1) * pageSize)
-                              .Take(pageSize)
-                              .ToList();
+                                .OrderBy(p => p.MASANPHAM)
+                                .Skip((page - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList();
+
+            // Gợi ý sản phẩm dựa trên lịch sử đơn hàng
+            var recommendedProducts = GetRecommendedProducts(); // Gọi phương thức gợi ý sản phẩm
+            ViewBag.RecommendedProducts = recommendedProducts; // Truyền sản phẩm gợi ý vào ViewBag
 
             // Truyền dữ liệu phân trang vào ViewBag
             ViewBag.CurrentPage = page;
@@ -63,6 +67,44 @@ namespace Handicraft_Shop.Controllers
             ViewBag.RelatedProducts = relatedProducts;
             return View(sanPham);
         }
+        public ActionResult KhachHangHuyDonHang(int id)
+        {
+            var donHang = data.DONHANGs.SingleOrDefault(dh => dh.MADONHANG == id);
+            if (donHang != null && donHang.TRANGTHAI == "Đang xử lý")
+            {
+                donHang.TRANGTHAI = "Đã hủy";  // Cập nhật trạng thái đơn hàng thành "Đã hủy"
+                data.SubmitChanges();
+            }
+            return RedirectToAction("KhachHangLichSuDonHang");  // Hoặc chuyển về trang đơn hàng đang xử lý
+        }
+        public ActionResult KhachHangChiTietDonHang(int id)
+        {
+            var donHang = data.DONHANGs.SingleOrDefault(dh => dh.MADONHANG == id);
+            if (donHang == null)
+            {
+                return HttpNotFound();
+            }
+
+            var chiTiet = data.CHITIETDONHANGs
+                .Where(ct => ct.MADONHANG == donHang.MADONHANG)
+                .Select(ct => new ChiTietSanPhamViewModel
+                {
+                    MaSanPham = ct.MASANPHAM,
+                    TenSanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).TENSANPHAM,
+                    HinhAnh = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).HINHANH,
+                    SoLuong = ct.SOLUONG ?? 0,
+                    DonGia = ct.DONGIA ?? 0
+                }).ToList();
+
+            var model = new DonHangViewModel
+            {
+                DonHang = donHang,
+                ChiTietSanPhams = chiTiet
+            };
+
+            return View(model);  // Hiển thị chi tiết đơn hàng
+        }
+
         public ActionResult KhachHangMenuCap1()
         {
             List<DANHMUCSANPHAM> dmsp = data.DANHMUCSANPHAMs.ToList();
@@ -295,7 +337,7 @@ namespace Handicraft_Shop.Controllers
                 GHICHU = ghiChu,
                 TONGSLHANG = gh.TongSLHang(),
                 TONGTHANHTIEN = (decimal)gh.TongThanhTien(),
-                TRANGTHAI = "Chờ xử lý"
+                TRANGTHAI = "Đang xử lý"
             };
             data.DONHANGs.InsertOnSubmit(donHang);
             data.SubmitChanges();
@@ -345,7 +387,8 @@ namespace Handicraft_Shop.Controllers
             }
 
             var donHangs = data.DONHANGs
-           .Where(d => d.MAKHACHHANG == khachHang.MAKHACHHANG)
+           .Where(d => d.MAKHACHHANG == khachHang.MAKHACHHANG &&
+                    (d.TRANGTHAI == "Đang xử lý" || d.TRANGTHAI == "Đang giao" || d.TRANGTHAI == "Đã hủy"))
            .OrderByDescending(d => d.NGAYDAT)
            .Select(dh => new DonHangViewModel
            {
@@ -372,7 +415,51 @@ namespace Handicraft_Shop.Controllers
             return View(donHangs);
         }
 
-        
+        [Authorize]
+        public ActionResult KhachHangLichSuMuaHang()
+        {
+            var user = Session["User"] as NGUOIDUNG;
+            if (user == null)
+            {
+                ViewBag.Message = "Bạn chưa có đơn hàng nào trong lịch sử mua hàng.";
+                return View(new List<DonHangViewModel>());
+            }
+
+            var khachHang = data.KHACHHANGs.SingleOrDefault(k => k.MANGUOIDUNG == user.MANGUOIDUNG);
+            if (khachHang == null)
+            {
+                ViewBag.Message = "Bạn chưa có đơn hàng nào trong lịch sử mua hàng.";
+                return View(new List<DonHangViewModel>());
+            }
+
+            // Lọc chỉ các đơn hàng đã giao
+            var donHangs = data.DONHANGs
+                .Where(d => d.MAKHACHHANG == khachHang.MAKHACHHANG && d.TRANGTHAI == "Đã giao")
+                .OrderByDescending(d => d.NGAYDAT)
+                .Select(dh => new DonHangViewModel
+                {
+                    DonHang = dh,
+                    ChiTietSanPhams = data.CHITIETDONHANGs
+                        .Where(ct => ct.MADONHANG == dh.MADONHANG)
+                        .Select(ct => new ChiTietSanPhamViewModel
+                        {
+                            MaSanPham = ct.MASANPHAM,
+                            SoLuong = ct.SOLUONG.GetValueOrDefault(),
+                            DonGia = ct.DONGIA.GetValueOrDefault(),
+                            TenSanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).TENSANPHAM,
+                            HinhAnh = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).HINHANH
+                        }).ToList()
+                }).ToList();
+
+            if (donHangs.Count == 0)
+            {
+                ViewBag.Message = "Bạn chưa có đơn hàng nào trong lịch sử mua hàng.";
+            }
+
+            return View(donHangs);
+        }
+
+
         public ActionResult KhachHangProfile()
         {
             var user = Session["User"] as NGUOIDUNG;
@@ -506,6 +593,30 @@ namespace Handicraft_Shop.Controllers
             Session["User"] = user;
             ViewBag.Message = "Đổi mật khẩu thành công!";
             return View("KhachHangDoiMatKhau");
+        }
+        private List<SANPHAM> GetRecommendedProducts(int top = 5)
+        {
+            var user = Session["User"] as NGUOIDUNG;
+            if (user == null) return new List<SANPHAM>();
+
+            var khachHang = data.KHACHHANGs.SingleOrDefault(k => k.MANGUOIDUNG == user.MANGUOIDUNG);
+            if (khachHang == null) return new List<SANPHAM>();
+
+            // Lấy danh sách sản phẩm đã mua
+            var sanPhamDaMua = data.CHITIETDONHANGs
+                .Where(ct => data.DONHANGs.Any(dh => dh.MAKHACHHANG == khachHang.MAKHACHHANG && dh.MADONHANG == ct.MADONHANG))
+                .Select(ct => ct.MASANPHAM)
+                .Distinct()
+                .ToList();
+
+            // Tìm các sản phẩm chưa mua và có số lượng tồn
+            var sanPhamGoiY = data.SANPHAMs
+                .Where(sp => !sanPhamDaMua.Contains(sp.MASANPHAM)) // Loại trừ các sản phẩm đã mua
+                .OrderByDescending(sp => sp.SOLUONGTON) // Có thể thay đổi tiêu chí khác
+                .Take(top)
+                .ToList();
+
+            return sanPhamGoiY;
         }
 
     }
