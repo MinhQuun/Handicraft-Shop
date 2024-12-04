@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TEST2" Class="HandicraftShopDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=MSI\TRNDON;Initial Catalog=TEST2;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="TEST2ConnectionString6" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="QL_MYNGHE" Class="HandicraftShopDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=MSI\TRNDON;Initial Catalog=QL_MYNGHE;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="QL_MYNGHEConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.CHITIETDONHANG" Member="CHITIETDONHANGs">
     <Type Name="CHITIETDONHANG">
       <Column Name="MADONHANG" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />

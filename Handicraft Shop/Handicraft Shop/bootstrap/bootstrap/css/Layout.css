@@ -330,6 +330,7 @@
         .footer__social a:hover {
             color: #003d80;
             transform: scale(1.2);
+            text-decoration: none;
         }
 
 /* Responsive Columns */

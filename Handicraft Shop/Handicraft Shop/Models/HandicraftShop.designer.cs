@@ -22,7 +22,7 @@ namespace Handicraft_Shop.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TEST2")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="QL_MYNGHE")]
 	public partial class HandicraftShopDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -78,7 +78,7 @@ namespace Handicraft_Shop.Models
     #endregion
 		
 		public HandicraftShopDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["TEST2ConnectionString6"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["QL_MYNGHEConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

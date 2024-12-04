@@ -110,6 +110,22 @@ namespace Handicraft_Shop.Controllers
 
             return View(nhaCungCapList);
         }
+        public ActionResult NhanVienQuanLyKhachHang(int page = 1, int pageSize = 10)
+        {
+            int totalKhachHang = data.KHACHHANGs.Count();
+            int totalPages = (int)Math.Ceiling((double)totalKhachHang / pageSize);
+
+            var khachHangList = data.KHACHHANGs
+                                     .OrderBy(kh => kh.MAKHACHHANG)
+                                     .Skip((page - 1) * pageSize)
+                                     .Take(pageSize)
+                                     .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(khachHangList);
+        }
 
         // Action GET: Hiển thị form thêm nhà cung cấp
         public ActionResult CreateNhaCungCap()
@@ -416,7 +432,6 @@ namespace Handicraft_Shop.Controllers
             return View(topSanPhamBanChay);
         }
 
-
         public ActionResult NhanVienBaoCaoTonKho(int page = 1, int pageSize = 10)
         {
             var tonKhoData = data.SANPHAMs
@@ -425,9 +440,10 @@ namespace Handicraft_Shop.Controllers
                     MaSanPham = sp.MASANPHAM,
                     TenSanPham = sp.TENSANPHAM,
                     HinhAnh = sp.HINHANH,
-                    SoLuongTon = (sp.SOLUONGTON ?? 0) - data.CHITIETDONHANGs
-                                            .Where(ct => ct.MASANPHAM == sp.MASANPHAM)
-                                            .Sum(ct => (int?)ct.SOLUONG) ?? 0
+            // Kiểm tra nếu không có đơn hàng nào thì giữ lại số lượng tồn ban đầu
+            SoLuongTon = (sp.SOLUONGTON ?? 0) - (data.CHITIETDONHANGs
+                                                        .Where(ct => ct.MASANPHAM == sp.MASANPHAM)
+                                                        .Sum(ct => (int?)ct.SOLUONG) ?? 0)
                 })
                 .OrderByDescending(sp => sp.SoLuongTon)
                 .Skip((page - 1) * pageSize)
@@ -442,6 +458,7 @@ namespace Handicraft_Shop.Controllers
 
             return View(tonKhoData);
         }
+
 
         public ActionResult NhanVienBaoCaoKhachHang(int page = 1, int pageSize = 10)
         {
