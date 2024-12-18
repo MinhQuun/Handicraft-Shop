@@ -1,0 +1,16 @@
+﻿@using Handicraft_Shop.Models;
+@model List<DANHMUCSANPHAM>
+
+<ul class="nav navbar">
+    @foreach (var dm in Model)
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link " href="#" id="dropdownMenuButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @dm.TENDANHMUC
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @Html.Action("NhanVienKhoHangMenuCap2", "NhanVienKhoHang", new { madm = dm.MADANHMUC })
+            </div>
+        </li>
+    }
+</ul>

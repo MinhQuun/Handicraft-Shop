@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "NhanVienKhoHangQuanLyNhaCungCap";
+    Layout = "~/Views/Shared/NhanVienKhoHangLayout.cshtml";
+}
+
+@model IEnumerable<Handicraft_Shop.Models.NHACUNGCAP>
+
+@section Styles {
+    <style>
+        /* CSS cho bảng Quản Lý Nhà Cung Cấp */
+        .container h2 {
+            text-align: center;
+            color: #6d4c41; /* Màu nâu đậm phù hợp với layout */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .table-bordered {
+            border: 1px solid #ddd;
+        }
+
+        .table thead th {
+            background-color: #8d6e63; /* Màu nâu trung bình cho tiêu đề bảng */
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #efebe9; /* Màu nâu nhạt */
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d7ccc8; /* Màu nâu nhạt hơn khi hover */
+            transition: background-color 0.3s ease;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* Link Sửa và Xóa */
+        .table tbody a {
+            color: #6d4c41; /* Màu nâu đậm cho liên kết */
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .table tbody a:hover {
+                color: #5d4037; /* Nâu đậm hơn khi hover */
+                text-decoration: underline;
+                transition: color 0.2s ease;
+            }
+
+        /* Nút Thêm Nhà Cung Cấp */
+        .btn-primary {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            background-color: #6d4c41; /* Nâu đậm */
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+
+            .btn-primary:hover {
+                background-color: #5d4037; /* Nâu đậm hơn khi hover */
+                transition: background-color 0.2s ease;
+            }
+
+
+        /* Căn giữa và định dạng phần phân trang */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+            .pagination a, .pagination span {
+                color: #333;
+                padding: 8px 12px;
+                margin: 0 5px;
+                text-decoration: none;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+                .pagination a:hover {
+                    background-color: #f2f2f2;
+                    color: #333;
+                }
+
+            .pagination .active {
+                background-color: #a0522d; /* Màu nâu phù hợp với giao diện */
+                color: white;
+                border: 1px solid #a0522d;
+            }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Thêm hiệu ứng mượt khi hover vào các dòng bảng
+        $(document).ready(function () {
+            $(".table tbody tr").hover(
+                function () {
+                    $(this).css("background-color", "#d7ccc8"); // Màu nâu nhạt khi hover
+                },
+                function () {
+                    $(this).css("background-color", ""); // Trả về màu nền ban đầu
+                }
+            );
+        });
+    </script>
+}
+
+<div class="container mt-4">
+    <h2>Quản Lý Nhà Cung Cấp</h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Mã Nhà Cung Cấp</th>
+                <th>Tên Nhà Cung Cấp</th>
+                <th>Điện Thoại</th>
+                <th>Địa Chỉ</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ncc in Model)
+            {
+                <tr>
+                    <td>@ncc.MANHACUNGCAP</td>
+                    <td>@ncc.TENNHACUNGCAP</td>
+                    <td>@ncc.DTHOAI</td>
+                    <td>@ncc.DIACHI</td>
+                    <td>
+                        <a href="@Url.Action("EditNhaCungCap", new { id = ncc.MANHACUNGCAP })">Sửa</a> |
+                        <a href="@Url.Action("DeleteNhaCungCap", new { id = ncc.MANHACUNGCAP })" onclick="return confirm('Bạn có chắc chắn muốn xóa nhà cung cấp này?');">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("CreateNhaCungCap")" class="btn btn-primary">Thêm Nhà Cung Cấp</a>
+
+    <div class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a href="@Url.Action("NhanVienKhoHangQuanLyNhaCungCap", new { page = i })" class="@(ViewBag.CurrentPage == i ? "active" : "")">@i</a>
+        }
+    </div>
+
+</div>
+

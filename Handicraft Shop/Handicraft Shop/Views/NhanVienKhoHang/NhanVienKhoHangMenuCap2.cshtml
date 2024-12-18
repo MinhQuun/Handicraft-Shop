@@ -1,0 +1,10 @@
+﻿
+
+@using Handicraft_Shop.Models;
+@model List<LOAI>
+
+@foreach (var l in Model)
+{
+    <a class="dropdown-item" href="/NhanVienKhoHang/NhanVienKhoHangLocDL_Theoloai/?mdm=@l.MALOAI">@l.TENLOAI</a>
+}
+

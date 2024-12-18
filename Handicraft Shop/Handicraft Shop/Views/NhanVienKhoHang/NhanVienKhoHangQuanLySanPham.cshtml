@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "NhanVienKhoHangQuanLySanPham";
+    Layout = "~/Views/Shared/NhanVienKhoHangLayout.cshtml";
+}
+
+@model IEnumerable<Handicraft_Shop.Models.SANPHAM>
+@section Styles {
+    <style>
+        /* Tăng chiều rộng của bảng để tận dụng tối đa không gian */
+        .container {
+            max-width: 95%; /* Đặt chiều rộng tối đa của container */
+        }
+
+        .table {
+            width: 100%; /* Đặt chiều rộng bảng chiếm 100% container */
+        }
+
+            .table th, .table td {
+                white-space: nowrap; /* Ngăn không cho xuống dòng trong ô */
+                text-align: center; /* Canh giữa nội dung */
+            }
+
+        /* Căn chỉnh tiêu đề trang */
+        .container h2 {
+            text-align: center;
+            color: #6d4c41; /* Màu nâu đậm phù hợp với layout */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Nút Thêm Sản Phẩm */
+        .btn-primary {
+            background-color: #6d4c41; /* Màu nâu đậm */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #5d4037; /* Màu nâu đậm hơn khi hover */
+                transition: background-color 0.2s ease;
+            }
+
+        /* Nút Sửa */
+        .btn-warning {
+            background-color: #ffb74d; /* Màu cam dịu cho nút Sửa */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: background-color 0.2s ease;
+        }
+
+            .btn-warning:hover {
+                background-color: #ffa726; /* Đậm hơn khi hover */
+            }
+
+        /* Nút Xóa */
+        .btn-danger {
+            background-color: #e57373; /* Màu đỏ dịu cho nút Xóa */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: background-color 0.2s ease;
+        }
+
+            .btn-danger:hover {
+                background-color: #ef5350; /* Đậm hơn khi hover */
+            }
+
+        /* Thiết kế cho các nút phân trang */
+        .pagination .page-item.active .page-link {
+            background-color: #6d4c41;
+            border-color: #6d4c41;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #6d4c41;
+        }
+
+            .pagination .page-link:hover {
+                color: #5d4037;
+            }
+    </style>
+}
+
+<div class="container mt-4">
+    <h2>Quản Lý Sản Phẩm</h2>
+    <a href="@Url.Action("CreateSanPham", "NhanVienKhoHang")" class="btn btn-primary mb-3">Thêm Sản Phẩm</a>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã Sản Phẩm</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Hình Ảnh</th>
+                <th>Giá Bán</th>
+                <th>Số Lượng Tồn</th>
+                <th>Nhà Cung Cấp</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sp in Model)
+            {
+                <tr>
+                    <td>@sp.MASANPHAM</td>
+                    <td>@sp.TENSANPHAM</td>
+                    <td>
+                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" alt="@sp.TENSANPHAM" width="100" />
+                    </td>
+                    <td>@string.Format("{0:N0} VND", sp.GIABAN)</td>
+                    <td>@sp.SOLUONGTON</td>
+                    <td>@sp.NHACUNGCAP.TENNHACUNGCAP</td>
+                    <td>
+                        <a href="@Url.Action("EditSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-warning">Sửa</a>
+                        <a href="@Url.Action("DeleteSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("NhanVienKhoHangQuanLySanPham", "NhanVienKhoHang", new { page = i })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+

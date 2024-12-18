@@ -2,7 +2,7 @@
 @model SANPHAM
 
 @{ ViewBag.Title = "Chi Tiết Sản Phẩm";
-    Layout = "~/Views/Shared/NhanVienLayout.cshtml"; }
+    Layout = "~/Views/Shared/NhanVienKhoHangLayout.cshtml"; }
 
 <div class="container product-detail">
     <div class="row">
@@ -34,7 +34,7 @@
                             <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@item.HINHANH" alt="@item.TENSANPHAM" class="img-fluid related-product-img" />
                             <h4 class="related-product-title">@item.TENSANPHAM</h4>
                             <p class="related-product-price">@String.Format("{0:#,###}", item.GIABAN) VNĐ</p>
-                            <a href="@Url.Action("NhanVienDetails", "NhanVien", new { id = item.MASANPHAM })" class="btn btn-warning view-details-btn">Xem chi tiết</a>
+                            <a href="@Url.Action("NhanVienKhoHangDetails", "NhanVienKhoHang", new { id = item.MASANPHAM })" class="btn btn-warning view-details-btn">Xem chi tiết</a>
                         </div>
                     </div>}
             </div>
@@ -257,7 +257,7 @@
         console.log("MASANPHAM:", productId, "TENSANPHAM:", productName, "HINHANH:", productImage, "GIABAN:", productPrice, "SoLuong:", quantity);
 
         $.ajax({
-            url: '/NhanVien/NhanVienThemMatHangAjax',
+            url: '/NhanVienKhoHang/NhanVienKhoHangThemMatHangAjax',
             type: 'POST',
             data: {
                 MASANPHAM: productId,

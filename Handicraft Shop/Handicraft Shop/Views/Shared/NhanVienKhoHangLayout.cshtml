@@ -19,7 +19,6 @@
     <style>
         /* Đảm bảo layout có thể cuộn đúng */
         html, body {
-            
             margin: 0;
             margin: 0;
             padding: 0;
@@ -35,7 +34,7 @@
     <header class="p-3">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/NhanVien/IndexNhanVien" class="d-flex align-items-center mb-2 mb-lg-0  text-decoration-none">
+                <a href="/NhanVienKhoHang/IndexNhanVienKhoHang" class="d-flex align-items-center mb-2 mb-lg-0  text-decoration-none">
                     <img src="~/HinhAnhSP/LOGO/Logo.jpg" class="bi me-2" width="50" height="auto" />
 
                 </a>
@@ -47,33 +46,23 @@
                                 Danh Mục Sản phẩm
                             </a>
                             <div class="submenu">
-                                @Html.Action("NhanVienMenuCap1", "NhanVien")
+                                @Html.Action("NhanVienKhoHangMenuCap1", "NhanVienKhoHang")
                             </div>
                         </div>
                     </li>
-                    <li><a href="/NhanVien/IndexNhanVien#Product" class="nav-link px-2 ">Danh Sách Sản Phẩm</a></li>
+                    <li><a href="/NhanVienKhoHang/IndexNhanVienKhoHang#Product" class="nav-link px-2 ">Danh Sách Sản Phẩm</a></li>
                     <li class="nav-item dropdown quan-ly-nghiep-vu">
                         <a href="#" class="nav-link dropdown-toggle px-2" id="quanLyNghiepVuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Quản Lý Nghiệp Vụ
                         </a>
                         <ul class="dropdown-menu quan-ly-nghiep-vu-dropdown" aria-labelledby="quanLyNghiepVuDropdown">
-                            @*<li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLyNhaCungCap">Quản Lý Nhà Cung Cấp</a></li>
-                            <li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLySanPham">Quản Lý Sản Phẩm</a></li>*@
-                            <li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLyKhachHang">Quản Lý Khách Hàng</a></li>
-                            <li><a class="dropdown-item" href="/NhanVien/NhanVienQuanLyDonHang">Quản Lý Đơn Hàng</a></li>
+                            <li><a class="dropdown-item" href="/NhanVienKhoHang/NhanVienKhoHangQuanLyNhaCungCap">Quản Lý Nhà Cung Cấp</a></li>
+                                <li><a class="dropdown-item" href="/NhanVienKhoHang/NhanVienKhoHangQuanLySanPham">Quản Lý Sản Phẩm</a></li>
+                            @*<li><a class="dropdown-item" href="/NhanVienKhoHang/NhanVienKhoHangQuanLyKhachHang">Quản Lý Khách Hàng</a></li>
+                            <li><a class="dropdown-item" href="/NhanVienKhoHang/NhanVienKhoHangQuanLyDonHang">Quản Lý Đơn Hàng</a></li>*@
 
-                            <!-- Dropdown phụ cho Báo Cáo Thống Kê -->
-                            <li class="dropdown-submenu bao-cao-thong-ke-menu">
-                                <a href="#" class="dropdown-item dropdown-toggle" id="baoCaoThongKeDropdown">
-                                    Báo Cáo Thống Kê
-                                </a>
-                                <ul class="dropdown-menu bao-cao-thong-ke-dropdown" id="baoCaoThongKeSubmenu">
-                                    <li><a class="dropdown-item" href="/NhanVien/NhanVienBaoCaoSanPhamBanChay">Sản Phẩm Bán Chạy Nhất</a></li>
-                                    @*<li><a class="dropdown-item" href="/NhanVien/NhanVienBaoCaoDoanhThu">Doanh Thu</a></li>*@
-                                    <li><a class="dropdown-item" href="/NhanVien/NhanVienBaoCaoKhachHang">Khách Hàng Mua Nhiều Nhất</a></li>
-                                    <li><a class="dropdown-item" href="/NhanVien/NhanVienBaoCaoTonKho">Số Lượng Tồn Kho</a></li>
-                                </ul>
-                            </li>
+                            
+                            
                         </ul>
                     </li>
 
@@ -107,7 +96,7 @@
                     }
                 </div>
                 <div class="col-md-3 d-flex justify-content-center">
-                    @using (Html.BeginForm("NhanVienSearch", "NhanVien", FormMethod.Get, new { @class = "form-inline", onsubmit = "return validateSearch();" }))
+                    @using (Html.BeginForm("NhanVienKhoHangSearch", "NhanVienKhoHang", FormMethod.Get, new { @class = "form-inline", onsubmit = "return validateSearch();" }))
                     {
                         <div class="form-group">
                             <input type="text" id="searchInput" class="form-control mx-sm-3"

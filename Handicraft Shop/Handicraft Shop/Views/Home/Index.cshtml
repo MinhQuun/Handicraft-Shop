@@ -20,38 +20,56 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Khởi chạy carousel của banner
             $('#customBannerCarousel').carousel({
-                interval: 3000, // Thời gian chuyển ảnh (3 giây)
-                ride: 'carousel' // Tự động chạy carousel
+                interval: 3000,
+                ride: 'carousel'
             });
 
-            // Cuộn đến phần tiêu đề "Danh Sách Sản Phẩm" nếu không phải trang đầu tiên
             const currentPage = @ViewBag.CurrentPage;
             if (currentPage > 1) {
                 $('html, body').animate({
                     scrollTop: $('#Product').offset().top
-                }, 800); // 800ms là thời gian cuộn, bạn có thể điều chỉnh
+                }, 800);
             }
         });
 
-        function addToCartAjax(productId) {
+        function addToCartAjaxIndex(productId) {
+            // Bước 1: Kiểm tra số lượng tồn
             $.ajax({
-                url: '/Home/ThemMatHangAjax',
+                url: '/Home/KiemTraSanPhamHetHang',
                 type: 'POST',
                 data: { MASANPHAM: productId },
                 success: function (response) {
                     if (response.success) {
-                        $('.cart-icon + .badge').text(response.cartCount);
+                        // Nếu còn hàng, gọi action thêm vào giỏ hàng
+                        $.ajax({
+                            url: '/Home/ThemMatHangAjax',
+                            type: 'POST',
+                            data: { MASANPHAM: productId },
+                            success: function (addResponse) {
+                                if (addResponse.success) {
+                                    $('.cart-icon + .badge').text(addResponse.cartCount);
+
+                                } else {
+                                    alert(addResponse.message);
+                                }
+                            },
+                            error: function () {
+                                alert("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                            }
+                        });
                     } else {
-                        alert(response.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+                        // Nếu hết hàng, hiển thị thông báo
+                        alert(response.message);
                     }
                 },
                 error: function () {
-                    console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                    alert("Lỗi khi kiểm tra trạng thái sản phẩm.");
                 }
             });
         }
+
+
     </script>
 }
 
@@ -67,7 +85,7 @@
                     <p class="product-price">@String.Format("{0:#,###}", sp.GIABAN) VNĐ</p>
                     <div class="button-group">
                         <a href="/Home/Details/@sp.MASANPHAM" class="btn btn-outline-primary">Chi Tiết</a>
-                        <a href="javascript:void(0);" onclick="addToCartAjax('@sp.MASANPHAM')" class="btn btn-success">Chọn Mua</a>
+                        <a href="javascript:void(0);" onclick="addToCartAjaxIndex('@sp.MASANPHAM')" class="btn btn-success">Chọn Mua</a>
                     </div>
                 </div>
             </div>

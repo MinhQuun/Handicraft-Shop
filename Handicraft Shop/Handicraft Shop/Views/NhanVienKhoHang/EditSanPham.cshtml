@@ -1,0 +1,129 @@
+﻿@model Handicraft_Shop.Models.SANPHAM
+@{
+    ViewBag.Title = "EditSanPham";
+    Layout = "~/Views/Shared/NhanVienKhoHangLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        /* Căn giữa tiêu đề và thêm khoảng cách */
+        h2 {
+            text-align: center;
+            color: #6d4c41; /* Màu nâu đậm phù hợp với layout */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Căn chỉnh form trong container để dễ nhìn hơn */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9; /* Màu nền nhẹ */
+        }
+
+        /* Nhãn và Trường nhập liệu */
+        .form-group label {
+            font-weight: 600;
+            color: #5d4037; /* Màu nâu đậm cho nhãn */
+        }
+
+        .form-control {
+            border: 1px solid #8d6e63; /* Viền màu nâu nhạt */
+            padding: 10px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+            .form-control:focus {
+                border-color: #6d4c41; /* Màu viền đậm hơn khi focus */
+                box-shadow: none;
+            }
+
+        /* Ảnh hiển thị */
+        .product-image {
+            display: block;
+            margin-top: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        /* Nút hành động */
+        .btn-primary {
+            background-color: #6d4c41; /* Màu nâu đậm */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #5d4037;
+                transition: background-color 0.2s ease;
+            }
+
+        .btn-secondary {
+            background-color: #a1887f;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+            .btn-secondary:hover {
+                background-color: #8d6e63;
+                transition: background-color 0.2s ease;
+            }
+    </style>
+}
+
+<div class="container mt-4 form-container">
+    <h2>Sửa Sản Phẩm</h2>
+
+    @using (Html.BeginForm("EditSanPham", "NhanVienKhoHang", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.MASANPHAM)
+
+        <div class="form-group">
+            <label for="TENSANPHAM">Tên Sản Phẩm</label>
+            @Html.TextBoxFor(model => model.TENSANPHAM, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="GIABAN">Giá Bán</label>
+            @Html.TextBoxFor(model => model.GIABAN, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="SOLUONGTON">Số Lượng Tồn</label>
+            @Html.TextBoxFor(model => model.SOLUONGTON, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="MOTA">Mô Tả</label>
+            @Html.TextAreaFor(model => model.MOTA, new { @class = "form-control", rows = 5 })
+        </div>
+
+        <div class="form-group">
+            <label for="MANHACUNGCAP">Nhà Cung Cấp</label>
+            @Html.DropDownListFor(model => model.MANHACUNGCAP, (SelectList)ViewBag.NhaCungCapList, "Chọn nhà cung cấp", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="HINHANH">Hình Ảnh</label>
+            <input type="file" name="file" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.HINHANH))
+            {
+                <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@Model.HINHANH" alt="Hình ảnh sản phẩm" width="150" class="product-image" />
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+        <a href="@Url.Action("NhanVienKhoHangQuanLySanPham", "NhanVienKhoHang")" class="btn btn-secondary">Hủy</a>
+    }
+</div>

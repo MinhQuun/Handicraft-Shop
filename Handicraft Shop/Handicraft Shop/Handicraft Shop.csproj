@@ -174,18 +174,19 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KhachHangController.cs" />
+    <Compile Include="Controllers\NhanVienKhoHangController.cs" />
     <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\GioHang.cs" />
+    <Compile Include="Models\DonHangViewModel.cs" />
     <Compile Include="Models\HandicraftShop.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HandicraftShop.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\DonHangViewModel.cs" />
     <Compile Include="Models\KhachHangEditPass.cs" />
     <Compile Include="Models\KhachHangEditProfile.cs" />
     <Compile Include="Models\KhachHangMuaNhieuNhat.cs" />
@@ -475,6 +476,19 @@
     <Content Include="Views\KhachHang\KhachHangDoiMatKhau.cshtml" />
     <Content Include="Views\KhachHang\KhachHangChiTietDonHang.cshtml" />
     <Content Include="Views\KhachHang\KhachHangLichSuMuaHang.cshtml" />
+    <Content Include="Views\Shared\NhanVienKhoHangLayout.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\IndexNhanVienKhoHang.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHang_Banner.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHangMenuCap1.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHangMenuCap2.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHangSearch.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHangQuanLyNhaCungCap.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\CreateNhaCungCap.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\EditNhaCungCap.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHangQuanLySanPham.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\CreateSanPham.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\EditSanPham.cshtml" />
+    <Content Include="Views\NhanVienKhoHang\NhanVienKhoHangDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -75,6 +75,8 @@ namespace Handicraft_Shop.Controllers
                             return RedirectToAction("IndexNhanVien", "NhanVien");
                         case "KhachHang":
                             return RedirectToAction("IndexKhachHang", "KhachHang");
+                        case "NhanVienKhoHang":
+                            return RedirectToAction("IndexNhanVienKhoHang", "NhanVienKhoHang");
                         default:
                             ViewBag.Message = "Không có quyền truy cập hợp lệ.";
                             return View();
@@ -220,42 +222,55 @@ namespace Handicraft_Shop.Controllers
         }
         //Them gio hang co SL
         [HttpPost]
-        public ActionResult ThemMatHangAjax(string MASANPHAM, string TENSANPHAM = null, string HINHANH = null, double? GIABAN = null, int SoLuong = 1)
+        public ActionResult ThemMatHangAjax(string MASANPHAM, int SoLuong = 1)
         {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
+            var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
+
+            if (sp == null)
             {
-                gh = new GioHang();
+                return Json(new { success = false, message = "Sản phẩm không tồn tại." });
             }
 
-            // Kiểm tra nếu các tham số bổ sung không được truyền (khi gọi từ Index.cshtml)
-            if (string.IsNullOrEmpty(TENSANPHAM) || string.IsNullOrEmpty(HINHANH) || !GIABAN.HasValue)
+            // Lấy giỏ hàng từ Session
+            GioHang gh = Session["GioHang"] as GioHang ?? new GioHang();
+
+            // Kiểm tra tổng số lượng đã có trong giỏ hàng
+            var soLuongDaCo = gh.list.Where(x => x.MaSP == MASANPHAM).Sum(x => x.SoLuong);
+            var tongSoLuongMoi = soLuongDaCo + SoLuong;
+
+            if (tongSoLuongMoi > sp.SOLUONGTON)
             {
-                // Lấy dữ liệu sản phẩm từ cơ sở dữ liệu dựa trên MASANPHAM
-                var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
-                if (sp != null)
+                return Json(new
                 {
-                    TENSANPHAM = sp.TENSANPHAM;
-                    HINHANH = sp.HINHANH;
-                    GIABAN = (double)sp.GIABAN;
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Sản phẩm không tồn tại." });
-                }
+                    success = false,
+                    message = $"Số lượng tồn chỉ còn {sp.SOLUONGTON}. Hiện bạn đã có {soLuongDaCo} sản phẩm này trong giỏ hàng."
+                });
             }
 
-            // Thêm sản phẩm vào giỏ hàng với thông tin đầy đủ
+            // Thêm sản phẩm vào giỏ hàng
             gh.Them(MASANPHAM, SoLuong);
             Session["GioHang"] = gh;
 
-            return Json(new
-            {
-                success = true,
-                cartCount = gh.SoMatHang() // Trả về số lượng sản phẩm trong giỏ hàng
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, cartCount = gh.SoMatHang() });
         }
 
+        [HttpPost]
+        public ActionResult KiemTraSanPhamHetHang(string MASANPHAM)
+        {
+            var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
+
+            if (sp == null)
+            {
+                return Json(new { success = false, message = "Sản phẩm không tồn tại." });
+            }
+
+            if (sp.SOLUONGTON <= 0)
+            {
+                return Json(new { success = false, message = "Sản phẩm đã hết hàng." });
+            }
+
+            return Json(new { success = true });
+        }
 
 
 
@@ -274,15 +289,36 @@ namespace Handicraft_Shop.Controllers
         //Tăng mặt hàng trong giỏ hàng
         public ActionResult TangMatHang(string id)
         {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
+            // Lấy giỏ hàng từ Session
+            GioHang gh = Session["GioHang"] as GioHang ?? new GioHang();
+
+            // Lấy thông tin sản phẩm từ database
+            var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == id);
+            if (sanPham == null || sanPham.SOLUONGTON <= 0)
             {
-                gh = new GioHang();
+                return RedirectToAction("KhachHangXemGioHang");
             }
-            gh.Them(id);
+
+            // Tính tổng số lượng hiện tại
+            var gioHangItem = gh.list.FirstOrDefault(p => p.MaSP == id);
+            if (gioHangItem != null)
+            {
+                int tongSoLuong = gioHangItem.SoLuong + 1;
+
+                if (tongSoLuong > sanPham.SOLUONGTON)
+                {
+                    ViewBag.ErrorMessage = "Số lượng sản phẩm đã đạt giới hạn tồn kho.";
+                }
+                else
+                {
+                    gh.Them(id);
+                }
+            }
+
             Session["GioHang"] = gh;
-            return RedirectToAction("Xemgiohang");
+            return RedirectToAction("KhachHangXemGioHang");
         }
+
 
         //Giảm mặt hàng trong giỏ hàng
         public ActionResult GiamMatHang(string id)

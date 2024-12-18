@@ -1,9 +1,10 @@
 ﻿USE QL_MYNGHE;
 
 INSERT INTO QUYEN (MAQUYEN, TENQUYEN) VALUES 
-('Q01', 'Admin'),
-('Q02', 'NhanVien'),
-('Q03', 'KhachHang');
+('Q01', N'Admin'),
+('Q02', N'NhanVien'),
+('Q03', N'KhachHang'),
+('Q04', N'NhanVienKhoHang');
 
 INSERT INTO NGUOIDUNG(MANGUOIDUNG, TENNGUOIDUNG, TAIKHOAN, MATKHAU, EMAIL, SODIENTHOAI) VALUES
 ('ND01', N'Minh Quân', 'minhquun', '123', 'vnmq@gmail.com', '0966546750'),
@@ -14,7 +15,8 @@ INSERT INTO NGUOIDUNG(MANGUOIDUNG, TENNGUOIDUNG, TAIKHOAN, MATKHAU, EMAIL, SODIE
 ('ND06', N'Huỳnh Giáp', 'giap', '123', 'giap@gmail.com', '0966546489'),
 ('ND07', N'Huỳnh Sơn', 'son', '123', 'son@gmail.com', '0966556689'),
 ('ND08', N'Anh Tú', 'tu', '123', 'tu@gmail.com', '0226556689'),
-('ND09', N'Tuấn Khoa', 'khoa', '123', 'khoa@gmail.com', '0919879902');
+('ND09', N'Tuấn Khoa', 'khoa', '123', 'khoa@gmail.com', '0919879902'),
+('ND10', N'Minh Luân', 'luan', '123', 'minhluan@gmail.com', '0979879902');
 
 INSERT INTO QUYEN_NGUOIDUNG(MANGUOIDUNG, MAQUYEN) VALUES
 ('ND01', 'Q01'),
@@ -25,7 +27,8 @@ INSERT INTO QUYEN_NGUOIDUNG(MANGUOIDUNG, MAQUYEN) VALUES
 ('ND06', 'Q03'),
 ('ND07', 'Q03'),
 ('ND08', 'Q03'),
-('ND09', 'Q03');
+('ND09', 'Q03'),
+('ND10', 'Q04');
 
 -- Thêm dữ liệu mẫu vào bảng KHACHHANG chỉ cho những người dùng có quyền 'KhachHang'
 INSERT INTO KHACHHANG (MANGUOIDUNG, HOTEN, SODIENTHOAI, EMAIL) VALUES

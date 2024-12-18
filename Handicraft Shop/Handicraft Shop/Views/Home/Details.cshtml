@@ -20,8 +20,11 @@
 
             <!-- Input cho số lượng và nút thêm vào giỏ hàng -->
             <div class="form-inline mt-3">
-                <input type="number" id="quantity" placeholder="Số lượng" value="1" min="1" class="form-control quantity-input" />
-                <button class="btn btn-outline-success add-to-cart-btn" onclick="addToCartAjax('@Model.MASANPHAM', '@Model.TENSANPHAM', '@Model.HINHANH', '@Model.GIABAN')">Thêm vào giỏ hàng</button>
+                <input type="number" id="quantity" placeholder="Số lượng" value="1" min="1" max="@Model.SOLUONGTON" class="form-control quantity-input" />
+                <button class="btn btn-outline-success add-to-cart-btn"
+                        onclick="addToCartAjax('@Model.MASANPHAM', '@Model.TENSANPHAM', '@Model.HINHANH', '@Model.GIABAN', @Model.SOLUONGTON)">
+                    Thêm vào giỏ hàng
+                </button>
             </div>
 
             <div>
@@ -246,12 +249,18 @@
 }
 
 <script>
-    function addToCartAjax(productId, productName, productImage, productPrice) {
-        var quantity = parseInt(document.getElementById("quantity").value);
+    function addToCartAjax(productId, productName, productImage, productPrice, maxQuantity) {
+        var quantityInput = document.getElementById("quantity");
+        var quantity = parseInt(quantityInput.value);
 
-        // Kiểm tra tham số trước khi gọi Ajax
-        console.log("MASANPHAM:", productId, "TENSANPHAM:", productName, "HINHANH:", productImage, "GIABAN:", productPrice, "SoLuong:", quantity);
+        // Kiểm tra số lượng trước khi gọi AJAX
+        if (quantity > maxQuantity) {
+            alert(`Số lượng tồn chỉ còn ${maxQuantity}. Không thể thêm ${quantity} sản phẩm.`);
+            quantityInput.value = maxQuantity; // Gán lại số lượng tối đa
+            return; // Dừng không gọi Ajax
+        }
 
+        // Gọi AJAX để thêm vào giỏ hàng
         $.ajax({
             url: '/Home/ThemMatHangAjax',
             type: 'POST',
@@ -264,15 +273,35 @@
             },
             success: function (response) {
                 if (response.success) {
-                    // Cập nhật số lượng sản phẩm trong giỏ hàng
                     $('.cart-icon + .badge').text(response.cartCount);
 
+                } else {
+                    alert(response.message);
+                    quantityInput.value = maxQuantity; // Gán lại giá trị hợp lệ
                 }
             },
             error: function () {
-                console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
             }
         });
     }
+
+    // Sự kiện giới hạn input số lượng
+    document.getElementById('quantity').addEventListener('input', function () {
+        var maxQuantity = parseInt(this.getAttribute('max'));
+        validateQuantity(this, maxQuantity);
+    });
+
+    function validateQuantity(input, maxQuantity) {
+        var value = parseInt(input.value);
+
+        if (value > maxQuantity) {
+            alert(`Số lượng tồn chỉ còn ${maxQuantity}. Không thể nhập thêm.`);
+            input.value = maxQuantity;
+        } else if (value < 1 || isNaN(value)) {
+            input.value = 1; // Không cho nhập nhỏ hơn 1
+        }
+    }
+
 
 </script>

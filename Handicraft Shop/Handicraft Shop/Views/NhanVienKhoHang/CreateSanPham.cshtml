@@ -1,0 +1,136 @@
+﻿@model Handicraft_Shop.Models.SANPHAM
+@{
+    ViewBag.Title = "CreateSanPham";
+    Layout = "~/Views/Shared/NhanVienKhoHangLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        /* Đặt tiêu đề ở giữa và thêm khoảng cách */
+        h2 {
+            text-align: center;
+            color: #6d4c41; /* Màu nâu đậm phù hợp với layout */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Tăng kích thước cho form */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9; /* Màu nền nhẹ */
+        }
+
+        /* Nhãn và Trường nhập liệu */
+        .form-group label {
+            font-weight: 600;
+            color: #5d4037; /* Màu nâu đậm cho nhãn */
+        }
+
+        /* Đảm bảo các trường chọn hiển thị đầy đủ nội dung */
+        .form-control, .form-control-file, .form-control select {
+            border: 1px solid #8d6e63; /* Viền màu nâu nhạt */
+            padding: 10px;
+            font-size: 1em;
+            width: 100%; /* Đặt chiều rộng tối đa */
+            box-sizing: border-box;
+            height: auto; /* Đặt chiều cao tự động để chữ không bị cắt */
+            line-height: 1.5; /* Tăng khoảng cách dòng để chữ không bị cắt */
+        }
+
+            /* Tăng kích thước font cho các tùy chọn trong dropdown */
+            .form-control select {
+                font-size: 1.1em; /* Tăng kích thước font chữ để rõ hơn */
+                min-height: 40px; /* Đặt chiều cao tối thiểu để chữ không bị cắt */
+            }
+
+                /* Đảm bảo viền và focus cho các trường nhập liệu */
+                .form-control:focus, .form-control-file:focus, .form-control select:focus {
+                    border-color: #6d4c41; /* Màu viền đậm hơn khi focus */
+                    box-shadow: none;
+                }
+
+        /* Nút hành động */
+        .btn-primary {
+            background-color: #6d4c41; /* Màu nâu đậm */
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #5d4037;
+                transition: background-color 0.2s ease;
+            }
+
+        .btn-secondary {
+            background-color: #a1887f;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+            .btn-secondary:hover {
+                background-color: #8d6e63;
+                transition: background-color 0.2s ease;
+            }
+    </style>
+}
+
+
+<div class="container mt-4 form-container">
+    <h2>Thêm Sản Phẩm Mới</h2>
+
+    @using (Html.BeginForm("CreateSanPham", "NhanVienKhoHang", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <label for="TENSANPHAM">Tên Sản Phẩm</label>
+            @Html.TextBoxFor(model => model.TENSANPHAM, new { @class = "form-control", placeholder = "Nhập tên sản phẩm" })
+        </div>
+
+        <div class="form-group">
+            <label for="HINHANH">Hình Ảnh</label>
+            <input type="file" name="uploadHinhAnh" class="form-control-file" />
+        </div>
+
+        <div class="form-group">
+            <label for="GIABAN">Giá Bán (VNĐ)</label>
+            @Html.TextBoxFor(model => model.GIABAN, new { @class = "form-control", placeholder = "Nhập giá bán", type = "number", step = "1000" })
+        </div>
+
+        <div class="form-group">
+            <label for="SOLUONGTON">Số Lượng Tồn</label>
+            @Html.TextBoxFor(model => model.SOLUONGTON, new { @class = "form-control", placeholder = "Nhập số lượng tồn", type = "number" })
+        </div>
+
+        <div class="form-group">
+            <label for="MOTA">Mô Tả</label>
+            @Html.TextAreaFor(model => model.MOTA, new { @class = "form-control", placeholder = "Nhập mô tả sản phẩm", rows = 4 })
+        </div>
+
+        <div class="form-group">
+            <label for="MALOAI">Loại Sản Phẩm</label>
+            @Html.DropDownList("MALOAI", (SelectList)ViewBag.LoaiSanPhamList, "Chọn loại sản phẩm", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="MANHACUNGCAP">Nhà Cung Cấp</label>
+            @Html.DropDownList("MANHACUNGCAP", (SelectList)ViewBag.NhaCungCapList, "Chọn nhà cung cấp", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="MAKHUYENMAI">Khuyến Mãi</label>
+            @Html.DropDownList("MAKHUYENMAI", (SelectList)ViewBag.KhuyenMaiList, "Chọn khuyến mãi (nếu có)", new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu Sản Phẩm</button>
+        <a href="@Url.Action("NhanVienKhoHangQuanLySanPham", "NhanVienKhoHang")" class="btn btn-secondary">Hủy</a>
+    }
+</div>

@@ -70,13 +70,32 @@ namespace Handicraft_Shop.Controllers
         public ActionResult KhachHangHuyDonHang(int id)
         {
             var donHang = data.DONHANGs.SingleOrDefault(dh => dh.MADONHANG == id);
+
             if (donHang != null && donHang.TRANGTHAI == "Đang xử lý")
             {
-                donHang.TRANGTHAI = "Đã hủy";  // Cập nhật trạng thái đơn hàng thành "Đã hủy"
+                // Tìm các chi tiết đơn hàng
+                var chiTietDonHang = data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == id).ToList();
+
+                foreach (var item in chiTietDonHang)
+                {
+                    // Cập nhật số lượng tồn kho của sản phẩm
+                    var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == item.MASANPHAM);
+                    if (sanPham != null)
+                    {
+                        sanPham.SOLUONGTON += item.SOLUONG ?? 0; // Cộng lại số lượng sản phẩm vào kho
+                    }
+                }
+
+                // Cập nhật trạng thái đơn hàng thành "Đã hủy"
+                donHang.TRANGTHAI = "Đã hủy";
+
+                // Lưu thay đổi vào database
                 data.SubmitChanges();
             }
-            return RedirectToAction("KhachHangLichSuDonHang");  // Hoặc chuyển về trang đơn hàng đang xử lý
+
+            return RedirectToAction("KhachHangLichSuDonHang");
         }
+
         public ActionResult KhachHangChiTietDonHang(int id)
         {
             var donHang = data.DONHANGs.SingleOrDefault(dh => dh.MADONHANG == id);
@@ -118,6 +137,8 @@ namespace Handicraft_Shop.Controllers
         public ActionResult KhachHangLocDL_Theoloai(string mdm)
         {
             List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
+            var recommendedProducts = GetRecommendedProducts();
+            ViewBag.RecommendedProducts = recommendedProducts;
             return View("IndexKhachHang", ds);
         }
         public ActionResult KhachHangSearch(string searchString, int page = 1, int pageSize = 12)
@@ -153,41 +174,57 @@ namespace Handicraft_Shop.Controllers
         }
         //Them gio hang co SL
         [HttpPost]
-        public ActionResult KhachHangThemMatHangAjax(string MASANPHAM, string TENSANPHAM = null, string HINHANH = null, double? GIABAN = null, int SoLuong = 1)
+        public ActionResult KhachHangThemMatHangAjax(string MASANPHAM, int SoLuong = 1)
         {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
+            var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
+
+            if (sp == null)
             {
-                gh = new GioHang();
+                return Json(new { success = false, message = "Sản phẩm không tồn tại." });
             }
 
-            // Kiểm tra nếu các tham số bổ sung không được truyền (khi gọi từ Index.cshtml)
-            if (string.IsNullOrEmpty(TENSANPHAM) || string.IsNullOrEmpty(HINHANH) || !GIABAN.HasValue)
+            // Lấy giỏ hàng từ Session
+            GioHang gh = Session["GioHang"] as GioHang ?? new GioHang();
+
+            // Kiểm tra tổng số lượng đã có trong giỏ hàng
+            var soLuongDaCo = gh.list.Where(x => x.MaSP == MASANPHAM).Sum(x => x.SoLuong);
+            var tongSoLuongMoi = soLuongDaCo + SoLuong;
+
+            if (tongSoLuongMoi > sp.SOLUONGTON)
             {
-                // Lấy dữ liệu sản phẩm từ cơ sở dữ liệu dựa trên MASANPHAM
-                var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
-                if (sp != null)
+                return Json(new
                 {
-                    TENSANPHAM = sp.TENSANPHAM;
-                    HINHANH = sp.HINHANH;
-                    GIABAN = (double)sp.GIABAN;
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Sản phẩm không tồn tại." });
-                }
+                    success = false,
+                    message = $"Số lượng tồn chỉ còn {sp.SOLUONGTON}. Hiện bạn đã có {soLuongDaCo} sản phẩm này trong giỏ hàng."
+                });
             }
 
-            // Thêm sản phẩm vào giỏ hàng với thông tin đầy đủ
+            // Thêm sản phẩm vào giỏ hàng
             gh.Them(MASANPHAM, SoLuong);
             Session["GioHang"] = gh;
 
-            return Json(new
-            {
-                success = true,
-                cartCount = gh.SoMatHang() // Trả về số lượng sản phẩm trong giỏ hàng
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, cartCount = gh.SoMatHang() });
         }
+
+        [HttpPost]
+        public ActionResult KiemTraSanPhamHetHang(string MASANPHAM)
+        {
+            var sp = data.SANPHAMs.SingleOrDefault(p => p.MASANPHAM == MASANPHAM);
+
+            if (sp == null)
+            {
+                return Json(new { success = false, message = "Sản phẩm không tồn tại." });
+            }
+
+            if (sp.SOLUONGTON <= 0)
+            {
+                return Json(new { success = false, message = "Sản phẩm đã hết hàng." });
+            }
+
+            return Json(new { success = true });
+        }
+
+
 
 
         //Xem giỏ hàng
@@ -204,15 +241,36 @@ namespace Handicraft_Shop.Controllers
         //Tăng mặt hàng trong giỏ hàng
         public ActionResult KhachHangTangMatHang(string id)
         {
-            GioHang gh = Session["GioHang"] as GioHang;
-            if (gh == null)
+            // Lấy giỏ hàng từ Session
+            GioHang gh = Session["GioHang"] as GioHang ?? new GioHang();
+
+            // Lấy thông tin sản phẩm từ database
+            var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == id);
+            if (sanPham == null || sanPham.SOLUONGTON <= 0)
             {
-                gh = new GioHang();
+                return RedirectToAction("KhachHangXemGioHang");
             }
-            gh.Them(id);
+
+            // Tính tổng số lượng hiện tại
+            var gioHangItem = gh.list.FirstOrDefault(p => p.MaSP == id);
+            if (gioHangItem != null)
+            {
+                int tongSoLuong = gioHangItem.SoLuong + 1;
+
+                if (tongSoLuong > sanPham.SOLUONGTON)
+                {
+                    ViewBag.ErrorMessage = "Số lượng sản phẩm đã đạt giới hạn tồn kho.";
+                }
+                else
+                {
+                    gh.Them(id);
+                }
+            }
+
             Session["GioHang"] = gh;
-            return RedirectToAction("KhachHangXemgiohang");
+            return RedirectToAction("KhachHangXemGioHang");
         }
+
 
         //Giảm mặt hàng trong giỏ hàng
         public ActionResult KhachHangGiamMatHang(string id)
@@ -283,24 +341,20 @@ namespace Handicraft_Shop.Controllers
         [HttpPost]
         public ActionResult KhachHangConfirmOrder(string diachigh, string SelectedRole, string ghiChu)
         {
-            // Kiểm tra người dùng đã đăng nhập
             var nguoiDung = Session["User"] as NGUOIDUNG;
             if (nguoiDung == null)
             {
                 return RedirectToAction("Login", "Home");
             }
 
-            // Lấy mã người dùng từ bảng NGUOIDUNG (dưới dạng chuỗi)
             string maNguoiDung = nguoiDung.MANGUOIDUNG;
 
-            // Kiểm tra xem người dùng này đã có thông tin trong bảng KHACHHANG chưa
             var khachHang = data.KHACHHANGs.SingleOrDefault(k => k.MANGUOIDUNG == maNguoiDung);
             if (khachHang == null)
             {
-                // Nếu chưa có, tạo bản ghi mới trong KHACHHANG
                 khachHang = new KHACHHANG
                 {
-                    MANGUOIDUNG = maNguoiDung, // Liên kết mã người dùng
+                    MANGUOIDUNG = maNguoiDung,
                     HOTEN = nguoiDung.TENNGUOIDUNG,
                     SODIENTHOAI = nguoiDung.SODIENTHOAI,
                     EMAIL = nguoiDung.EMAIL
@@ -309,7 +363,6 @@ namespace Handicraft_Shop.Controllers
                 data.SubmitChanges();
             }
 
-            // Lấy giỏ hàng từ session
             var gh = Session["GioHang"] as GioHang;
             if (gh == null || !gh.list.Any())
             {
@@ -317,7 +370,6 @@ namespace Handicraft_Shop.Controllers
                 return RedirectToAction("KhachHangXemGioHang", "KhachHang");
             }
 
-            // Thêm địa chỉ vào bảng DIACHI_GIAOHANG
             var diaChiGiaoHang = new DIACHI_GIAOHANG
             {
                 MAKHACHHANG = khachHang.MAKHACHHANG,
@@ -326,7 +378,6 @@ namespace Handicraft_Shop.Controllers
             data.DIACHI_GIAOHANGs.InsertOnSubmit(diaChiGiaoHang);
             data.SubmitChanges();
 
-            // Thêm đơn hàng vào bảng DONHANG
             var donHang = new DONHANG
             {
                 MAKHACHHANG = khachHang.MAKHACHHANG,
@@ -342,9 +393,22 @@ namespace Handicraft_Shop.Controllers
             data.DONHANGs.InsertOnSubmit(donHang);
             data.SubmitChanges();
 
-            // Thêm từng sản phẩm trong giỏ vào bảng CHITIETDONHANG
+            // Thêm chi tiết đơn hàng và cập nhật số lượng tồn
             foreach (var item in gh.list)
             {
+                var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == item.MaSP);
+                if (sanPham != null)
+                {
+                    // Cập nhật số lượng tồn
+                    sanPham.SOLUONGTON -= item.SoLuong;
+
+                    // Đảm bảo số lượng tồn không nhỏ hơn 0
+                    if (sanPham.SOLUONGTON < 0)
+                    {
+                        sanPham.SOLUONGTON = 0;
+                    }
+                }
+
                 var chiTietDonHang = new CHITIETDONHANG
                 {
                     MADONHANG = donHang.MADONHANG,
@@ -354,14 +418,15 @@ namespace Handicraft_Shop.Controllers
                 };
                 data.CHITIETDONHANGs.InsertOnSubmit(chiTietDonHang);
             }
+
             data.SubmitChanges();
 
             // Xóa giỏ hàng sau khi đơn hàng đã được xác nhận
             Session["GioHang"] = null;
 
-            // Chuyển hướng đến trang xác nhận đơn hàng
             return RedirectToAction("KhachHangOrderConfirmation", new { id = donHang.MADONHANG });
         }
+
 
 
         public ActionResult KhachHangOrderConfirmation()

@@ -161,22 +161,84 @@ namespace Handicraft_Shop.Controllers
         // Xóa người dùng
         public ActionResult DeleteUser(string id)
         {
-            
-            var user = data.NGUOIDUNGs.FirstOrDefault(u => u.MANGUOIDUNG == id);
-
-            if (user != null)
+            try
             {
-               
-                var userRoles = data.QUYEN_NGUOIDUNGs.Where(q => q.MANGUOIDUNG == id).ToList();
-                data.QUYEN_NGUOIDUNGs.DeleteAllOnSubmit(userRoles);
+                // Kiểm tra người dùng có tồn tại không
+                var user = data.NGUOIDUNGs.FirstOrDefault(u => u.MANGUOIDUNG == id);
+                if (user == null)
+                {
+                    TempData["ErrorMessage"] = "Không tìm thấy người dùng.";
+                    return RedirectToAction("ManageUsers");
+                }
 
-                
+                // Kiểm tra quyền người dùng
+                var userRole = data.QUYEN_NGUOIDUNGs
+                    .FirstOrDefault(q => q.MANGUOIDUNG == id && q.MAQUYEN == "Q01");
+
+                if (userRole != null)
+                {
+                    TempData["ErrorMessage"] = "Không thể xóa người dùng có quyền Admin.";
+                    return RedirectToAction("ManageUsers");
+                }
+
+                // Tìm khách hàng liên quan đến người dùng
+                var customer = data.KHACHHANGs.FirstOrDefault(kh => kh.MANGUOIDUNG == id);
+
+                // Nếu có khách hàng liên quan, xóa tất cả đơn hàng và chi tiết đơn hàng
+                if (customer != null)
+                {
+                    // Xóa chi tiết đơn hàng
+                    var orderDetails = data.CHITIETDONHANGs.Where(ctdh => ctdh.MADONHANG == customer.MAKHACHHANG).ToList();
+                    if (orderDetails.Any())
+                    {
+                        data.CHITIETDONHANGs.DeleteAllOnSubmit(orderDetails);
+                    }
+
+                    // Xóa các đơn hàng
+                    var orders = data.DONHANGs.Where(dh => dh.MAKHACHHANG == customer.MAKHACHHANG).ToList();
+                    if (orders.Any())
+                    {
+                        data.DONHANGs.DeleteAllOnSubmit(orders);
+                    }
+
+                    // Xóa địa chỉ giao hàng
+                    var deliveryAddresses = data.DIACHI_GIAOHANGs.Where(d => d.MAKHACHHANG == customer.MAKHACHHANG).ToList();
+                    if (deliveryAddresses.Any())
+                    {
+                        data.DIACHI_GIAOHANGs.DeleteAllOnSubmit(deliveryAddresses);
+                    }
+
+                    // Xóa khách hàng
+                    data.KHACHHANGs.DeleteOnSubmit(customer);
+                }
+
+                // Xóa quyền người dùng
+                var userRoles = data.QUYEN_NGUOIDUNGs.Where(q => q.MANGUOIDUNG == id).ToList();
+                if (userRoles.Any())
+                {
+                    data.QUYEN_NGUOIDUNGs.DeleteAllOnSubmit(userRoles);
+                }
+
+                // Xóa người dùng
                 data.NGUOIDUNGs.DeleteOnSubmit(user);
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
                 data.SubmitChanges();
+
+                // Thông báo thành công
+                TempData["SuccessMessage"] = "Tài khoản người dùng đã được xóa thành công.";
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ và thông báo lỗi
+                TempData["ErrorMessage"] = "Có lỗi xảy ra khi xóa tài khoản: " + ex.Message;
             }
 
+            // Quay lại trang quản lý người dùng
             return RedirectToAction("ManageUsers");
         }
+
+
 
 
         public ActionResult AdminDetails(string id)

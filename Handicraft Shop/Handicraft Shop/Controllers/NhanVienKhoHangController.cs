@@ -5,13 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using Handicraft_Shop.Models;
 using System.IO;
+
 namespace Handicraft_Shop.Controllers
 {
-    public class NhanVienController : Controller
+    public class NhanVienKhoHangController : Controller
     {
-        // GET: NhanVien
+        // GET: NhanVienKhoHang
         HandicraftShopDataContext data = new HandicraftShopDataContext();
-        public ActionResult IndexNhanVien(int page = 1, int pageSize = 12)
+        public ActionResult IndexNhanVienKhoHang(int page = 1, int pageSize = 12)
         {
             // Tổng số sản phẩm
             int totalProducts = data.SANPHAMs.Count();
@@ -33,16 +34,8 @@ namespace Handicraft_Shop.Controllers
             return View(products);
         }
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            var role = Session["UserRole"] as string;
-            if (role != "NhanVien")
-            {
-                filterContext.Result = RedirectToAction("Login", "Home");
-            }
-            base.OnActionExecuting(filterContext);
-        }
-        public ActionResult NhanVienDetails(string id)
+        
+        public ActionResult NhanVienKhoHangDetails(string id)
         {
             // Tìm sản phẩm chi tiết bằng cách sử dụng LINQ to SQL
             var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == id);
@@ -61,23 +54,23 @@ namespace Handicraft_Shop.Controllers
             ViewBag.RelatedProducts = relatedProducts;
             return View(sanPham);
         }
-        public ActionResult NhanVienMenuCap1()
+        public ActionResult NhanVienKhoHangMenuCap1()
         {
             List<DANHMUCSANPHAM> dmsp = data.DANHMUCSANPHAMs.ToList();
 
             return PartialView(dmsp);
         }
-        public ActionResult NhanVienMenuCap2(int madm)
+        public ActionResult NhanVienKhoHangMenuCap2(int madm)
         {
             List<LOAI> dsloai = data.LOAIs.Where(t => t.MADANHMUC == madm).ToList();
             return PartialView(dsloai);
         }
-        public ActionResult NhanVienLocDL_Theoloai(string mdm)
+        public ActionResult NhanVienKhoHangLocDL_Theoloai(string mdm)
         {
             List<SANPHAM> ds = data.SANPHAMs.Where(t => t.MALOAI == mdm).ToList();
-            return View("IndexNhanVien", ds);
+            return View("IndexNhanVienKhoHang", ds);
         }
-        public ActionResult NhanVienSearch(string searchString, int page = 1, int pageSize = 12)
+        public ActionResult NhanVienKhoHangSearch(string searchString, int page = 1, int pageSize = 12)
         {
             var sp = data.SANPHAMs.Where(s => s.TENSANPHAM.Contains(searchString));
 
@@ -92,9 +85,9 @@ namespace Handicraft_Shop.Controllers
             ViewBag.TotalPages = totalPages;
             ViewBag.SearchString = searchString; // Truyền từ khóa vào ViewBag để hiển thị lại
 
-            return View("NhanVienSearch", sp.ToList());
+            return View("NhanVienKhoHangSearch", sp.ToList());
         }
-        public ActionResult NhanVienQuanLyNhaCungCap(int page = 1, int pageSize = 10)
+        public ActionResult NhanVienKhoHangQuanLyNhaCungCap(int page = 1, int pageSize = 10)
         {
             int totalNhaCungCap = data.NHACUNGCAPs.Count();
             int totalPages = (int)Math.Ceiling((double)totalNhaCungCap / pageSize);
@@ -109,22 +102,6 @@ namespace Handicraft_Shop.Controllers
             ViewBag.TotalPages = totalPages;
 
             return View(nhaCungCapList);
-        }
-        public ActionResult NhanVienQuanLyKhachHang(int page = 1, int pageSize = 10)
-        {
-            int totalKhachHang = data.KHACHHANGs.Count();
-            int totalPages = (int)Math.Ceiling((double)totalKhachHang / pageSize);
-
-            var khachHangList = data.KHACHHANGs
-                                     .OrderBy(kh => kh.MAKHACHHANG)
-                                     .Skip((page - 1) * pageSize)
-                                     .Take(pageSize)
-                                     .ToList();
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(khachHangList);
         }
 
         // Action GET: Hiển thị form thêm nhà cung cấp
@@ -141,7 +118,7 @@ namespace Handicraft_Shop.Controllers
             {
                 data.NHACUNGCAPs.InsertOnSubmit(nhaCungCap);
                 data.SubmitChanges();
-                return RedirectToAction("NhanVienQuanLyNhaCungCap");
+                return RedirectToAction("NhanVienKhoHangQuanLyNhaCungCap");
             }
             return View(nhaCungCap);
         }
@@ -170,7 +147,7 @@ namespace Handicraft_Shop.Controllers
                     existingNhaCungCap.DTHOAI = nhaCungCap.DTHOAI;
                     existingNhaCungCap.DIACHI = nhaCungCap.DIACHI;
                     data.SubmitChanges();
-                    return RedirectToAction("NhanVienQuanLyNhaCungCap");
+                    return RedirectToAction("NhanVienKhoHangQuanLyNhaCungCap");
                 }
             }
             return View(nhaCungCap);
@@ -195,10 +172,10 @@ namespace Handicraft_Shop.Controllers
                 data.SubmitChanges();
             }
 
-            return RedirectToAction("NhanVienQuanLyNhaCungCap");
+            return RedirectToAction("NhanVienKhoHangQuanLyNhaCungCap");
         }
 
-        public ActionResult NhanVienQuanLySanPham(int page = 1, int pageSize = 10)
+        public ActionResult NhanVienKhoHangQuanLySanPham(int page = 1, int pageSize = 10)
         {
             // Tổng số sản phẩm
             int totalProducts = data.SANPHAMs.Count();
@@ -249,7 +226,7 @@ namespace Handicraft_Shop.Controllers
             data.SANPHAMs.InsertOnSubmit(sanPham);
             data.SubmitChanges();
 
-            return RedirectToAction("NhanVienQuanLySanPham");
+            return RedirectToAction("NhanVienKhoHangQuanLySanPham");
         }
 
         public ActionResult CreateSanPham()
@@ -300,7 +277,7 @@ namespace Handicraft_Shop.Controllers
                 }
 
                 data.SubmitChanges();
-                return RedirectToAction("NhanVienQuanLySanPham");
+                return RedirectToAction("NhanVienKhoHangQuanLySanPham");
             }
 
             ViewBag.NhaCungCapList = new SelectList(data.NHACUNGCAPs, "MANHACUNGCAP", "TENNHACUNGCAP", sanPham.MANHACUNGCAP);
@@ -334,176 +311,24 @@ namespace Handicraft_Shop.Controllers
             data.SANPHAMs.DeleteOnSubmit(sanPham);
             data.SubmitChanges();
 
-            return RedirectToAction("NhanVienQuanLySanPham");
+            return RedirectToAction("NhanVienKhoHangQuanLySanPham");
         }
-        public ActionResult NhanVienQuanLyDonHang(int page = 1, int pageSize = 10)
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            // Lấy danh sách tất cả các đơn hàng, sắp xếp theo ngày đặt giảm dần
-            var donHangList = data.DONHANGs
-                                .OrderByDescending(d => d.NGAYDAT)
-                                .Skip((page - 1) * pageSize)
-                                .Take(pageSize)
-                                .ToList();
+            // Kiểm tra quyền để đảm bảo là nhân viên kho hàng
+            var role = Session["UserRole"] as string;
+            if (role != "NhanVienKhoHang")
+            {
+                filterContext.Result = RedirectToAction("Login", "Home");
+            }
 
-            // Tổng số đơn hàng để tính số trang
-            int totalDonHang = data.DONHANGs.Count();
-            int totalPages = (int)Math.Ceiling((double)totalDonHang / pageSize);
+            // Tính toán và cập nhật số lượng tồn tự động
+            
 
-            // Truyền dữ liệu phân trang vào ViewBag
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(donHangList);
+            base.OnActionExecuting(filterContext);
         }
+
         
-
-        public ActionResult NhanVienDonHangDetails(int id)
-        {
-            // Lấy đơn hàng dựa vào mã đơn hàng
-            var donHang = data.DONHANGs.SingleOrDefault(d => d.MADONHANG == id);
-
-            if (donHang == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Lấy danh sách chi tiết đơn hàng
-            var chiTietDonHang = data.CHITIETDONHANGs.Where(c => c.MADONHANG == id).ToList();
-
-            // Truyền dữ liệu chi tiết vào View
-            ViewBag.ChiTietDonHang = chiTietDonHang;
-
-            return View(donHang);
-        }
-        [HttpPost]
-        public ActionResult NhanVienUpdateTrangThaiDonHang(int id, string trangThaiMoi)
-        {
-            var donHang = data.DONHANGs.SingleOrDefault(d => d.MADONHANG == id);
-            if (donHang == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Cập nhật trạng thái trực tiếp
-            donHang.TRANGTHAI = trangThaiMoi; // "Đã giao", "Đang xử lý", v.v.
-
-            // Cập nhật ngày giao nếu trạng thái là "Đã giao"
-            if (trangThaiMoi == "Đã giao")
-            {
-                donHang.NGAYGIAO = DateTime.Now; // Cập nhật ngày giao
-            }
-
-            try
-            {
-                data.SubmitChanges(); // Cập nhật cơ sở dữ liệu
-                return RedirectToAction("NhanVienQuanLyDonHang");
-            }
-            catch (Exception ex)
-            {
-                // Nếu có lỗi, hiển thị thông báo lỗi
-                ViewBag.ErrorMessage = "Có lỗi xảy ra: " + ex.Message;
-                return View("Error");
-            }
-        }
-
-        public ActionResult NhanVienBaoCaoSanPhamBanChay(int page = 1, int pageSize = 10)
-        {
-            var topSanPhamBanChay = data.CHITIETDONHANGs
-                .GroupBy(ct => new { ct.MASANPHAM, ct.SANPHAM.TENSANPHAM, ct.SANPHAM.HINHANH })
-                .Select(g => new TopSanPhamViewModel
-                {
-                    MaSanPham = g.Key.MASANPHAM,
-                    TenSanPham = g.Key.TENSANPHAM,
-                    TongSoLuongBan = g.Sum(ct => ct.SOLUONG ?? 0),
-                    TongDoanhThu = g.Sum(ct => (ct.SOLUONG ?? 0) * (ct.DONGIA ?? 0)),
-                    HinhAnh = g.Key.HINHANH
-                })
-                .OrderByDescending(x => x.TongSoLuongBan)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            int totalProducts = topSanPhamBanChay.Count();
-            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(topSanPhamBanChay);
-        }
-
-        public ActionResult NhanVienBaoCaoTonKho(int page = 1, int pageSize = 10)
-        {
-            // Lấy dữ liệu số lượng tồn từ bảng SANPHAM
-            var tonKhoData = data.SANPHAMs
-                .Select(sp => new TonKhoViewModel
-                {
-                    MaSanPham = sp.MASANPHAM,
-                    TenSanPham = sp.TENSANPHAM,
-                    HinhAnh = sp.HINHANH,
-                    SoLuongTon = sp.SOLUONGTON ?? 0  // Lấy trực tiếp từ cột SOLUONGTON
-        })
-                .OrderByDescending(sp => sp.SoLuongTon) // Sắp xếp theo số lượng tồn giảm dần
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            // Tính tổng số sản phẩm để phân trang
-            int totalProducts = data.SANPHAMs.Count();
-            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
-
-            // Truyền dữ liệu phân trang vào ViewBag
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(tonKhoData);
-        }
-
-
-
-        public ActionResult NhanVienBaoCaoKhachHang(int page = 1, int pageSize = 10)
-        {
-            var topKhachHang = data.KHACHHANGs
-                .Select(kh => new KhachHangMuaNhieuNhat
-                {
-                    MaKhachHang = kh.MAKHACHHANG,
-                    TenKhachHang = kh.HOTEN,
-                    SoDienThoai = kh.SODIENTHOAI,
-                    Email = kh.EMAIL,
-                    TongSoLuongMua = data.DONHANGs
-                        .Where(dh => dh.MAKHACHHANG == kh.MAKHACHHANG)
-                        .SelectMany(dh => data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == dh.MADONHANG))
-                        .Sum(ct => (int?)ct.SOLUONG) ?? 0,
-                    TongSoLuongTatCaSanPham = data.DONHANGs
-                        .Where(dh => dh.MAKHACHHANG == kh.MAKHACHHANG)
-                        .SelectMany(dh => data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == dh.MADONHANG))
-                        .Sum(ct => ct.SOLUONG) ?? 0,
-                    SanPhamsDaMua = data.DONHANGs
-                        .Where(dh => dh.MAKHACHHANG == kh.MAKHACHHANG)
-                        .SelectMany(dh => data.CHITIETDONHANGs.Where(ct => ct.MADONHANG == dh.MADONHANG))
-                        .Select(ct => new SanPhamMuaViewModel
-                        {
-                            MaSanPham = ct.MASANPHAM,
-                            TenSanPham = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).TENSANPHAM,
-                            SoLuongMua = ct.SOLUONG.GetValueOrDefault(),
-                            HinhAnh = data.SANPHAMs.FirstOrDefault(sp => sp.MASANPHAM == ct.MASANPHAM).HINHANH
-                        })
-                        .ToList()
-                })
-                .OrderByDescending(kh => kh.TongSoLuongMua)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            int totalCustomers = data.KHACHHANGs.Count();
-            int totalPages = (int)Math.Ceiling((double)totalCustomers / pageSize);
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(topKhachHang);
-        }
-
 
     }
 }
