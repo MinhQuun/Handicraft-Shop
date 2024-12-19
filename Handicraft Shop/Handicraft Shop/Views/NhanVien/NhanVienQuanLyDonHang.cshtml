@@ -153,18 +153,19 @@
 }
 
 <div class="container-custom">
+    
     <h2>Quản Lý Đơn Hàng</h2>
     <div class="filter-container">
         <form action="@Url.Action("NhanVienQuanLyDonHang")" method="get" class="d-flex justify-content-center align-items-center">
             <div>
                 <label for="startDate">Từ Ngày:</label>
                 <input type="date" id="startDate" name="startDate" class="form-control"
-                       value="@(ViewBag.StartDate == null ? "" : DateTime.ParseExact(ViewBag.StartDate, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"))" />
+                       value="@ViewBag.StartDate" />
             </div>
             <div>
                 <label for="endDate">Đến Ngày:</label>
                 <input type="date" id="endDate" name="endDate" class="form-control"
-                       value="@(ViewBag.EndDate == null ? "" : DateTime.ParseExact(ViewBag.EndDate, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"))" />
+                       value="@ViewBag.EndDate" />
             </div>
 
             <div class="align-self-end">
@@ -174,7 +175,6 @@
             </div>
         </form>
     </div>
-
 
     <!-- Bảng Đơn Hàng -->
     <table class="table">

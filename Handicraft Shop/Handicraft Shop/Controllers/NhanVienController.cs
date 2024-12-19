@@ -345,11 +345,18 @@ namespace Handicraft_Shop.Controllers
             if (!string.IsNullOrEmpty(startDate))
             {
                 // Chuyển từ định dạng dd/MM/yyyy sang DateTime
-                startDateTime = DateTime.ParseExact(startDate, "dd/MM/yyyy", null);
+                if (DateTime.TryParseExact(startDate, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out DateTime parsedStartDate))
+                {
+                    startDateTime = parsedStartDate;
+                }
             }
+
             if (!string.IsNullOrEmpty(endDate))
             {
-                endDateTime = DateTime.ParseExact(endDate, "dd/MM/yyyy", null);
+                if (DateTime.TryParseExact(endDate, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out DateTime parsedEndDate))
+                {
+                    endDateTime = parsedEndDate;
+                }
             }
 
             var donHangList = data.DONHANGs.AsQueryable();
@@ -370,8 +377,8 @@ namespace Handicraft_Shop.Controllers
             ViewBag.CurrentPage = page;
 
             // Truyền lại giá trị ngày vào ViewBag để hiển thị lại trong view
-            ViewBag.StartDate = startDate; // Giá trị dạng chuỗi "dd/MM/yyyy"
-            ViewBag.EndDate = endDate;     // Giá trị dạng chuỗi "dd/MM/yyyy"
+            ViewBag.StartDate = startDate; // Giá trị dạng chuỗi "yyyy-MM-dd"
+            ViewBag.EndDate = endDate;     // Giá trị dạng chuỗi "yyyy-MM-dd"
 
             var paginatedList = donHangList
                                 .OrderByDescending(dh => dh.NGAYDAT) // Sắp xếp ngày mới nhất
@@ -381,6 +388,7 @@ namespace Handicraft_Shop.Controllers
 
             return View(paginatedList);
         }
+
 
 
         public ActionResult NhanVienDonHangDetails(int id)
@@ -396,11 +404,16 @@ namespace Handicraft_Shop.Controllers
             // Lấy danh sách chi tiết đơn hàng
             var chiTietDonHang = data.CHITIETDONHANGs.Where(c => c.MADONHANG == id).ToList();
 
-            // Truyền dữ liệu chi tiết vào View
+            // Lấy thông tin hình thức thanh toán
+            var hinhThucThanhToan = data.HINHTHUCTTs.SingleOrDefault(ht => ht.MATT == donHang.MATT);
+
+            // Truyền dữ liệu chi tiết vào ViewBag
             ViewBag.ChiTietDonHang = chiTietDonHang;
+            ViewBag.HinhThucThanhToan = hinhThucThanhToan?.LOAITT ?? "Không xác định";
 
             return View(donHang);
         }
+
         [HttpPost]
         public ActionResult NhanVienUpdateTrangThaiDonHang(int id, string trangThaiMoi, int? page, string startDate, string endDate)
         {
