@@ -1,78 +1,106 @@
-﻿@model Handicraft_Shop.Models.KHACHHANG
+﻿@model Handicraft_Shop.Models.NGUOIDUNG
+
 @{
     ViewBag.Title = "Hồ Sơ";
     Layout = "~/Views/Shared/KhachHangLayout.cshtml";
 }
+
 @section Styles {
     <style>
-        
+        /* Tiêu đề chính */
         .profile-title {
-            font-size: 2rem;
-            color: #8B4513; 
+            font-size: 2.2rem;
+            color: #6b3b10;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 30px;
-            margin-top: 20px;
+            margin-bottom: 20px;
+            margin-top: 40px;
+            text-transform: uppercase;
         }
 
-        
+        /* Thông tin hồ sơ */
         .profile-info {
-            background-color: #f9f9f9;
+            background: #ffffff;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: left;
+            padding: 30px;
+            max-width: 650px; /* Thu gọn vào giữa */
+            margin: 0 auto 20px; /* Căn giữa và thêm khoảng cách dưới */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
             .profile-info p {
-                font-size: 1.1rem;
-                margin: 10px 0;
-                color: #333;
-                line-height: 1.6;
+                font-size: 1rem;
+                margin: 12px 0;
+                color: #444;
             }
 
             .profile-info strong {
-                color: #8B4513;
+                color: #6b3b10;
+                font-weight: bold;
+                font-size: 1.05rem;
             }
 
-        
+        /* Container nút chỉnh sửa */
         .edit-profile-btn-container {
-            text-align: center; 
+            text-align: center;
+            margin-top: 15px;
         }
 
+        /* Nút chỉnh sửa */
         .edit-profile-btn {
             display: inline-block;
-            background-color: #8B4513; 
-            color: white;
-            font-weight: bold;
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            border-radius: 5px;
-            border: none;
-            transition: background-color 0.3s ease;
+            background-color: #8B4513;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin: 0 10px; /* Khoảng cách giữa các nút */
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
             .edit-profile-btn:hover {
-                background-color: #6b3b10; 
+                background-color: #6b3b10;
                 color: #fff;
+                transform: scale(1.05);
                 text-decoration: none;
             }
+
+        /* Căn giữa và bo tròn khối nội dung */
+        body {
+            background-color: #f5f5f5;
+        }
     </style>
 }
 
-<h2 class="profile-title">Thông Tin Cá Nhân</h2>
+<h2 class="profile-title">
+    <i class="fas fa-user-circle"></i> Thông Tin Cá Nhân
+</h2>
 
 <div class="profile-info">
-    <p><strong>Mã Khách Hàng:</strong> @Model.MANGUOIDUNG</p>
-    <p><strong>Tên Khách Hàng:</strong> @Model.HOTEN</p>
-    <p><strong>Số Điện Thoại:</strong> @Model.SODIENTHOAI</p>
-    <p><strong>Email:</strong> @Model.EMAIL</p>
-    <p><strong>Tài Khoản:</strong> @Model.NGUOIDUNG.TAIKHOAN</p>
+
+    <p>
+        <i class="fas fa-user"></i> <strong>Tên Khách Hàng:</strong> @Model.TENNGUOIDUNG
+    </p>
+    <p>
+        <i class="fas fa-phone"></i> <strong>Số Điện Thoại:</strong> @Model.SODIENTHOAI
+    </p>
+    <p>
+        <i class="fas fa-envelope"></i> <strong>Email:</strong> @Model.EMAIL
+    </p>
+    <p>
+        <i class="fas fa-user-lock"></i> <strong>Tài Khoản:</strong> @Model.TAIKHOAN
+    </p>
 </div>
 
 <div class="edit-profile-btn-container">
-    <a href="@Url.Action("KhachHangEditProfile", "KhachHang")" class="edit-profile-btn">Chỉnh Sửa Thông Tin</a>
-    <a href="@Url.Action("KhachHangDoiMatKhau", "KhachHang")" class="edit-profile-btn">Thay đổi mật khẩu</a>
+    <a href="@Url.Action("KhachHangEditProfile", "KhachHang")" class="edit-profile-btn">
+        <i class="fas fa-edit"></i> Chỉnh Sửa Thông Tin
+    </a>
+    <a href="@Url.Action("KhachHangDoiMatKhau", "KhachHang")" class="edit-profile-btn">
+        <i class="fas fa-key"></i> Thay Đổi Mật Khẩu
+    </a>
 </div>

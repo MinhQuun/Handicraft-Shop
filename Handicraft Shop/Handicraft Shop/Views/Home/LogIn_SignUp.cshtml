@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In & Sign Up Form</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    @model Handicraft_Shop.Models.NGUOIDUNG
 
     <link href="~/bootstrap/bootstrap/css/LogIn_SignUp.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container" id="container">
         <!-- Sign Up Form -->
+        
         <div class="form-container sign-up-container">
             <form action="/Home/SignUp" method="post">
                 <h1>Đăng Ký</h1>
@@ -21,14 +22,22 @@
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>hoặc sử dụng email của bạn để đăng ký</span>
+
                 <input type="text" name="TENNGUOIDUNG" placeholder="Họ Tên" required />
-                <input type="text" name="TAIKHOAN" placeholder="Tên Đăng Nhập" required />
+                <input type="text" name="TAIKHOAN" placeholder="Tên Đăng Nhập"  required />
                 <input type="email" name="EMAIL" placeholder="Email" required />
                 <input type="password" name="MATKHAU" placeholder="Mật Khẩu" required />
-                <input type="text" name="SODIENTHOAI" placeholder="Số Điện Thoại" required pattern="\d*" title="Chỉ được nhập số" />
+                <input type="text" name="SODIENTHOAI" placeholder="Số Điện Thoại"  required pattern="\d*" title="Chỉ được nhập số" />
+
+                <!-- Hiển thị lỗi cho từng trường -->
+                @Html.ValidationMessageFor(m => m.TAIKHOAN, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(m => m.EMAIL, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(m => m.SODIENTHOAI, "", new { @class = "text-danger" })
+
                 <button type="submit">Đăng Ký</button>
             </form>
         </div>
+
 
         <!-- Sign In Form -->
         <div class="form-container sign-in-container">
@@ -40,7 +49,7 @@
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>hoặc sử dụng tài khoản của bạn</span>
-                <input type="text" name="username" placeholder="Tên Đăng Nhập" required autofocus/>
+                <input type="text" name="username" placeholder="Tên Đăng Nhập" required autofocus />
                 <input type="password" name="password" placeholder="Mật Khẩu" required />
                 @if (ViewData.ModelState.ContainsKey("Password") && ViewData.ModelState["Password"].Errors.Count > 0)
                 {
@@ -49,7 +58,7 @@
                         {
                             <p>@error.ErrorMessage</p>}
                     </div>
-                 }
+                }
                 <a href="#">Bạn quên mật khẩu?</a>
                 <button type="submit">Đăng Nhập</button>
             </form>
@@ -74,5 +83,14 @@
 
 
     <script src="~/bootstrap/bootstrap/js/SignInUp.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var errorFields = document.querySelectorAll(".field-validation-error input, .field-validation-error textarea");
+            if (errorFields.length > 0) {
+                errorFields[0].focus(); // Focus vào trường đầu tiên có lỗi
+            }
+        });
+    </script>
+
 </body>
 </html>

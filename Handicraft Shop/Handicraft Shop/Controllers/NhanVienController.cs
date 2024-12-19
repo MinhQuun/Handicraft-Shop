@@ -336,26 +336,52 @@ namespace Handicraft_Shop.Controllers
 
             return RedirectToAction("NhanVienQuanLySanPham");
         }
-        public ActionResult NhanVienQuanLyDonHang(int page = 1, int pageSize = 10)
+        public ActionResult NhanVienQuanLyDonHang(string startDate, string endDate, int page = 1, int pageSize = 10)
         {
-            // Lấy danh sách tất cả các đơn hàng, sắp xếp theo ngày đặt giảm dần
-            var donHangList = data.DONHANGs
-                                .OrderByDescending(d => d.NGAYDAT)
+            // Chuyển đổi định dạng ngày từ chuỗi sang DateTime
+            DateTime? startDateTime = null;
+            DateTime? endDateTime = null;
+
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                // Chuyển từ định dạng dd/MM/yyyy sang DateTime
+                startDateTime = DateTime.ParseExact(startDate, "dd/MM/yyyy", null);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                endDateTime = DateTime.ParseExact(endDate, "dd/MM/yyyy", null);
+            }
+
+            var donHangList = data.DONHANGs.AsQueryable();
+
+            // Lọc theo ngày đặt nếu có giá trị
+            if (startDateTime.HasValue)
+            {
+                donHangList = donHangList.Where(dh => dh.NGAYDAT >= startDateTime.Value);
+            }
+            if (endDateTime.HasValue)
+            {
+                donHangList = donHangList.Where(dh => dh.NGAYDAT <= endDateTime.Value);
+            }
+
+            // Phân trang
+            int totalRecords = donHangList.Count();
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+            ViewBag.CurrentPage = page;
+
+            // Truyền lại giá trị ngày vào ViewBag để hiển thị lại trong view
+            ViewBag.StartDate = startDate; // Giá trị dạng chuỗi "dd/MM/yyyy"
+            ViewBag.EndDate = endDate;     // Giá trị dạng chuỗi "dd/MM/yyyy"
+
+            var paginatedList = donHangList
+                                .OrderByDescending(dh => dh.NGAYDAT) // Sắp xếp ngày mới nhất
                                 .Skip((page - 1) * pageSize)
                                 .Take(pageSize)
                                 .ToList();
 
-            // Tổng số đơn hàng để tính số trang
-            int totalDonHang = data.DONHANGs.Count();
-            int totalPages = (int)Math.Ceiling((double)totalDonHang / pageSize);
-
-            // Truyền dữ liệu phân trang vào ViewBag
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(donHangList);
+            return View(paginatedList);
         }
-        
+
 
         public ActionResult NhanVienDonHangDetails(int id)
         {
@@ -376,7 +402,7 @@ namespace Handicraft_Shop.Controllers
             return View(donHang);
         }
         [HttpPost]
-        public ActionResult NhanVienUpdateTrangThaiDonHang(int id, string trangThaiMoi)
+        public ActionResult NhanVienUpdateTrangThaiDonHang(int id, string trangThaiMoi, int? page, string startDate, string endDate)
         {
             var donHang = data.DONHANGs.SingleOrDefault(d => d.MADONHANG == id);
             if (donHang == null)
@@ -384,27 +410,28 @@ namespace Handicraft_Shop.Controllers
                 return HttpNotFound();
             }
 
-            // Cập nhật trạng thái trực tiếp
-            donHang.TRANGTHAI = trangThaiMoi; // "Đã giao", "Đang xử lý", v.v.
+            // Cập nhật trạng thái
+            donHang.TRANGTHAI = trangThaiMoi;
 
             // Cập nhật ngày giao nếu trạng thái là "Đã giao"
             if (trangThaiMoi == "Đã giao")
             {
-                donHang.NGAYGIAO = DateTime.Now; // Cập nhật ngày giao
+                donHang.NGAYGIAO = DateTime.Now;
             }
 
             try
             {
-                data.SubmitChanges(); // Cập nhật cơ sở dữ liệu
-                return RedirectToAction("NhanVienQuanLyDonHang");
+                data.SubmitChanges();
+                // Điều hướng lại trang cũ với các tham số
+                return RedirectToAction("NhanVienQuanLyDonHang", new { page = page, startDate = startDate, endDate = endDate });
             }
             catch (Exception ex)
             {
-                // Nếu có lỗi, hiển thị thông báo lỗi
                 ViewBag.ErrorMessage = "Có lỗi xảy ra: " + ex.Message;
                 return View("Error");
             }
         }
+
 
         public ActionResult NhanVienBaoCaoSanPhamBanChay(int page = 1, int pageSize = 10)
         {

@@ -175,27 +175,38 @@ namespace Handicraft_Shop.Controllers
             return RedirectToAction("NhanVienKhoHangQuanLyNhaCungCap");
         }
 
-        public ActionResult NhanVienKhoHangQuanLySanPham(int page = 1, int pageSize = 10)
+        public ActionResult NhanVienKhoHangQuanLySanPham(int page = 1, int pageSize = 10, int? minValue = null, int? maxValue = null)
         {
-            // Tổng số sản phẩm
-            int totalProducts = data.SANPHAMs.Count();
+            var query = data.SANPHAMs.AsQueryable();
 
-            // Tính tổng số trang
+            // Lọc theo số lượng tồn nếu có giá trị lọc
+            if (minValue.HasValue)
+            {
+                query = query.Where(sp => sp.SOLUONGTON >= minValue.Value);
+            }
+            if (maxValue.HasValue)
+            {
+                query = query.Where(sp => sp.SOLUONGTON <= maxValue.Value);
+            }
+
+            // Phân trang
+            int totalProducts = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
 
-            // Lấy sản phẩm cho trang hiện tại
-            var products = data.SANPHAMs
-                                .OrderBy(p => p.MASANPHAM)
-                                .Skip((page - 1) * pageSize)
-                                .Take(pageSize)
-                                .ToList();
+            var products = query
+                            .OrderBy(p => p.MASANPHAM)
+                            .Skip((page - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
 
-            // Truyền dữ liệu phân trang vào ViewBag
+            // Truyền dữ liệu phân trang và lọc vào ViewBag
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
 
+            // Trả về View với danh sách sản phẩm đã lọc và phân trang
             return View(products);
         }
+
         // GET: ThemSanPham - Hiển thị form thêm sản phẩm
         [HttpPost]
         public ActionResult CreateSanPham(SANPHAM sanPham, HttpPostedFileBase uploadHinhAnh)
@@ -327,8 +338,36 @@ namespace Handicraft_Shop.Controllers
 
             base.OnActionExecuting(filterContext);
         }
+        public ActionResult NhanVienKhoHangLoc_SoLuongTon(int? minValue, int? maxValue, int page = 1, int pageSize = 10)
+        {
+            // Lấy danh sách sản phẩm và lọc theo khoảng số lượng tồn
+            var sanPhams = data.SANPHAMs.AsQueryable();
 
-        
+            if (minValue.HasValue)
+            {
+                sanPhams = sanPhams.Where(sp => sp.SOLUONGTON >= minValue.Value);
+            }
+
+            if (maxValue.HasValue)
+            {
+                sanPhams = sanPhams.Where(sp => sp.SOLUONGTON <= maxValue.Value);
+            }
+
+            // Phân trang
+            int totalProducts = sanPhams.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            sanPhams = sanPhams.OrderBy(sp => sp.MASANPHAM)
+                               .Skip((page - 1) * pageSize)
+                               .Take(pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View("NhanVienKhoHangQuanLySanPham", sanPhams.ToList());
+        }
+
+
 
     }
 }

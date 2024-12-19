@@ -6,69 +6,235 @@
 }
 
 @section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <!-- CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
-    <link href="~/bootstrap/bootstrap/css/KhachHangDatHang.css" rel="stylesheet" />
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <style>
+        /* Container chính với độ rộng giới hạn */
+        .order-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            margin: 30px auto; /* Canh giữa và thêm khoảng cách trên/dưới */
+            max-width: 900px; /* Độ rộng tối đa */
+        }
+
+        .order-header {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        /* Form thông tin đơn hàng */
+        .order-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* Chia cột cân đối */
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .order-label {
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .order-input {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #333;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        /* Bảng sản phẩm */
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+            .product-table thead {
+                background-color: #007bff;
+                color: #fff;
+                text-transform: uppercase;
+            }
+
+            .product-table th, .product-table td {
+                padding: 12px;
+                text-align: center;
+            }
+
+            .product-table img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+        /* Nút xác nhận */
+        /* Button Xác Nhận Đặt Hàng */
+        .order-submit-btn {
+            background-color: #28a745;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            padding: 10px 30px; /* Giữ kích thước như cũ */
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin: 20px auto 0; /* Canh giữa */
+            display: inline-block;
+            width: auto; /* Kích thước theo nội dung */
+        }
+
+            .order-submit-btn:hover {
+                background-color: #218838;
+                transform: scale(1.05);
+            }
+
+        /* Tiêu đề bảng thông tin sản phẩm */
+        .product-table thead {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px; /* Tăng khoảng cách chữ */
+        }
+
+        .product-table th {
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* Nội dung bảng */
+        .product-table td {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        /* Tổng kết đơn hàng */
+        .summary-info {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #555;
+        }
+        /* Custom style for input */
+        .custom-autocomplete {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+            .custom-autocomplete:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+            .custom-autocomplete:hover {
+                border-color: #6c757d;
+            }
+
+        /* Style cho datalist */
+        ::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    </style>
+
 }
 
-@section Scripts {
+<div class="order-container">
+    <!-- Tiêu đề -->
+    <h2 class="order-header">
+        <i class="fas fa-clipboard-check"></i> Xác Nhận Đơn Hàng
+    </h2>
 
-
-    <script src="~/bootstrap/bootstrap/js/KhachHangDatHang.js"></script>
-
-}
-
-<div class="compact-order-container">
-    <h2 class="compact-order-header">Xác Nhận Đơn Hàng</h2>
+    <!-- Form thông tin -->
     <form action="/KhachHang/KhachHangConfirmOrder" method="post">
-
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Họ tên:</label>
+        <div class="order-info">
+            <label class="order-label">
+                <i class="fas fa-user"></i> Họ tên:
+            </label>
             <span>@kh.TENNGUOIDUNG</span>
-        </div>
 
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Điện thoại:</label>
+            <label class="order-label">
+                <i class="fas fa-phone"></i> Điện thoại:
+            </label>
             <span>@kh.SODIENTHOAI</span>
-        </div>
 
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Email:</label>
+            <label class="order-label">
+                <i class="fas fa-envelope"></i> Email:
+            </label>
             <span>@kh.EMAIL</span>
-        </div>
 
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Địa chỉ:</label>
-            <input type="text" name="diachigh" class="compact-order-form-input" required />
-        </div>
+            <label class="order-label">
+                <i class="fas fa-map-marker-alt"></i> Địa chỉ:
+            </label>
+            <input type="text" id="diaChiInput" name="diachigh" class="order-input custom-autocomplete" placeholder="Nhập địa chỉ giao hàng" list="diaChiGoiY" />
 
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Ngày đặt:</label>
+            <datalist id="diaChiGoiY">
+                @if (ViewBag.DiaChiGoiY != null)
+                {
+                    foreach (var diaChi in ViewBag.DiaChiGoiY)
+                    {
+                        <option value="@diaChi"></option>
+                    }
+                }
+            </datalist>
+
+
+            <label class="order-label">
+                <i class="fas fa-calendar-day"></i> Ngày đặt:
+            </label>
             <span>@DateTime.Now.ToString("dd/MM/yyyy")</span>
-        </div>
 
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Hình thức thanh toán:</label>
-            <select class="compact-order-form-input" name="SelectedRole">
+            <label class="order-label">
+                <i class="fas fa-credit-card"></i> Hình thức thanh toán:
+            </label>
+            <select name="SelectedRole" class="order-input">
                 <option value="HT01">ATM Banking</option>
                 <option value="HT02">Tiền mặt</option>
             </select>
+
+            <label class="order-label">
+                <i class="fas fa-comment-alt"></i> Ghi chú:
+            </label>
+            <input type="text" name="ghiChu" class="order-input" placeholder="Nhập ghi chú..." />
         </div>
 
-        <div class="compact-order-form-group">
-            <label class="compact-order-form-label">Ghi chú:</label>
-            <input type="text" name="ghiChu" class="compact-order-form-input" required />
-        </div>
-
-        <table class="compact-summary-table table table-striped table-bordered">
+        <!-- Bảng thông tin đơn hàng -->
+        <table class="product-table">
             <thead>
-                <tr>
-                    <th colspan="5">Thông tin đơn hàng</th>
-                </tr>
                 <tr>
                     <th>Tên Sản Phẩm</th>
                     <th>Ảnh</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
+                    <th>Số Lượng</th>
+                    <th>Đơn Giá</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,22 +242,41 @@
                 {
                     <tr>
                         <td>@item.TenSP</td>
-                        <td><img src="@Url.Content("~/HinhAnhSP/MUC HINH ANH CHUNG/" + item.AnhBia)" /></td>
+                        <td>
+                            <img src="@Url.Content("~/HinhAnhSP/MUC HINH ANH CHUNG/" + item.AnhBia)" alt="Hình ảnh sản phẩm" />
+                        </td>
                         <td>@item.SoLuong</td>
-                        <td>@String.Format("{0:#,###}", item.DonGia) VND</td>
+                        <td class="text-danger">@String.Format("{0:#,###}", item.DonGia) VNĐ</td>
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2"><strong>Tổng số lượng:</strong> @Model.TongSLHang()</td>
-                    <td colspan="3">@String.Format("{0:#,###}", Model.TongThanhTien()) VND</td>
+                    <td colspan="3" class="text-end">Tổng số lượng:</td>
+                    <td>@Model.TongSLHang()</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end">Tổng thành tiền:</td>
+                    <td class="text-danger">@String.Format("{0:#,###}", Model.TongThanhTien()) VNĐ</td>
                 </tr>
             </tfoot>
         </table>
 
-        <div class="compact-footer">
-            <input type="submit" value="Đồng ý đặt hàng" class="btn btn-confirm" />
+        <!-- Nút xác nhận -->
+        <div class="text-center mt-4">
+            <button type="submit" class="order-submit-btn">
+                <i class="fas fa-check-circle"></i> Xác Nhận Đặt Hàng
+            </button>
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function () {
+        // Kích hoạt Select2 với placeholder và chức năng tìm kiếm
+        $('#diaChiInput').select2({
+            placeholder: "Nhập hoặc chọn địa chỉ giao hàng",
+            allowClear: true,
+            width: 'resolve' // Tự động điều chỉnh độ rộng
+        });
+    });
+</script>

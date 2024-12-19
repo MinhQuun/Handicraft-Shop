@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Text.RegularExpressions;
+
 using Handicraft_Shop.Models;
 
 namespace Handicraft_Shop.Controllers
@@ -99,37 +101,66 @@ namespace Handicraft_Shop.Controllers
         [HttpPost]
         public ActionResult SignUp(NGUOIDUNG newUser)
         {
-            if (ModelState.IsValid)
+            // Kiểm tra trùng lặp thông tin
+            if (data.NGUOIDUNGs.Any(u => u.TAIKHOAN == newUser.TAIKHOAN))
             {
-                var lastUser = data.NGUOIDUNGs
-                                  .OrderByDescending(u => u.MANGUOIDUNG)
-                                  .FirstOrDefault();
-
-                int nextId = 1;
-                if (lastUser != null)
-                {
-                    string lastIdString = lastUser.MANGUOIDUNG.Substring(2); 
-                    nextId = int.Parse(lastIdString) + 1; 
-                }
-
-                newUser.MANGUOIDUNG = "ND" + nextId.ToString("D2");
-
-                data.NGUOIDUNGs.InsertOnSubmit(newUser);
-                data.SubmitChanges();
-
-                QUYEN_NGUOIDUNG userRole = new QUYEN_NGUOIDUNG
-                {
-                    MANGUOIDUNG = newUser.MANGUOIDUNG,
-                    MAQUYEN = "Q03" 
-                };
-                data.QUYEN_NGUOIDUNGs.InsertOnSubmit(userRole);
-                data.SubmitChanges();
-
-                return RedirectToAction("Success");
+                ModelState.AddModelError("TAIKHOAN", "Tên đăng nhập đã tồn tại. Vui lòng chọn tên đăng nhập khác.");
+            }
+            if (data.NGUOIDUNGs.Any(u => u.EMAIL == newUser.EMAIL))
+            {
+                ModelState.AddModelError("EMAIL", "Email đã được sử dụng. Vui lòng chọn email khác.");
+            }
+            if (data.NGUOIDUNGs.Any(u => u.SODIENTHOAI == newUser.SODIENTHOAI))
+            {
+                ModelState.AddModelError("SODIENTHOAI", "Số điện thoại đã được sử dụng. Vui lòng chọn số khác.");
             }
 
-            return View(newUser);
+            // Kiểm tra định dạng email và số điện thoại
+            if (!Regex.IsMatch(newUser.EMAIL, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                ModelState.AddModelError("EMAIL", "Email không đúng định dạng.");
+            }
+            if (!Regex.IsMatch(newUser.SODIENTHOAI, @"^\d{10}$"))
+            {
+                ModelState.AddModelError("SODIENTHOAI", "Số điện thoại phải là 10 chữ số.");
+            }
+
+            // Nếu có lỗi, trả về view với lỗi
+            if (!ModelState.IsValid)
+            {
+                return View("LogIn_SignUp", newUser);
+            }
+
+            // Sinh mã người dùng mới
+            var lastUser = data.NGUOIDUNGs
+                              .OrderByDescending(u => u.MANGUOIDUNG)
+                              .FirstOrDefault();
+
+            int nextId = 1;
+            if (lastUser != null)
+            {
+                string lastIdString = lastUser.MANGUOIDUNG.Substring(2);
+                nextId = int.Parse(lastIdString) + 1;
+            }
+
+            newUser.MANGUOIDUNG = "ND" + nextId.ToString("D2");
+
+            // Lưu vào database
+            data.NGUOIDUNGs.InsertOnSubmit(newUser);
+            data.SubmitChanges();
+
+            // Gán quyền mặc định (Khách hàng)
+            QUYEN_NGUOIDUNG userRole = new QUYEN_NGUOIDUNG
+            {
+                MANGUOIDUNG = newUser.MANGUOIDUNG,
+                MAQUYEN = "Q03" // Quyền khách hàng
+            };
+            data.QUYEN_NGUOIDUNGs.InsertOnSubmit(userRole);
+            data.SubmitChanges();
+
+            return RedirectToAction("Success");
         }
+
         public ActionResult Success()
         {
             return View();

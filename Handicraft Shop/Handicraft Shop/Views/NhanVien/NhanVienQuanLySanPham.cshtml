@@ -90,6 +90,20 @@
 
 <div class="container mt-4">
     <h2>Quản Lý Sản Phẩm</h2>
+    <form action="@Url.Action("NhanVienKhoHangLoc_SoLuongTon", "NhanVienKhoHang")" method="get" class="row mb-3">
+        <div class="col-md-4">
+            <label for="minValue">Từ Số Lượng:</label>
+            <input type="number" name="minValue" class="form-control" placeholder="Số lượng nhỏ nhất" />
+        </div>
+        <div class="col-md-4">
+            <label for="maxValue">Đến Số Lượng:</label>
+            <input type="number" name="maxValue" class="form-control" placeholder="Số lượng lớn nhất" />
+        </div>
+        <div class="col-md-4 mt-4">
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </div>
+    </form>
+
     <a href="@Url.Action("CreateSanPham", "NhanVien")" class="btn btn-primary mb-3">Thêm Sản Phẩm</a>
 
     <table class="table table-bordered">

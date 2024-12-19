@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Handicraft_Shop.Models;
+using System.Text.RegularExpressions;
 
 namespace Handicraft_Shop.Controllers
 {
@@ -55,13 +56,62 @@ namespace Handicraft_Shop.Controllers
             return View();
         }
 
+
         
         [HttpPost]
         public ActionResult CreateUser(NGUOIDUNG newUser, string SelectedRole)
         {
+            if (string.IsNullOrWhiteSpace(newUser.MATKHAU))
+            {
+                ModelState.AddModelError("MATKHAU", "Mật khẩu không được để trống.");
+                return View(newUser);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(newUser);
+            }
+
+            // Kiểm tra trùng tên tài khoản
+            if (data.NGUOIDUNGs.Any(u => u.TAIKHOAN == newUser.TAIKHOAN))
+            {
+                ModelState.AddModelError("TAIKHOAN", "Tên tài khoản đã tồn tại. Vui lòng chọn tài khoản khác.");
+                return View(newUser);
+            }
+
+            // Kiểm tra trùng email
+            if (data.NGUOIDUNGs.Any(u => u.EMAIL == newUser.EMAIL))
+            {
+                ModelState.AddModelError("EMAIL", "Email đã được sử dụng. Vui lòng chọn email khác.");
+                return View(newUser);
+            }
+
+            // Kiểm tra trùng số điện thoại
+            if (data.NGUOIDUNGs.Any(u => u.SODIENTHOAI == newUser.SODIENTHOAI))
+            {
+                ModelState.AddModelError("SODIENTHOAI", "Số điện thoại đã được sử dụng. Vui lòng chọn số khác.");
+                return View(newUser);
+            }
+
+            // Kiểm tra định dạng email
+            if (!Regex.IsMatch(newUser.EMAIL ?? "", @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                ModelState.AddModelError("EMAIL", "Email không đúng định dạng.");
+                return View(newUser);
+            }
+
+            // Kiểm tra định dạng số điện thoại
+            if (!Regex.IsMatch(newUser.SODIENTHOAI ?? "", @"^\d{10}$"))
+            {
+                ModelState.AddModelError("SODIENTHOAI", "Số điện thoại phải là 10 chữ số.");
+                return View(newUser);
+            }
+
             if (ModelState.IsValid)
             {
-                
+                // Xử lý kiểm tra tên tài khoản, email, và số điện thoại như trước đó
+                //...
+
+                // Sinh mã người dùng mới
                 var lastUser = data.NGUOIDUNGs
                     .OrderByDescending(u => u.MANGUOIDUNG)
                     .FirstOrDefault();
@@ -69,19 +119,17 @@ namespace Handicraft_Shop.Controllers
                 int nextId = 1;
                 if (lastUser != null)
                 {
-                    
                     string lastIdString = lastUser.MANGUOIDUNG.Substring(2);
                     nextId = int.Parse(lastIdString) + 1;
                 }
 
-                
                 newUser.MANGUOIDUNG = "ND" + nextId.ToString("D2");
 
-                
+                // Thêm người dùng vào cơ sở dữ liệu
                 data.NGUOIDUNGs.InsertOnSubmit(newUser);
                 data.SubmitChanges();
 
-                
+                // Gán quyền cho người dùng
                 QUYEN_NGUOIDUNG userRole = new QUYEN_NGUOIDUNG
                 {
                     MANGUOIDUNG = newUser.MANGUOIDUNG,
@@ -92,8 +140,10 @@ namespace Handicraft_Shop.Controllers
 
                 return RedirectToAction("ManageUsers");
             }
+
             return View(newUser);
         }
+
 
         // [GET] Sửa thông tin người dùng
         [HttpGet]
@@ -113,52 +163,90 @@ namespace Handicraft_Shop.Controllers
         {
             var user = data.NGUOIDUNGs.FirstOrDefault(u => u.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
 
-            if (user != null && ModelState.IsValid)
+            if (user != null)
             {
+                // Kiểm tra các trường không được để trống
+                if (string.IsNullOrWhiteSpace(updatedUser.TENNGUOIDUNG))
+                {
+                    ModelState.AddModelError("TENNGUOIDUNG", "Tên người dùng không được để trống.");
+                }
+
+                if (string.IsNullOrWhiteSpace(updatedUser.TAIKHOAN))
+                {
+                    ModelState.AddModelError("TAIKHOAN", "Tài khoản không được để trống.");
+                }
+
+                if (string.IsNullOrWhiteSpace(updatedUser.MATKHAU))
+                {
+                    ModelState.AddModelError("MATKHAU", "Mật khẩu không được để trống.");
+                }
+
+                if (string.IsNullOrWhiteSpace(updatedUser.EMAIL))
+                {
+                    ModelState.AddModelError("EMAIL", "Email không được để trống.");
+                }
+
+                if (string.IsNullOrWhiteSpace(updatedUser.SODIENTHOAI))
+                {
+                    ModelState.AddModelError("SODIENTHOAI", "Số điện thoại không được để trống.");
+                }
+
+                // Kiểm tra định dạng email
+                if (!Regex.IsMatch(updatedUser.EMAIL ?? "", @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    ModelState.AddModelError("EMAIL", "Email không đúng định dạng.");
+                }
+
+                // Kiểm tra định dạng số điện thoại
+                if (!Regex.IsMatch(updatedUser.SODIENTHOAI ?? "", @"^\d{10}$"))
+                {
+                    ModelState.AddModelError("SODIENTHOAI", "Số điện thoại phải là 10 chữ số.");
+                }
+
+                // Kiểm tra tài khoản trùng
+                var existingUsername = data.NGUOIDUNGs.FirstOrDefault(u => u.TAIKHOAN == updatedUser.TAIKHOAN && u.MANGUOIDUNG != updatedUser.MANGUOIDUNG);
+                if (existingUsername != null)
+                {
+                    ModelState.AddModelError("TAIKHOAN", "Tài khoản đã tồn tại. Vui lòng chọn tài khoản khác.");
+                }
+
+                // Kiểm tra email trùng
+                var existingEmail = data.NGUOIDUNGs.FirstOrDefault(u => u.EMAIL == updatedUser.EMAIL && u.MANGUOIDUNG != updatedUser.MANGUOIDUNG);
+                if (existingEmail != null)
+                {
+                    ModelState.AddModelError("EMAIL", "Email đã tồn tại. Vui lòng chọn email khác.");
+                }
+
+                // Kiểm tra số điện thoại trùng
+                var existingPhone = data.NGUOIDUNGs.FirstOrDefault(u => u.SODIENTHOAI == updatedUser.SODIENTHOAI && u.MANGUOIDUNG != updatedUser.MANGUOIDUNG);
+                if (existingPhone != null)
+                {
+                    ModelState.AddModelError("SODIENTHOAI", "Số điện thoại đã tồn tại. Vui lòng chọn số khác.");
+                }
+
+                // Nếu có lỗi, trả về View với thông báo lỗi
+                if (!ModelState.IsValid)
+                {
+                    return View(updatedUser);
+                }
+
+                // Cập nhật thông tin người dùng
                 user.TENNGUOIDUNG = updatedUser.TENNGUOIDUNG;
                 user.TAIKHOAN = updatedUser.TAIKHOAN;
                 user.MATKHAU = updatedUser.MATKHAU;
                 user.EMAIL = updatedUser.EMAIL;
                 user.SODIENTHOAI = updatedUser.SODIENTHOAI;
 
-                //var userRole = data.QUYEN_NGUOIDUNGs.FirstOrDefault(q => q.MANGUOIDUNG == updatedUser.MANGUOIDUNG);
-
-                //if (userRole != null)
-                //{
-                //    if (userRole.MAQUYEN != SelectedRole)
-                //    {
-                //        data.QUYEN_NGUOIDUNGs.DeleteOnSubmit(userRole);
-
-                //        QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
-                //        {
-                //            MANGUOIDUNG = updatedUser.MANGUOIDUNG,
-                //            MAQUYEN = SelectedRole
-                //        };
-                //        data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
-                //    }
-                //}
-                //else
-                //{
-                //    QUYEN_NGUOIDUNG newRole = new QUYEN_NGUOIDUNG
-                //    {
-                //        MANGUOIDUNG = updatedUser.MANGUOIDUNG,
-                //        MAQUYEN = SelectedRole
-                //    };
-                //    data.QUYEN_NGUOIDUNGs.InsertOnSubmit(newRole);
-                //}
-
                 data.SubmitChanges();
 
                 return RedirectToAction("ManageUsers");
             }
 
-            ViewBag.SelectedRole = SelectedRole; 
-            return View(updatedUser);
+            return HttpNotFound();
         }
 
 
-
-        // Xóa người dùng
+        // Xóa người dùng (trừ Admin)
         public ActionResult DeleteUser(string id)
         {
             try
@@ -171,7 +259,7 @@ namespace Handicraft_Shop.Controllers
                     return RedirectToAction("ManageUsers");
                 }
 
-                // Kiểm tra quyền người dùng
+                // Kiểm tra quyền người dùng (không xóa Admin)
                 var userRole = data.QUYEN_NGUOIDUNGs
                     .FirstOrDefault(q => q.MANGUOIDUNG == id && q.MAQUYEN == "Q01");
 
@@ -184,17 +272,21 @@ namespace Handicraft_Shop.Controllers
                 // Tìm khách hàng liên quan đến người dùng
                 var customer = data.KHACHHANGs.FirstOrDefault(kh => kh.MANGUOIDUNG == id);
 
-                // Nếu có khách hàng liên quan, xóa tất cả đơn hàng và chi tiết đơn hàng
                 if (customer != null)
                 {
                     // Xóa chi tiết đơn hàng
-                    var orderDetails = data.CHITIETDONHANGs.Where(ctdh => ctdh.MADONHANG == customer.MAKHACHHANG).ToList();
+                    var orderDetails = data.CHITIETDONHANGs
+                        .Where(ctdh => data.DONHANGs
+                                        .Where(dh => dh.MAKHACHHANG == customer.MAKHACHHANG)
+                                        .Select(dh => dh.MADONHANG)
+                                        .Contains(ctdh.MADONHANG))
+                        .ToList();
                     if (orderDetails.Any())
                     {
                         data.CHITIETDONHANGs.DeleteAllOnSubmit(orderDetails);
                     }
 
-                    // Xóa các đơn hàng
+                    // Xóa đơn hàng
                     var orders = data.DONHANGs.Where(dh => dh.MAKHACHHANG == customer.MAKHACHHANG).ToList();
                     if (orders.Any())
                     {
@@ -222,10 +314,9 @@ namespace Handicraft_Shop.Controllers
                 // Xóa người dùng
                 data.NGUOIDUNGs.DeleteOnSubmit(user);
 
-                // Lưu các thay đổi vào cơ sở dữ liệu
+                // Lưu thay đổi vào cơ sở dữ liệu
                 data.SubmitChanges();
 
-                // Thông báo thành công
                 TempData["SuccessMessage"] = "Tài khoản người dùng đã được xóa thành công.";
             }
             catch (Exception ex)

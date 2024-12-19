@@ -59,42 +59,56 @@
                 text-decoration: none;
             }
 
-        .group{
-            display:flex;
+        .group {
+            display: flex;
         }
     </style>
 }
-<h2 class="edit-profile-title">Thay đổi mật khẩu</h2>
+<h2 class="edit-profile-title">
+    <i class="fas fa-key"></i> Thay Đổi Mật Khẩu
+</h2>
+
 @using (Html.BeginForm("KhachHangDoiMatKhau", "KhachHang", FormMethod.Post, new { @class = "edit-profile-form" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label for="CurrentPassword">Mật Khẩu Hiện Tại</label>
+        <label for="CurrentPassword">
+            <i class="fas fa-lock"></i> Mật Khẩu Hiện Tại
+        </label>
         <input type="password" id="CurrentPassword" name="CurrentPassword" class="form-control" />
-        @Html.ValidationMessageFor(m => m.CurrentPassword)
+        @Html.ValidationMessageFor(m => m.CurrentPassword, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <label for="NewPassword">Mật Khẩu Mới</label>
+        <label for="NewPassword">
+            <i class="fas fa-lock-open"></i> Mật Khẩu Mới
+        </label>
         <input type="password" id="NewPassword" name="NewPassword" class="form-control" />
-        @Html.ValidationMessageFor(m => m.NewPassword)
+        @Html.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <label for="ConfirmPassword">Xác Nhận Mật Khẩu Mới</label>
+        <label for="ConfirmPassword">
+            <i class="fas fa-check-circle"></i> Xác Nhận Mật Khẩu Mới
+        </label>
         <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" />
-        @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
     </div>
 
     <div class="group">
-        <button type="submit" class="btn update-profile-button">Cập Nhật</button>
-        <a href="@Url.Action("KhachHangProfile", "KhachHang")" class=" btn update-profile-button">Trở về</a>
+        <button type="submit" class="btn update-profile-button">
+            <i class="fas fa-save"></i> Cập Nhật
+        </button>
+        <a href="@Url.Action("KhachHangProfile", "KhachHang")" class="btn update-profile-button">
+            <i class="fas fa-arrow-left"></i> Trở Về
+        </a>
     </div>
 }
 
 @if (!string.IsNullOrEmpty(ViewBag.Message))
 {
-    <div class="alert alert-success mt-3">@ViewBag.Message</div>
+    <div class="alert alert-success mt-3 text-center">
+        <i class="fas fa-check-circle"></i> @ViewBag.Message
+    </div>
 }
-

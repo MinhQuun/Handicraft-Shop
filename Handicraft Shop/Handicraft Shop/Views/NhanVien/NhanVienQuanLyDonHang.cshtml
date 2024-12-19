@@ -8,197 +8,237 @@
 
 @section Styles {
     <style>
-        /* Tiêu đề trang */
-        h2 {
-            text-align: center;
-            color: #5a5a5a; /* Màu chữ nhẹ hơn */
-            font-weight: bold;
-            margin-top: 30px; /* Tạo khoảng cách để không bị che */
-            margin-bottom: 20px;
-            font-size: 24px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            color: #333;
         }
 
-        /* Bảng */
+        .container-custom {
+            max-width: 90%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #6d4c41;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Table */
         .table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #fafafa; /* Nền nhẹ hơn */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
-            margin-top: 20px;
         }
 
             .table thead {
-                background-color: #8d6e63; /* Màu nâu nhạt hơn */
-                color: #ffffff;
+                background-color: #6d4c41;
+                color: white;
             }
 
             .table th, .table td {
-                padding: 15px;
+                padding: 10px;
                 text-align: center;
                 border: 1px solid #ddd;
             }
 
-            .table tbody tr:nth-child(even) {
-                background-color: #f5f5f5; /* Nền xen kẽ sáng hơn */
-            }
-
-            .table tbody tr:hover {
-                background-color: #f0f4c3; /* Màu nền nhạt hơn khi hover */
-            }
-
-        /* Nút hành động */
-        .btn-info {
-            background-color: #4fc3f7; /* Xanh nhạt hơn */
-            color: white;
-            border: none;
-            margin-right: 5px;
-            padding: 8px 12px;
-            font-weight: 500;
+        .btn-action {
+            padding: 10px 20px;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            color: white;
+            font-size: 15px;
+            text-decoration: none;
         }
 
-            .btn-info:hover {
-                background-color: #29b6f6;
-            }
+        .btn-info {
+            background-color: #4fc3f7;
+        }
 
         .btn-success {
-            background-color: #81c784; /* Xanh lá nhẹ hơn */
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            font-weight: 500;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            background-color: #81c784;
         }
 
-            .btn-success:hover {
-                background-color: #66bb6a;
-            }
-
-        /* Select box */
-        select.form-control {
-            display: inline-block;
-            width: auto;
-            min-width: 140px; /* Tăng độ rộng để tránh cắt chữ */
-            margin-right: 10px;
-            padding: 5px 8px;
+        select {
+            padding: 4px 6px;
             border-radius: 5px;
-            border: 1px solid #ddd;
         }
 
-        /* Phân trang */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
+            gap: 5px;
             margin-top: 20px;
         }
 
             .pagination a {
-                color: #5a5a5a; /* Màu chữ nhẹ */
-                padding: 10px 15px;
-                margin: 0 5px;
-                text-decoration: none;
-                border: 1px solid #ddd;
+                padding: 6px 10px;
+                background: #ddd;
+                color: #333;
                 border-radius: 5px;
-                transition: background-color 0.3s ease, color 0.3s ease;
+                text-decoration: none;
             }
 
                 .pagination a.active {
                     background-color: #6d4c41;
-                    color: #ffffff;
-                    border: none;
+                    color: white;
                 }
 
-                .pagination a:hover:not(.active) {
-                    background-color: #e0f2f1;
-                    color: #6d4c41;
-                }
-
-        /* Lớp CSS làm mờ các đơn hàng đã hủy */
-        .canceled-order {
-            opacity: 0.6;
-            pointer-events: none; /* Không cho phép thao tác với các button */
+                .filter-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-            .canceled-order .btn-info,
-            .canceled-order .btn-success,
-            .canceled-order select.form-control {
-                pointer-events: none; /* Không cho phép chọn hoặc nhấp chuột */
-            }
-
-        select.form-control {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            padding-right: 20px; /* Để có không gian cho mũi tên */
+        .filter-container label {
+            font-weight: bold;
+            color: #6d4c41;
         }
 
-            select.form-control option.huy {
-                background-color: #f0f0f0; /* Tạo màu nền khác nếu cần */
-                color: #b0b0b0; /* Màu chữ nhẹ */
-                font-weight: bold; /* Tạo nổi bật cho giá trị "Hủy" */
+        .filter-container input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-container input[type="date"]:focus {
+            outline: none;
+            border-color: #6d4c41;
+            box-shadow: 0 0 5px rgba(109, 76, 65, 0.3);
+        }
+
+        .btn-primary {
+            background-color: #6d4c41;
+            color: white;
+            font-weight: bold;
+            padding: 8px 15px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+
+        .btn-primary:hover {
+            background-color: #5d4037;
+        }
+
+        /* Responsive cho phần lọc */
+        @@media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                gap: 10px;
             }
 
+            .filter-container input,
+            .filter-container button {
+                width: 100%;
+            }
+        }
     </style>
 }
 
-<h2>Quản lý Đơn Hàng</h2>
+<div class="container-custom">
+    <h2>Quản Lý Đơn Hàng</h2>
+    <div class="filter-container">
+        <form action="@Url.Action("NhanVienQuanLyDonHang")" method="get" class="d-flex justify-content-center align-items-center">
+            <div>
+                <label for="startDate">Từ Ngày:</label>
+                <input type="date" id="startDate" name="startDate" class="form-control"
+                       value="@(ViewBag.StartDate == null ? "" : DateTime.ParseExact(ViewBag.StartDate, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"))" />
+            </div>
+            <div>
+                <label for="endDate">Đến Ngày:</label>
+                <input type="date" id="endDate" name="endDate" class="form-control"
+                       value="@(ViewBag.EndDate == null ? "" : DateTime.ParseExact(ViewBag.EndDate, "dd/MM/yyyy", null).ToString("yyyy-MM-dd"))" />
+            </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã Đơn Hàng</th>
-            <th>Khách Hàng</th>
-            <th>Ngày Đặt</th>
-            <th>Tổng Số Lượng</th>
-            <th>Tổng Thành Tiền</th>
-            <th>Trạng Thái</th>
-            <th>Hành Động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var donHang in Model)
-        {
-            var isCanceled = donHang.TRANGTHAI == "Đã hủy";
-            <tr class="@(isCanceled ? "canceled-order" : "")">
-                <td>@donHang.MADONHANG</td>
-                <td>@donHang.KHACHHANG.HOTEN</td>
-                <td>@string.Format("{0:dd/MM/yyyy HH:mm:ss}", donHang.NGAYDAT)</td>
-                <td>@donHang.TONGSLHANG</td>
-                <td>@String.Format("{0:N0}", donHang.TONGTHANHTIEN) VNĐ</td>
-                <td>@donHang.TRANGTHAI</td>
-                <td>
-                    @if (!isCanceled)
-                    {
-                        <a href="@Url.Action("NhanVienDonHangDetails", new { id = donHang.MADONHANG })" class="btn btn-info">Chi Tiết</a>
-                    }
-                    <form action="@Url.Action("NhanVienUpdateTrangThaiDonHang", new { id = donHang.MADONHANG })" method="post" style="display:inline;">
-                        <select name="trangThaiMoi" class="form-control">
-                            <option value="Đang xử lý" @(donHang.TRANGTHAI == "Đang xử lý" ? "selected" : "")>Đang xử lý</option>
-                            <option value="Đang giao" @(donHang.TRANGTHAI == "Đang giao" ? "selected" : "")>Đang giao</option>
-                            <option value="Đã giao" @(donHang.TRANGTHAI == "Đã giao" ? "selected" : "")>Đã giao</option>
-                            @if (isCanceled)
-                            {
-                                <option class="huy" value="Hủy" @(donHang.TRANGTHAI == "Đã hủy" ? "selected" : "")>Hủy</option>
-                            }
-                            
-                        </select>
-                        @if (!isCanceled)
-                        {
-                            <button type="submit" class="btn btn-success">Cập Nhật</button>
-                        }
-                    </form>
-                </td>
+            <div class="align-self-end">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Lọc
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Bảng Đơn Hàng -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã Đơn Hàng</th>
+                <th>Khách Hàng</th>
+                <th>Ngày Đặt</th>
+                <th>Tổng Số Lượng</th>
+                <th>Tổng Thành Tiền</th>
+                <th>Trạng Thái</th>
+                <th>Hành Động</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var donHang in Model)
+            {
+                <tr>
+                    <td>@donHang.MADONHANG</td>
+                    <td>@donHang.KHACHHANG.HOTEN</td>
+                    <td>@string.Format("{0:dd/MM/yyyy HH:mm:ss}", donHang.NGAYDAT)</td>
+                    <td>@donHang.TONGSLHANG</td>
+                    <td>@String.Format("{0:N0}", donHang.TONGTHANHTIEN) VNĐ</td>
+                    <td>@donHang.TRANGTHAI</td>
+                    <td>
+                        <a href="@Url.Action("NhanVienDonHangDetails", new { id = donHang.MADONHANG })" class="btn-action btn-info">Chi Tiết</a>
+                        @if (donHang.TRANGTHAI == "Đang xử lý")
+                        {
+                            <!-- ComboBox hiển thị Đang xử lý nhưng chọn được Đang giao -->
+                            <form action="@Url.Action("NhanVienUpdateTrangThaiDonHang", new { id = donHang.MADONHANG })" method="post" style="display:inline;">
+                                <select name="trangThaiMoi" class="form-select">
+                                    <option value="Đang xử lý" selected>Đang xử lý</option>
+                                    <option value="Đang giao">Đang giao</option>
+                                </select>
+                                <button type="submit" class="btn-action btn-success">Cập Nhật</button>
+                            </form>
+                        }
+                        else if (donHang.TRANGTHAI == "Đang giao")
+                        {
+                            <!-- ComboBox hiển thị Đang giao nhưng chọn được Đã giao -->
+                            <form action="@Url.Action("NhanVienUpdateTrangThaiDonHang", new { id = donHang.MADONHANG, page = Request.QueryString["page"], startDate = Request.QueryString["startDate"], endDate = Request.QueryString["endDate"] })" method="post" style="display:inline;">
+                                <select name="trangThaiMoi" class="form-select">
+                                    <option value="Đang giao" selected>Đang giao</option>
+                                    <option value="Đã giao">Đã giao</option>
+                                </select>
+                                <button type="submit" class="btn-action btn-success">Cập Nhật</button>
+                            </form>
+                        }
+                        else if (donHang.TRANGTHAI == "Đã giao" || donHang.TRANGTHAI == "Đã hủy")
+                        {
 
-<!-- Hiển thị phân trang -->
-<div class="pagination">
-    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-    {
-        <a href="@Url.Action("NhanVienQuanLyDonHang", new { page = i })" class="@(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
-    }
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Phân Trang -->
+    <div class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a href="@Url.Action("NhanVienQuanLyDonHang", new { page = i, startDate = Request.QueryString["startDate"], endDate = Request.QueryString["endDate"] })" class="@(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+        }
+    </div>
 </div>

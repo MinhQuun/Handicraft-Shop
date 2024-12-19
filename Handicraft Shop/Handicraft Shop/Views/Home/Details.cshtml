@@ -17,6 +17,7 @@
             <h2 class="product-title">@Model.TENSANPHAM</h2>
             <p class="product-price">@String.Format("{0:#,###}", @Model.GIABAN) VNĐ</p>
             <p class="product-description"><strong>Mô tả:</strong> @Model.MOTA</p>
+            <p class="product-description"><strong>Số lượng:</strong> @Model.SOLUONGTON sản phẩm có sẵn</p>
 
             <!-- Input cho số lượng và nút thêm vào giỏ hàng -->
             <div class="form-inline mt-3">
@@ -173,6 +174,7 @@
             font-size: 24px;
             color: #333;
             text-align: center;
+            font-weight:bold;
             margin-bottom: 20px;
         }
 

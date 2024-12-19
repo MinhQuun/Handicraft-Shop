@@ -5,85 +5,16 @@
 
 @model List<Handicraft_Shop.Models.DonHangViewModel>
 
-<!-- CSS Tùy chỉnh -->
-<style>
-    /* Căn giữa tiêu đề */
-    h2.text-center {
-        font-size: 1.8rem;
-        color: #333;
-        font-weight: bold;
-    }
+<div class="order-history-container container shadow-lg p-4 rounded mb-5" style="background-color: #fff;">
+    <h2 class="text-center my-4 text-uppercase font-weight-bold" style="color: #333;">Lịch Sử Đơn Hàng</h2>
 
-    /* Bảng Bootstrap */
-    .table {
-        font-size: 16px; /* Tăng cỡ chữ */
-    }
-
-    .thead-dark th {
-        background-color: #343a40;
-        color: #fff;
-    }
-
-    tbody tr:hover {
-        background-color: #f5f5f5; /* Màu nền khi hover */
-    }
-
-    /* Tăng khoảng cách giữa các hàng */
-    .table td, .table th {
-        vertical-align: middle;
-        padding: 12px;
-        text-align: center; /* Căn giữa nội dung */
-    }
-
-    /* Tạo khoảng trống và đường viền cho bảng chi tiết sản phẩm */
-    .details-table-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 10px;
-        border: 1px solid #ddd;
-    }
-
-    .details-table .table {
-        margin-bottom: 0;
-    }
-
-    /* Căn chỉnh và định dạng hình ảnh */
-    .product-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-
-    /* Định dạng cột tên sản phẩm */
-    .product-name {
-        font-weight: 600;
-        color: #555;
-    }
-
-    /* Màu nền cho phần chi tiết sản phẩm */
-    .details-table {
-        background-color: #ffffff;
-        border-radius: 8px;
-    }
-
-    /* Button */
-    .btn-sm {
-        margin-right: 10px;
-    }
-</style>
-
-<h2 class="text-center my-4">Đơn Hàng</h2>
-
-<div class="container">
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-hover text-center align-middle shadow-sm">
+        <thead class="table-dark">
             <tr>
                 <th>Mã Đơn Hàng</th>
                 <th>Ngày Đặt</th>
                 <th>Ngày Giao</th>
-                <th>Tổng Số Lượng Hàng</th>
+                <th>Tổng Số Lượng</th>
                 <th>Tổng Thành Tiền</th>
                 <th>Trạng Thái</th>
                 <th>Thao Tác</th>
@@ -93,24 +24,115 @@
             @foreach (var donHang in Model)
             {
                 <tr>
-                    <td>@donHang.DonHang.MADONHANG</td>
+                    <td class="fw-bold">@donHang.DonHang.MADONHANG</td>
                     <td>@(donHang.DonHang.NGAYDAT.HasValue ? donHang.DonHang.NGAYDAT.Value.ToString("dd/MM/yyyy") : "N/A")</td>
                     <td>@(donHang.DonHang.NGAYGIAO.HasValue ? donHang.DonHang.NGAYGIAO.Value.ToString("dd/MM/yyyy") : "Chưa giao")</td>
-                    <td>@donHang.DonHang.TONGSLHANG</td>
-                    <td>@String.Format("{0:#,###} VND", donHang.DonHang.TONGTHANHTIEN)</td>
-                    <td>@donHang.DonHang.TRANGTHAI</td>
+                    <td class="text-success fw-bold">@donHang.DonHang.TONGSLHANG</td>
+                    <td class="text-danger fw-bold">@String.Format("{0:#,###} VNĐ", donHang.DonHang.TONGTHANHTIEN)</td>
                     <td>
-                        <!-- Button "Chi Tiết" sẽ luôn hiển thị -->
-                        <button class="btn btn-info btn-sm" onclick="location.href='@Url.Action("KhachHangChiTietDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })'">Chi Tiết</button>
-
-                        <!-- Button "Hủy Đơn" chỉ hiển thị khi trạng thái là "Đang xử lý" -->
                         @if (donHang.DonHang.TRANGTHAI == "Đang xử lý")
                         {
-                            <button class="btn btn-danger btn-sm" onclick="location.href='@Url.Action("KhachHangHuyDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })'">Hủy Đơn</button>
+                            <span class="badge bg-warning text-dark">Đang xử lý</span>
+                        }
+                        else if (donHang.DonHang.TRANGTHAI == "Đã hủy")
+                        {
+                            <span class="badge bg-danger text-white">Đã hủy</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success text-white">Đã giao</span>
                         }
                     </td>
-                </tr>   
+                    <td>
+                        <a href="@Url.Action("KhachHangChiTietDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })"
+                           class="btn btn-info btn-sm me-2 shadow-sm">
+                            <i class="fas fa-info-circle"></i> Chi Tiết
+                        </a>
+                        @if (donHang.DonHang.TRANGTHAI == "Đang xử lý")
+                        {
+                            <a href="@Url.Action("KhachHangHuyDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })"
+                               class="btn btn-danger btn-sm shadow-sm">
+                                <i class="fas fa-times-circle"></i> Hủy Đơn
+                            </a>
+                        }
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
+
+<style>
+    /* CSS chỉ áp dụng cho .order-history-container */
+    .order-history-container h2 {
+        font-size: 2rem;
+        color: #333;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    .order-history-container .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .order-history-container .table th,
+        .order-history-container .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 15px;
+        }
+
+    .order-history-container .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .order-history-container .badge {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+
+    .order-history-container .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        transition: all 0.3s ease;
+    }
+
+        .order-history-container .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+    .order-history-container .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        transition: all 0.3s ease;
+    }
+
+        .order-history-container .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+    .footer-item__link:hover i {
+        color: #003d80;
+        transform: scale(1.1);
+    }
+
+    .footer-item__link i {
+        color: #0056b3;
+        font-size: 18px;
+        margin-right: 8px;
+        transition: color 0.3s, transform 0.3s;
+    }
+</style>
+
+<!-- Icon Scripts -->
+

@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="QL_MYNGHE" Class="HandicraftShopDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=MSI\TRNDON;Initial Catalog=QL_MYNGHE;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="QL_MYNGHEConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs">
-    <Type Name="SANPHAM_KHUYENMAI">
-      <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
-      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.CHITIETDONHANG" Member="CHITIETDONHANGs">
     <Type Name="CHITIETDONHANG">
       <Column Name="MADONHANG" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="SOLUONG" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="DONGIA" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
-      <Association Name="DONHANG_CHITIETDONHANG" Member="DONHANG" ThisKey="MADONHANG" OtherKey="MADONHANG" Type="DONHANG" IsForeignKey="true" />
+      <Association Name="DONHANG_CHITIETDONHANG" Member="DONHANG" ThisKey="MADONHANG" OtherKey="MADONHANG" Type="DONHANG" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="SANPHAM_CHITIETDONHANG" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs">
+    <Type Name="SANPHAM_KHUYENMAI">
+      <Column Name="MASANPHAM" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="KHUYENMAI_SANPHAM_KHUYENMAI" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
+      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DANHGIA" Member="DANHGIAs">
@@ -26,7 +26,7 @@
       <Column Name="DIEMSO" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="NHANXET" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
       <Column Name="NGAYDANHGIA" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="KHACHHANG_DANHGIA" Member="KHACHHANG" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="KHACHHANG" IsForeignKey="true" />
+      <Association Name="KHACHHANG_DANHGIA" Member="KHACHHANG" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="KHACHHANG" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="SANPHAM_DANHGIA" Member="SANPHAM" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM" IsForeignKey="true" />
     </Type>
   </Table>
@@ -60,15 +60,13 @@
       <Column Name="TRANGTHAI" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="DONHANG_CHITIETDONHANG" Member="CHITIETDONHANGs" ThisKey="MADONHANG" OtherKey="MADONHANG" Type="CHITIETDONHANG" />
       <Association Name="DIACHI_GIAOHANG_DONHANG" Member="DIACHI_GIAOHANG" ThisKey="MADIACHI" OtherKey="MADIACHI" Type="DIACHI_GIAOHANG" IsForeignKey="true" />
-      <Association Name="HINHTHUCTT_DONHANG" Member="HINHTHUCTT" ThisKey="MATT" OtherKey="MATT" Type="HINHTHUCTT" IsForeignKey="true" />
-      <Association Name="KHACHHANG_DONHANG" Member="KHACHHANG" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="KHACHHANG" IsForeignKey="true" />
+      <Association Name="KHACHHANG_DONHANG" Member="KHACHHANG" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="KHACHHANG" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.HINHTHUCTT" Member="HINHTHUCTTs">
     <Type Name="HINHTHUCTT">
       <Column Name="MATT" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="LOAITT" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Association Name="HINHTHUCTT_DONHANG" Member="DONHANGs" ThisKey="MATT" OtherKey="MATT" Type="DONHANG" />
     </Type>
   </Table>
   <Table Name="dbo.KHACHHANG" Member="KHACHHANGs">
@@ -81,7 +79,7 @@
       <Association Name="KHACHHANG_DANHGIA" Member="DANHGIAs" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="DANHGIA" />
       <Association Name="KHACHHANG_DIACHI_GIAOHANG" Member="DIACHI_GIAOHANGs" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="DIACHI_GIAOHANG" />
       <Association Name="KHACHHANG_DONHANG" Member="DONHANGs" ThisKey="MAKHACHHANG" OtherKey="MAKHACHHANG" Type="DONHANG" />
-      <Association Name="NGUOIDUNG_KHACHHANG" Member="NGUOIDUNG" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="NGUOIDUNG" IsForeignKey="true" />
+      <Association Name="NGUOIDUNG_KHACHHANG" Member="NGUOIDUNG" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="NGUOIDUNG" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.KHUYENMAI" Member="KHUYENMAIs">
@@ -102,7 +100,7 @@
       <Column Name="TENLOAI" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="MADANHMUC" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="LOAI_SANPHAM" Member="SANPHAMs" ThisKey="MALOAI" OtherKey="MALOAI" Type="SANPHAM" />
-      <Association Name="DANHMUCSANPHAM_LOAI" Member="DANHMUCSANPHAM" ThisKey="MADANHMUC" OtherKey="MADANHMUC" Type="DANHMUCSANPHAM" IsForeignKey="true" />
+      <Association Name="DANHMUCSANPHAM_LOAI" Member="DANHMUCSANPHAM" ThisKey="MADANHMUC" OtherKey="MADANHMUC" Type="DANHMUCSANPHAM" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.NGUOIDUNG" Member="NGUOIDUNGs">
@@ -137,7 +135,7 @@
     <Type Name="QUYEN_NGUOIDUNG">
       <Column Name="MANGUOIDUNG" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="MAQUYEN" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="NGUOIDUNG_QUYEN_NGUOIDUNG" Member="NGUOIDUNG" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="NGUOIDUNG" IsForeignKey="true" />
+      <Association Name="NGUOIDUNG_QUYEN_NGUOIDUNG" Member="NGUOIDUNG" ThisKey="MANGUOIDUNG" OtherKey="MANGUOIDUNG" Type="NGUOIDUNG" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="QUYEN_QUYEN_NGUOIDUNG" Member="QUYEN" ThisKey="MAQUYEN" OtherKey="MAQUYEN" Type="QUYEN" IsForeignKey="true" />
     </Type>
   </Table>
@@ -152,12 +150,12 @@
       <Column Name="MALOAI" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="MAKHUYENMAI" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="MANHACUNGCAP" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM_KHUYENMAI" />
       <Association Name="SANPHAM_CHITIETDONHANG" Member="CHITIETDONHANGs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="CHITIETDONHANG" />
+      <Association Name="SANPHAM_SANPHAM_KHUYENMAI" Member="SANPHAM_KHUYENMAIs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="SANPHAM_KHUYENMAI" />
       <Association Name="SANPHAM_DANHGIA" Member="DANHGIAs" ThisKey="MASANPHAM" OtherKey="MASANPHAM" Type="DANHGIA" />
-      <Association Name="KHUYENMAI_SANPHAM" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" />
-      <Association Name="LOAI_SANPHAM" Member="LOAI" ThisKey="MALOAI" OtherKey="MALOAI" Type="LOAI" IsForeignKey="true" />
-      <Association Name="NHACUNGCAP_SANPHAM" Member="NHACUNGCAP" ThisKey="MANHACUNGCAP" OtherKey="MANHACUNGCAP" Type="NHACUNGCAP" IsForeignKey="true" />
+      <Association Name="KHUYENMAI_SANPHAM" Member="KHUYENMAI" ThisKey="MAKHUYENMAI" OtherKey="MAKHUYENMAI" Type="KHUYENMAI" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="LOAI_SANPHAM" Member="LOAI" ThisKey="MALOAI" OtherKey="MALOAI" Type="LOAI" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="NHACUNGCAP_SANPHAM" Member="NHACUNGCAP" ThisKey="MANHACUNGCAP" OtherKey="MANHACUNGCAP" Type="NHACUNGCAP" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
 </Database>

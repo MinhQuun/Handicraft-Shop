@@ -6,102 +6,165 @@
 @model IEnumerable<Handicraft_Shop.Models.SANPHAM>
 @section Styles {
     <style>
-        /* Tăng chiều rộng của bảng để tận dụng tối đa không gian */
+        /* Tăng chiều rộng của container */
+
         .container {
-            max-width: 95%; /* Đặt chiều rộng tối đa của container */
+            max-width: 78%;
         }
 
-        .table {
-            width: 100%; /* Đặt chiều rộng bảng chiếm 100% container */
-        }
-
-            .table th, .table td {
-                white-space: nowrap; /* Ngăn không cho xuống dòng trong ô */
-                text-align: center; /* Canh giữa nội dung */
-            }
-
-        /* Căn chỉnh tiêu đề trang */
-        .container h2 {
-            text-align: center;
-            color: #6d4c41; /* Màu nâu đậm phù hợp với layout */
-            font-weight: bold;
+        /* Form lọc */
+        .filter-container {
+            background-color: #fdfdfd; /* Màu nền sáng */
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Khoảng cách giữa các ô input */
         }
 
-        /* Nút Thêm Sản Phẩm */
-        .btn-primary {
-            background-color: #6d4c41; /* Màu nâu đậm */
-            border: none;
-            color: white;
-            font-weight: bold;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-        }
-
-            .btn-primary:hover {
-                background-color: #5d4037; /* Màu nâu đậm hơn khi hover */
-                transition: background-color 0.2s ease;
+            .filter-container input {
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 8px 12px;
+                font-size: 0.95rem;
+                width: 100%;
+                transition: all 0.3s ease;
             }
 
-        /* Nút Sửa */
-        .btn-warning {
-            background-color: #ffb74d; /* Màu cam dịu cho nút Sửa */
-            border: none;
-            color: white;
-            font-weight: bold;
-            padding: 5px 10px;
-            transition: background-color 0.2s ease;
-        }
+                .filter-container input:focus {
+                    border-color: #6d4c41;
+                    box-shadow: 0 0 8px rgba(109, 76, 65, 0.4);
+                    outline: none;
+                }
 
-            .btn-warning:hover {
-                background-color: #ffa726; /* Đậm hơn khi hover */
-            }
-
-        /* Nút Xóa */
-        .btn-danger {
-            background-color: #e57373; /* Màu đỏ dịu cho nút Xóa */
-            border: none;
-            color: white;
-            font-weight: bold;
-            padding: 5px 10px;
-            transition: background-color 0.2s ease;
-        }
-
-            .btn-danger:hover {
-                background-color: #ef5350; /* Đậm hơn khi hover */
-            }
-
-        /* Thiết kế cho các nút phân trang */
-        .pagination .page-item.active .page-link {
+        .btn-filter {
             background-color: #6d4c41;
-            border-color: #6d4c41;
-            color: white;
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
         }
 
+            .btn-filter:hover {
+                background-color: #5d4037;
+                box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            }
+
+        /* Bảng sản phẩm */
+        .table th {
+            background-color: #6d4c41;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 12px;
+            border: none;
+
+        }
+
+        .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+            white-space: nowrap; /* Thu gọn chữ dài với dấu '...' */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .table img {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 60px;
+        }
+
+        /* Nút Hành Động */
+        .btn-warning, .btn-danger {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 10px;
+            transition: transform 0.2s ease;
+        }
+
+            .btn-warning:hover, .btn-danger:hover {
+                transform: scale(1.05);
+            }
+
+        /* Icon cho tiêu đề */
+        .title {
+            font-weight: bold;
+            text-align: center;
+            margin-top:35px;
+        }
+
+        h2 i {
+            color: #6d4c41;
+            margin-right: 10px;
+            align-items: center;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Hiệu ứng hover cho bảng */
+        .table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Phân trang */
         .pagination .page-link {
             color: #6d4c41;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 0 3px;
         }
 
             .pagination .page-link:hover {
-                color: #5d4037;
+                background-color: #5d4037;
+                color: #fff;
             }
+
+        .pagination .page-item.active .page-link {
+            background-color: #6d4c41;
+            border-color: #6d4c41;
+            color: #fff;
+        }
     </style>
 }
 
+
 <div class="container mt-4">
-    <h2>Quản Lý Sản Phẩm</h2>
-    <a href="@Url.Action("CreateSanPham", "NhanVienKhoHang")" class="btn btn-primary mb-3">Thêm Sản Phẩm</a>
+    <h2 class="title"><i class="fas fa-box-open"></i> Quản Lý Sản Phẩm</h2>
+    <div class="filter-container">
+        <form id="filterForm" action="@Url.Action("NhanVienKhoHangLoc_SoLuongTon", "NhanVienKhoHang")" method="get" class="row">
+            <div class="col-md-3">
+                <label for="minValue"><i class="fas fa-sort-amount-down-alt"></i> Từ Số Lượng:</label>
+                <input type="number" name="minValue" id="minValue" class="form-control" placeholder="Nhỏ nhất" min="0" value="@(Request.QueryString["minValue"])" />
+            </div>
+            <div class="col-md-3">
+                <label for="maxValue"><i class="fas fa-sort-amount-up-alt"></i> Đến Số Lượng:</label>
+                <input type="number" name="maxValue" id="maxValue" class="form-control" placeholder="Lớn nhất" min="0" value="@(Request.QueryString["maxValue"])" />
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-filter"><i class="fas fa-filter"></i> Lọc</button>
+            </div>
+        </form>
+    </div>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Mã Sản Phẩm</th>
-                <th>Tên Sản Phẩm</th>
-                <th>Hình Ảnh</th>
-                <th>Giá Bán</th>
-                <th>Số Lượng Tồn</th>
-                <th>Nhà Cung Cấp</th>
-                <th>Hành Động</th>
+                <th><i class="fas fa-barcode"></i> Mã Sản Phẩm</th>
+                <th><i class="fas fa-tag"></i> Tên Sản Phẩm</th>
+                <th><i class="fas fa-image"></i> Hình Ảnh</th>
+                <th><i class="fas fa-dollar-sign"></i> Giá Bán</th>
+                <th><i class="fas fa-cubes"></i> Số Lượng Tồn</th>
+                <th><i class="fas fa-warehouse"></i> Nhà Cung Cấp</th>
+                <th><i class="fas fa-cogs"></i> Hành Động</th>
             </tr>
         </thead>
         <tbody>
@@ -109,31 +172,55 @@
             {
                 <tr>
                     <td>@sp.MASANPHAM</td>
-                    <td>@sp.TENSANPHAM</td>
+                    <td title="@sp.TENSANPHAM">@sp.TENSANPHAM</td>
                     <td>
-                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" alt="@sp.TENSANPHAM" width="100" />
+                        <img src="~/HinhAnhSP/MUC HINH ANH CHUNG/@sp.HINHANH" alt="@sp.TENSANPHAM" />
                     </td>
                     <td>@string.Format("{0:N0} VND", sp.GIABAN)</td>
                     <td>@sp.SOLUONGTON</td>
-                    <td>@sp.NHACUNGCAP.TENNHACUNGCAP</td>
+                    <td title="@sp.NHACUNGCAP.TENNHACUNGCAP">@sp.NHACUNGCAP.TENNHACUNGCAP</td>
                     <td>
-                        <a href="@Url.Action("EditSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-warning">Sửa</a>
-                        <a href="@Url.Action("DeleteSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
+                        <a href="@Url.Action("EditSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Cập Nhật
+                        </a>
+                        <a href="@Url.Action("DeleteSanPham", new { id = sp.MASANPHAM })" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                            <i class="fas fa-trash-alt"></i> Xóa
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
                 <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("NhanVienKhoHangQuanLySanPham", "NhanVienKhoHang", new { page = i })">@i</a>
+                    <a class="page-link" href="@Url.Action("NhanVienKhoHangQuanLySanPham", "NhanVienKhoHang", new { page = i, minValue = Request.QueryString["minValue"], maxValue = Request.QueryString["maxValue"] })">
+                        @i
+                    </a>
                 </li>
-            }
+}
         </ul>
     </nav>
 </div>
 
+
+@section Scripts {
+    <script>
+        // Thêm ràng buộc ngoại lệ cho form lọc
+        document.getElementById('filterForm').addEventListener('submit', function (e) {
+            const minValue = parseInt(document.getElementById('minValue').value) || 0;
+            const maxValue = parseInt(document.getElementById('maxValue').value) || 0;
+            const errorDiv = document.getElementById('filterError');
+
+            if (minValue > maxValue) {
+                e.preventDefault(); // Ngăn form submit
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Số lượng nhỏ nhất không được lớn hơn số lượng lớn nhất.';
+            } else {
+                errorDiv.style.display = 'none';
+            }
+        });
+    </script>
+}

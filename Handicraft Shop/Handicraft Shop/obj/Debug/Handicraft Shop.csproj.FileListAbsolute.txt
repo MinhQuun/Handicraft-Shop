@@ -413,3 +413,4 @@ D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\Sys
 D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Numerics.Vectors.xml
 D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\System.Runtime.CompilerServices.Unsafe.xml
 D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\obj\Debug\Handicraft Shop.csproj.AssemblyReference.cache
+D:\user\Truong Doan\Cnpm\Handicraft-Shop\Handicraft Shop\Handicraft Shop\bin\QRCoder.dll

@@ -5,85 +5,15 @@
 
 @model List<Handicraft_Shop.Models.DonHangViewModel>
 
-<!-- CSS Tùy chỉnh -->
-<style>
-    /* Căn giữa tiêu đề */
-    h2.text-center {
-        font-size: 1.8rem;
-        color: #333;
-        font-weight: bold;
-    }
-
-    /* Bảng Bootstrap */
-    .table {
-        font-size: 16px; /* Tăng cỡ chữ */
-    }
-
-    .thead-dark th {
-        background-color: #343a40;
-        color: #fff;
-    }
-
-    tbody tr:hover {
-        background-color: #f5f5f5; /* Màu nền khi hover */
-    }
-
-    /* Tăng khoảng cách giữa các hàng */
-    .table td, .table th {
-        vertical-align: middle;
-        padding: 12px;
-        text-align: center; /* Căn giữa nội dung */
-    }
-
-    /* Tạo khoảng trống và đường viền cho bảng chi tiết sản phẩm */
-    .details-table-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 10px;
-        border: 1px solid #ddd;
-    }
-
-    .details-table .table {
-        margin-bottom: 0;
-    }
-
-    /* Căn chỉnh và định dạng hình ảnh */
-    .product-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-
-    /* Định dạng cột tên sản phẩm */
-    .product-name {
-        font-weight: 600;
-        color: #555;
-    }
-
-    /* Màu nền cho phần chi tiết sản phẩm */
-    .details-table {
-        background-color: #ffffff;
-        border-radius: 8px;
-    }
-
-    /* Button */
-    .btn-sm {
-        margin-right: 10px;
-    }
-</style>
-
-<h2 class="text-center my-4">Lịch Sử Mua Hàng</h2>
-
-<div class="container">
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
+<div id="purchase-history-container" class="container shadow-lg p-4 rounded bg-white">
+    <h2 class="text-center my-4">Lịch Sử Mua Hàng</h2>
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-dark text-center">
             <tr>
                 <th>Mã Đơn Hàng</th>
                 <th>Ngày Đặt</th>
                 <th>Ngày Giao</th>
-                <th>Tổng Số Lượng Hàng</th>
+                <th>Tổng Số Lượng</th>
                 <th>Tổng Thành Tiền</th>
                 <th>Trạng Thái</th>
                 <th>Thao Tác</th>
@@ -93,20 +23,68 @@
             @foreach (var donHang in Model)
             {
                 <tr>
-                    <td>@donHang.DonHang.MADONHANG</td>
+                    <td class="fw-bold">@donHang.DonHang.MADONHANG</td>
                     <td>@(donHang.DonHang.NGAYDAT.HasValue ? donHang.DonHang.NGAYDAT.Value.ToString("dd/MM/yyyy") : "N/A")</td>
                     <td>@(donHang.DonHang.NGAYGIAO.HasValue ? donHang.DonHang.NGAYGIAO.Value.ToString("dd/MM/yyyy") : "Chưa giao")</td>
-                    <td>@donHang.DonHang.TONGSLHANG</td>
-                    <td>@String.Format("{0:#,###} VND", donHang.DonHang.TONGTHANHTIEN)</td>
-                    <td>@donHang.DonHang.TRANGTHAI</td>
+                    <td class="text-success fw-bold">@donHang.DonHang.TONGSLHANG</td>
+                    <td class="text-danger fw-bold">@String.Format("{0:#,###} VNĐ", donHang.DonHang.TONGTHANHTIEN)</td>
                     <td>
-                        <!-- Button "Chi Tiết" sẽ luôn hiển thị -->
-                        <button class="btn btn-info btn-sm" onclick="location.href='@Url.Action("KhachHangChiTietDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })'">Chi Tiết</button>
-
-                        <!-- Không có nút hủy đơn vì tất cả đơn hàng trong lịch sử mua hàng đều đã giao -->
+                        <span class="badge bg-success text-white">
+                            @donHang.DonHang.TRANGTHAI
+                        </span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("KhachHangChiTietDonHang", "KhachHang", new { id = donHang.DonHang.MADONHANG })" class="btn btn-info btn-sm">
+                            <i class="fas fa-info-circle"></i> Chi Tiết
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<!-- CSS chỉ áp dụng trong ID "purchase-history-container" -->
+<style>
+    #purchase-history-container {
+        background-color: #fff;
+        border-radius: 10px;
+    }
+
+        #purchase-history-container h2 {
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #purchase-history-container .table th,
+        #purchase-history-container .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 15px;
+        }
+
+        #purchase-history-container .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        #purchase-history-container .btn-sm {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        #purchase-history-container .btn-info:hover {
+            background-color: #117a8b;
+            color: #fff;
+        }
+
+        #purchase-history-container .badge {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+</style>

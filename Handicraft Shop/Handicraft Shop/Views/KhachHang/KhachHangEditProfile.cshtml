@@ -6,51 +6,55 @@
 
 @section Styles {
     <style>
-        
         .edit-profile-title {
             font-size: 2rem;
             color: #8B4513;
             font-weight: bold;
             text-align: center;
-            margin: 30px 0 20px; 
+            margin: 20px 0;
         }
 
-        
         .edit-profile-form {
-            background-color: #f9f9f9;
+            background-color: #fff;
             border-radius: 8px;
-            padding: 20px 20px 30px; 
-            max-width: 600px;
-            margin: 0 auto; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 25px 20px;
+            max-width: 550px;
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-            .edit-profile-form .form-group label {
+            .edit-profile-form .form-group {
+                margin-bottom: 15px;
+            }
+
+            .edit-profile-form label {
                 font-weight: bold;
                 color: #8B4513;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
 
             .edit-profile-form .form-control {
                 border-radius: 5px;
+                padding: 8px;
                 border: 1px solid #ddd;
-                padding: 8px; 
-                font-size: 1rem;
-                color: #333;
             }
 
-        
+        .group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         .update-profile-button {
-            display: block;
-            text-align: center;
             background-color: #8B4513;
             color: white;
             font-weight: bold;
-            padding: 8px 16px; 
+            padding: 8px 20px;
             border-radius: 5px;
-            border: none;
             transition: background-color 0.3s ease;
-            margin: 20px auto 0;
-            width: fit-content;
         }
 
             .update-profile-button:hover {
@@ -58,49 +62,63 @@
                 color: #fff;
                 text-decoration: none;
             }
-        .group{
-            display:flex;
+
+        .alert-success {
+            text-align: center;
+            font-weight: bold;
         }
     </style>
 }
 
-<h2 class="edit-profile-title">Chỉnh Sửa Hồ Sơ</h2>
+
+<h2 class="edit-profile-title">
+    <i class="fas fa-user-edit"></i> Chỉnh Sửa Hồ Sơ
+</h2>
 
 @using (Html.BeginForm("KhachHangUpdateProfile", "KhachHang", FormMethod.Post, new { @class = "edit-profile-form" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        <label for="Username">Tên Tài Khoản</label>
+        <label for="Username">
+            <i class="fas fa-user"></i> Tên Tài Khoản
+        </label>
         <input type="text" id="Username" name="Username" class="form-control" value="@Model.Username" readonly />
     </div>
 
     <div class="form-group">
-        <label for="HoTen">Họ Tên</label>
+        <label for="HoTen">
+            <i class="fas fa-id-card"></i> Họ Tên
+        </label>
         <input type="text" id="HoTen" name="HoTen" class="form-control" value="@Model.HoTen" required />
+        @Html.ValidationMessageFor(m => m.HoTen, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <label for="Email">Email</label>
+        <label for="Email">
+            <i class="fas fa-envelope"></i> Email
+        </label>
         <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" required />
-        @Html.ValidationMessageFor(m => m.Email)
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
     </div>
 
     <div class="form-group">
-        <label for="SoDienThoai">Số Điện Thoại</label>
+        <label for="SoDienThoai">
+            <i class="fas fa-phone"></i> Số Điện Thoại
+        </label>
         <input type="text" id="SoDienThoai" name="SoDienThoai" class="form-control" value="@Model.SoDienThoai" required />
-        @Html.ValidationMessageFor(m => m.SoDienThoai)
+        @Html.ValidationMessageFor(m => m.SoDienThoai, "", new { @class = "text-danger" })
     </div>
 
     <div class="group">
-        <button type="submit" class="btn update-profile-button">Cập Nhật</button>
-        <a href="@Url.Action("KhachHangProfile", "KhachHang")" class=" btn update-profile-button">Trở về</a>
-    </div>
-
-}
-
+        <button type="submit" class="btn update-profile-button">
+            <i class="fas fa-save"></i> Cập Nhật
+        </button>
+        <a href="@Url.Action("KhachHangProfile", "KhachHang")" class="btn update-profile-button">
+            <i class="fas fa-arrow-left"></i> Trở Về
+        </a>
+    </div>}
 
 @if (!string.IsNullOrEmpty(ViewBag.Message))
 {
-    <div class="alert alert-success mt-3">@ViewBag.Message</div>
-}
+    <div class="alert alert-success mt-3">@ViewBag.Message</div>}

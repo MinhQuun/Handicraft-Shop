@@ -28,8 +28,7 @@
         <td>@user.SODIENTHOAI</td>
         <td>
             <a href="@Url.Action("EditUser", new { id = user.MANGUOIDUNG })">Sửa</a> |
-            <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })"
-               onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+            <a href="@Url.Action("DeleteUser", new { id = user.MANGUOIDUNG })">Xóa</a>
         </td>
     </tr>
 }

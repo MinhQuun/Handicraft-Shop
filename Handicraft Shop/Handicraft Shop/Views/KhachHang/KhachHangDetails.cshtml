@@ -13,7 +13,7 @@
             <h2 class="product-title">@Model.TENSANPHAM</h2>
             <p class="product-price">@String.Format("{0:#,###}", @Model.GIABAN) VNĐ</p>
             <p class="product-description"><strong>Mô tả:</strong> @Model.MOTA</p>
-
+            <p class="product-description"><strong>Số lượng:</strong> @Model.SOLUONGTON sản phẩm có sẵn</p>
             <!-- Input cho số lượng và nút thêm vào giỏ hàng -->
             <div class="form-inline mt-3">
                 <input type="number" id="quantity" placeholder="Số lượng" value="1" min="1" max="@Model.SOLUONGTON" class="form-control quantity-input" />
@@ -167,6 +167,7 @@
         /* Sản phẩm liên quan */
         .related-products-title {
             font-size: 24px;
+            font-weight: bold;
             color: #333;
             text-align: center;
             margin-bottom: 20px;
