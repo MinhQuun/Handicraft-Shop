@@ -8,21 +8,39 @@
 }
 
 <script>
-    function addToCartAjax(productId) {
-        $.ajax({
-            url: '/Home/ThemMatHangAjax',
-            type: 'POST',
-            data: { MASANPHAM: productId },
-            success: function (response) {
-                if (response.success) {
-                    $('.cart-icon + .badge').text(response.cartCount);
-                } else {
-                    alert(response.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+        function addToCartAjaxIndex(productId) {
+            // Bước 1: Kiểm tra số lượng tồn
+            $.ajax({
+                url: '/Home/KiemTraSanPhamHetHang',
+                type: 'POST',
+                data: { MASANPHAM: productId },
+                success: function (response) {
+                    if (response.success) {
+                        // Nếu còn hàng, gọi action thêm vào giỏ hàng
+                        $.ajax({
+                            url: '/Home/ThemMatHangAjax',
+                            type: 'POST',
+                            data: { MASANPHAM: productId },
+                            success: function (addResponse) {
+                                if (addResponse.success) {
+                                    $('.cart-icon + .badge').text(addResponse.cartCount);
+
+                                } else {
+                                    alert(addResponse.message);
+                                }
+                            },
+                            error: function () {
+                                alert("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+                            }
+                        });
+                    } else {
+                        // Nếu hết hàng, hiển thị thông báo
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Lỗi khi kiểm tra trạng thái sản phẩm.");
                 }
-            },
-            error: function () {
-                console.log("Lỗi khi thêm sản phẩm vào giỏ hàng.");
-            }
-        });
-    }
+            });
+        }
 </script>

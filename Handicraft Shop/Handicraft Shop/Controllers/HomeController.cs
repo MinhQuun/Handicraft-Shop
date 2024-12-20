@@ -327,7 +327,7 @@ namespace Handicraft_Shop.Controllers
             var sanPham = data.SANPHAMs.SingleOrDefault(sp => sp.MASANPHAM == id);
             if (sanPham == null || sanPham.SOLUONGTON <= 0)
             {
-                return RedirectToAction("KhachHangXemGioHang");
+                return RedirectToAction("XemGioHang");
             }
 
             // Tính tổng số lượng hiện tại
@@ -347,7 +347,7 @@ namespace Handicraft_Shop.Controllers
             }
 
             Session["GioHang"] = gh;
-            return RedirectToAction("KhachHangXemGioHang");
+            return RedirectToAction("XemGioHang");
         }
 
 
